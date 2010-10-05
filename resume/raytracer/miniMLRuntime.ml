@@ -46,7 +46,7 @@ external atan : float -> float = "atan_float" "atan" "float"
 external int_of_float : float -> int = "%intoffloat"
 external float_of_int : int -> float = "%floatofint"
 
-external create_array : int -> 'a -> 'a array = "make_vect"
+external create_array : int -> 'a -> 'a array = "caml_make_vect"
 
 (* I/O *)
 

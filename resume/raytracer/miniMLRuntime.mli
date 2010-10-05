@@ -45,7 +45,7 @@ external atan : float -> float = "atan_float" "atan" "float"
 val read_float : unit -> float
 val read_int : unit -> int
 
-external create_array : int -> 'a -> 'a array = "make_vect"
+external create_array : int -> 'a -> 'a array = "caml_make_vect"
 
 val print_char : int -> unit
 val print_int : int -> unit

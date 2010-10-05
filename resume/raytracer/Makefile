@@ -1,5 +1,5 @@
 OCOPT = -ccopt -O2
-OCAMLBASE=/usr/local/.version/ocaml/ocaml-3.07/bin/
+OCAMLBASE=/usr/bin
 OCAMLC=$(OCAMLBASE)/ocamlc
 OCAMLOPT=$(OCAMLBASE)/ocamlopt
 

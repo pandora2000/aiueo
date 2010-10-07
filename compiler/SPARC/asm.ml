@@ -116,8 +116,8 @@ let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
     "%l0"; "%l1"; "%l2"; "%l3"; "%l4"; "%l5"; "%l6"; "%l7";
     "%o0"; "%o1"; "%o2"; "%o3"; "%o4"; "%o5" |]*)
   
-let regs =  Array.init 30 (fun i -> Printf.sprintf "%%r%d" (i + 1))
-let fregs = Array.init 30 (fun i -> Printf.sprintf "%%f%d" (i + 1))
+let regs =  Array.init 30 (fun i -> Printf.sprintf "%%r%d" (i + 2))
+let fregs = Array.init 30 (fun i -> Printf.sprintf "%%f%d" (i + 2))
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
 let zreg = "%r0"

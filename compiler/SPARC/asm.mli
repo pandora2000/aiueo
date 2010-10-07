@@ -64,6 +64,8 @@ val is_reg : Id.t -> bool
   
 val zreg : Id.t
 val fzreg : Id.t
+val swreg : Id.t
+val fswreg : Id.t
 
 
   val fv : t -> Id.t list

@@ -1,4 +1,4 @@
-open Asm
+(*open Asm
 
 let rec g env = function (* 命令列の13bit即値最適化 (caml2html: simm13_g) *)
   | Ans(exp) -> Ans(g' env exp)
@@ -39,3 +39,4 @@ let h { name = l; args = xs; fargs = ys; body = e; ret = t } = (* トップレベル関
 
 let f (Prog(data, fundefs, e)) = (* プログラム全体の13bit即値最適化 *)
   Prog(data, List.map h fundefs, g M.empty e)
+*)

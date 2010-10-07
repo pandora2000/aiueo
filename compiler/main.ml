@@ -7,30 +7,36 @@ let rec iter n e = (* 最適化処理をくりかえす (caml2html: main_iter) *)
       if e = e' then e else
 	iter (n - 1) e'
 
-let lexbuf outchan l = (* バッファをコンパイルしてチャンネルへ出力する (caml2html: main_lexbuf) *)
-  Id.counter := 0;
-  Typing.extenv := M.empty;
-  Emit.f outchan
-    (RegAlloc.f
-       (Simm.f
-	  (Virtual.f
-	     (Closure.f
-		(iter !limit
-		   (Alpha.f
-		      (KNormal.f
-			 (Typing.f
-			    (Parser.exp Lexer.token l)))))))))
+let prep s =
+  let r = ref "" in
+    for i = 0 to String.length s - 1 do
+      if s.[i] = '%' then () else r := !r ^ (String.make 1 s.[i])
+    done; !r
 
 let lexbuf outchan l = (* バッファをコンパイルしてチャンネルへ出力する (caml2html: main_lexbuf) *)
+(*  Id.counter := 0;
+  Typing.extenv := M.empty;
+  output_string stdout (prep
+			  (Emit.f
+			     (RegAlloc.f
+				(Virtual.f
+				   (Closure.f
+				      (iter !limit
+					 (Alpha.f
+					    (KNormal.f
+					       (Typing.f
+						  (Parser.exp Lexer.token l))))))))))*)
   Id.counter := 0;
   Typing.extenv := M.empty;
-  Closure.print_prog outchan
-    (Closure.f
-       (iter !limit
-	  (Alpha.f
-	     (KNormal.f
-		(Typing.f
-		   (Parser.exp Lexer.token l))))))
+  Asm.print_prog stdout
+    (RegAlloc.f
+       (Virtual.f
+	  (Closure.f
+	     (iter !limit
+		(Alpha.f
+		   (KNormal.f
+		      (Typing.f
+			 (Parser.exp Lexer.token l))))))))
 
 let string s = lexbuf stdout (Lexing.from_string s) (* 文字列をコンパイルして標準出力に表示する (caml2html: main_string) *)
 

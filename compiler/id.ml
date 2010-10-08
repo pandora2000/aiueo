@@ -10,6 +10,9 @@ let counter = ref 0
 let genid s =
   incr counter;
   Printf.sprintf "L_%s_%d" s !counter
+let genid2 s =
+  incr counter;
+  Printf.sprintf "P_%s_%d" s !counter
 
 let rec id_of_typ = function
   | Type.Unit -> "u"

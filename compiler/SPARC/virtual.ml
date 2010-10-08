@@ -155,13 +155,13 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	  let (l, _) = List.find (fun (_, d') -> d = d') !data in
 	    l
 	with Not_found ->
-	  let l = Id.L(Id.genid "l") in
+	  let l = Id.L(Id.genid2 "fd") in
 	    data := (l, d) :: !data;
 	    l in
-      let x = Id.genid "l" in
+	(match l with Id.L x ->
 	(*ここはハードウェアと相談*)
 	(*メモリにあらかじめ入れておくことに*)
-	Ans(Nop)
+	  Ans(Fload(x, 0)))
 	  (*Let((x, Type.Int), SetL(l), Ans(LdDF(x, C(0))))*)
   | Closure.Neg(x) -> Ans(Sub(zreg, x))
   | Closure.Add(x, y) -> Ans(Add(x, y))

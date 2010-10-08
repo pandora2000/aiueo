@@ -661,7 +661,7 @@ in
   let s = 0.0 > w3 in
   not (xor (o_isinvert m) s)
 in
-
+  
 (*MINCAML*)let rec is_outside m =
 (*NOMINCAML let is_outside m =*)
   isoutside_q.(0) <- chkinside_p.(0) -. o_param_x m;

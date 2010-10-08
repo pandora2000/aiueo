@@ -54,20 +54,22 @@ let ltostr (Id.L x) = x
 let ii_tostr = function
   | V x -> x
   | C x -> string_of_int x
+      
+let string_of_vinst = function
+  | Nop -> "Nop" | Add _ -> "Add" | Sub _ -> "Sub" | Mul _ -> "Mul"
+  | And _ -> "And" | Or _ -> "Or" | Nor _ -> "Nor" | Xor _ -> "Xor"
+  | Addi _ -> "Addi" | Subi _ -> "Subi" | Muli _ -> "Muli" | Andi _ -> "Andi"
+  | Ori _ -> "Ori" | Nori _ -> "Nori" | Xori _ -> "Xori" | Fadd _ -> "Fadd"
+  | Fsub _ -> "Fsub" | Fmul _ -> "Fmul" | Finv _ -> "Finv" | Fsqrt _ -> "Fsqrt"
+  | Fdiv _ -> "Fdiv" | Load _ -> "Load" | Store _ ->  "Store" | Fload _ -> "Fload"
+  | Fstore _ ->  "Fstore" | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | IfGE _ -> "IfGE"
+  | IfFEq _ -> "IfEFq" | IfFLE _ -> "IfFLE" | CallCls _ -> "CallCls" | CallDir _ -> "CallDir"
+  | Save _ -> "Save" | Restore _ -> "Restore"
   
 let rec soe level e =
   let nl = level + 1 in
   let i = String.make level ' ' in
-  let son = function
-    | Nop -> "Nop" | Add _ -> "Add" | Sub _ -> "Sub" | Mul _ -> "Mul"
-    | And _ -> "And" | Or _ -> "Or" | Nor _ -> "Nor" | Xor _ -> "Xor"
-    | Addi _ -> "Addi" | Subi _ -> "Subi" | Muli _ -> "Muli" | Andi _ -> "Andi"
-    | Ori _ -> "Ori" | Nori _ -> "Nori" | Xori _ -> "Xori" | Fadd _ -> "Fadd"
-    | Fsub _ -> "Fsub" | Fmul _ -> "Fmul" | Finv _ -> "Finv" | Fsqrt _ -> "Fsqrt"
-    | Fdiv _ -> "Fdiv" | Load _ -> "Load" | Store _ ->  "Store" | Fload _ -> "Fload"
-    | Fstore _ ->  "Fstore" | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | IfGE _ -> "IfGE"
-    | IfFEq _ -> "IfEFq" | IfFLE _ -> "IfFLE" | CallCls _ -> "CallCls" | CallDir _ -> "CallDir"
-    | Save _ -> "Save" | Restore _ -> "Restore" in
+  let son = string_of_vinst in
     match e with
       | Nop -> sprintf "%s%s\n" i (son e)
       | Add (x, y) | Sub (x, y) | Mul (x, y) | And (x, y) | Or (x, y)
@@ -93,12 +95,12 @@ let rec soe level e =
 and sop level e =
   let i = String.make level ' ' in
   let nl = level + 1 in
-  match e with
-    | Ans x ->
-	sprintf "%sRet <-\n%s" i (soe nl x)
-    | Let ((x, _), z, w) ->
-	sprintf "%s%s <-\n%s%s" i x (soe nl z) (sop level w)
-	  
+    match e with
+      | Ans x ->
+	  sprintf "%sRet <-\n%s" i (soe nl x)
+      | Let ((x, _), z, w) ->
+	  sprintf "%s%s <-\n%s%s" i x (soe nl z) (sop level w)
+	    
 let print_prog outchan (Prog (fl, l, e)) =
   output_string outchan (sprintf "%s\n" (string_of_int (List.length fl)));
   List.iter (fun x ->
@@ -116,7 +118,7 @@ let seq(e1, e2) = Let((Id.gentmp Type.Unit, Type.Unit), e1, e2)
     "%l0"; "%l1"; "%l2"; "%l3"; "%l4"; "%l5"; "%l6"; "%l7";
     "%o0"; "%o1"; "%o2"; "%o3"; "%o4"; "%o5" |]*)
   
-let regs =  Array.init 30 (fun i -> Printf.sprintf "%%r%d" (i + 2))
+let regs =  Array.init 29 (fun i -> Printf.sprintf "%%r%d" (i + 3))
 let fregs = Array.init 30 (fun i -> Printf.sprintf "%%f%d" (i + 2))
 let allregs = Array.to_list regs
 let allfregs = Array.to_list fregs
@@ -124,53 +126,20 @@ let zreg = "%r0"
 let fzreg = "%f0"
 let swreg = "%r1"
 let fswreg = "%f1"
-  (*
-    let reg_cl = regs.(Array.length regs - 1) (* closure address (caml2html: sparcasm_regcl) *)
-    let reg_sw = regs.(Array.length regs - 2) (* temporary for swap *)
-    let reg_fsw = fregs.(Array.length fregs - 1) (* temporary for swap *)
-  *)
-  (*
-    let reg_sp = "%i0" (* stack pointer *)
-    let reg_hp = "%i1" (* heap pointer (caml2html: sparcasm_reghp) *)
-    let reg_ra = "%o7" (* return address *)
-  *)
+let spreg = "%r2"
+
+let int_of_reg x =
+  int_of_string (String.sub x 2 ((String.length x) - 2))
+  
 let is_reg x = (x.[0] = '%')
-  (*
-    let co_freg_table =
-    let ht = Hashtbl.create 16 in
-    for i = 0 to 15 do
-    Hashtbl.add
-    ht
-    (Printf.sprintf "%%f%d" (i * 2))
-    (Printf.sprintf "%%f%d" (i * 2 + 1))
-    done;
-    ht
-    let co_freg freg = Hashtbl.find co_freg_table freg (* "companion" freg *)
-  *)
+  
   (* super-tenuki *)
 let rec remove_and_uniq xs = function
   | [] -> []
   | x :: ys when S.mem x xs -> remove_and_uniq xs ys
   | x :: ys -> x :: remove_and_uniq (S.add x xs) ys
 
-(* free variables in the order of use (for spilling) (caml2html: sparcasm_fv) *)
-  (*
-    let rec fv_exp = function
-    | Nop | Set(_) | SetL(_) | Comment(_) | Restore(_) -> []
-    | Mov(x) | Neg(x) | FMovD(x) | FNegD(x) | Save(x, _) -> [x]
-    | Add(x, y') | Sub(x, y') | SLL(x, y') | Ld(x, y') | LdDF(x, y') -> x :: fv_id_or_imm y'
-    | St(x, y, z') | StDF(x, y, z') -> x :: y :: fv_id_or_imm z'
-    | FAddD(x, y) | FSubD(x, y) | FMulD(x, y) | FDivD(x, y) -> [x; y]
-    | IfEq(x, y', e1, e2) | IfLE(x, y', e1, e2) | IfGE(x, y', e1, e2) -> x :: fv_id_or_imm y' @ remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
-    | IfFEq(x, y, e1, e2) | IfFLE(x, y, e1, e2) -> x :: y :: remove_and_uniq S.empty (fv e1 @ fv e2) (* uniq here just for efficiency *)
-    | CallCls(x, ys, zs) -> x :: ys @ zs
-    | CallDir(_, ys, zs) -> ys @ zs
-    and fv = function
-    | Ans(exp) -> fv_exp exp
-    | Let((x, t), exp, e) ->
-    fv_exp exp @ remove_and_uniq (S.singleton x) (fv e)
-  *)
-  
+      
 let rec fv_exp = function
   | Nop | Restore _ -> []
   | Save(x, _) -> [x]

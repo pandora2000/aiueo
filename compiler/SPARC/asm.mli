@@ -28,14 +28,6 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Store of Id.t * Id.t * int
   | Fload of Id.t * int
   | Fstore of Id.t * Id.t * int
-      (*
-	| Beq of Id.t * int
-	| Bne of Id.t * int
-	| Bgt of Id.t * int
-	| Blt of Id.t * int
-	| Bge of Id.t * int
-	| Ble of Id.t * int
-      *)
       (* virtual instructions *)
   | IfEq of Id.t * Id.t * t * t
   | IfLE of Id.t * Id.t * t * t
@@ -61,14 +53,18 @@ val allregs : Id.t list
 val allfregs : Id.t list
   
 val is_reg : Id.t -> bool
+val int_of_reg : Id.t -> int
   
 val zreg : Id.t
 val fzreg : Id.t
 val swreg : Id.t
 val fswreg : Id.t
+val spreg : Id.t
+
+val string_of_vinst : exp -> string
 
 
-  val fv : t -> Id.t list
+val fv : t -> Id.t list
 
 val concat : t -> Id.t * Type.t -> t -> t
   

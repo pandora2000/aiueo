@@ -1,4 +1,5 @@
-let rec fib a b c =
-  if a = 0 then b else
-    fib (a - 1) c (b + c) in
-  print_int (fib 0 0 1)
+let rec fib n a b =
+  if n = 0 then a else
+      fib (n - 1) b (a + b) in
+  print_int (fib 6 0 1)
+    

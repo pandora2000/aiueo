@@ -60,26 +60,18 @@ instruction *parse_one_line_instruction(char *str){
   int name_number=0;
   int name_now=0;
   instruction* answer = malloc(sizeof(instruction));
-  int flag = 0;
 
 
   while(str[i] != '\n'){
-    /*まずフラグが立っていない場合。最初のスペースは無視する*/
-    while(flag == 0 && (str[i] == ' ' || str[i] == '\r' || str[i] == '\t')){
-      i++;
-    }
-
     if(str[i] == ' ' || str[i] == '\r' || str[i] == '\t'){
       answer->name[name_number][name_now] == '\0';
       name_number++;
       name_now = 0;
-      flag = 0;
       i++;
     }
     else{
       answer->name[name_number][name_now] = str[i];
       name_now++;
-      flag = 1;
       i++;
     }
   }

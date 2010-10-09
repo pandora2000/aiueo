@@ -3,7 +3,8 @@
 open Asm
 
 let data = ref [] (* 浮動小数点数の定数テーブル (caml2html: virtual_data) *)
-  
+
+(*intとfloatに分類*)
 let classify xts ini addf addi =
   List.fold_left
     (fun acc (x, t) ->
@@ -159,9 +160,9 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	    data := (l, d) :: !data;
 	    l in
 	(match l with Id.L x ->
-	(*ここはハードウェアと相談*)
-	(*メモリにあらかじめ入れておくことに*)
-	  Ans(Fload(x, 0)))
+	   (*ここはハードウェアと相談*)
+	   (*メモリにあらかじめ入れておくことに*)
+	   Ans(Fload(x, 0)))
 	  (*Let((x, Type.Int), SetL(l), Ans(LdDF(x, C(0))))*)
   | Closure.Neg(x) -> Ans(Sub(zreg, x))
   | Closure.Add(x, y) -> Ans(Add(x, y))
@@ -217,19 +218,27 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
 	Ans(CallDir(Id.L(x), int, float))
 	  (*ここまで*)
+	  (*tupleの方針:K正規化後の段階でタプルを全部平坦にして、その後関数適用における
+	    タプルも全部展開する*)
+	  (*
+  | Closure.Tuple(x) ->
+      let y = Id.genid "tpl" in
+		      *)
+	  (*
+  | Closure.Tuple(xs) -> (* 組の生成 (caml2html: virtual_tuple) *)
+      let y = Id.genid "tpl" in
+      let (offset, store) =
+	expand
+	  (List.map (fun x -> (x, M.find x env)) xs)
+	  (0, Ans(Add(zreg, y)))
+	  (fun x offset store -> seq(Fstore(x, y, offset), store))
+	  (fun x _ offset store -> seq(Store(x, y, offset), store)) in
+	Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Add(zreg, "%r31"),
+	    Let(("%r31", Type.Int), Addi("%r31", offset),
+		store))
+	  *)
   | _ -> Ans(Nop)
       (*
-	| Closure.Tuple(xs) -> (* 組の生成 (caml2html: virtual_tuple) *)
-	let y = Id.genid "t" in
-	let (offset, store) =
-	expand
-	(List.map (fun x -> (x, M.find x env)) xs)
-	(0, Ans(Mov(y)))
-	(fun x offset store -> seq(StDF(x, y, C(offset)), store))
-	(fun x _ offset store -> seq(St(x, y, C(offset)), store)) in
-	Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Mov(reg_hp),
-	Let((reg_hp, Type.Int), Add(reg_hp, C(align offset)),
-	store))
 	| Closure.LetTuple(xts, y, e2) ->
 	let s = Closure.fv e2 in
 	let (offset, load) =
@@ -268,7 +277,10 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	| Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
       *)
       (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
-let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts; Closure.body = e } =
+      (*TODO:*)
+let h { Closure.name = (Id.L(x), t); Closure.args = yts;
+	Closure.formal_fv = zts; Closure.body = e } = 
+  
   let (int, float) = separate yts in
   let (offset, load) =
     expand
@@ -281,7 +293,7 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts; Closure.formal_fv = zts
       | Type.Fun(_, t2) ->
 	  { name = Id.L(x); args = int; fargs = float; body = load; ret = t2 }
       | _ -> assert false
-
+								
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
 let f (Closure.Prog(fundefs, e)) =
   data := [];

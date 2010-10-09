@@ -152,11 +152,11 @@ let rec sop level e =
 	    
 let print_prog outchan (Prog (l, e)) =
   output_string outchan
-    (sprintf "%s\n\n"
-       (String.concat "\n"
+    (sprintf "%s\n"
+       (String.concat ""
 	  (List.map
 	     (fun x ->
-		sprintf "%s%s" (ltostr (fst x.name)) (sop 0 x.body)
+		sprintf "%s\n%s" (ltostr (fst x.name)) (sop 0 x.body)
 	     ) l)));
   output_string outchan (sop 0 e)
 

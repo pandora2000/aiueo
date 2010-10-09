@@ -14,37 +14,35 @@ let prep s =
     done; !r
 
 let lexbuf outchan l = (* バッファをコンパイルしてチャンネルへ出力する (caml2html: main_lexbuf) *)
+  (*  Id.counter := 0;
+      Typing.extenv := M.empty;
+      let p = Emit.f
+      (RegAlloc.f
+      (Virtual.f
+      (Closure.f
+      (iter !limit
+      (Alpha.f
+      (KNormal.f
+      (Typing.f
+      (Parser.exp Lexer.token l)))))))) in
+      output_string stdout (prep (Emit.string_of_alist p));
+      print_newline ();
+      output_string stdout (Emit.string_of_flist p);
+      print_newline ();
+      output_string stdout (Emit.string_of_binary p)
+  *)			    
   
+
   Id.counter := 0;
   Typing.extenv := M.empty;
-  let p = Emit.f
-    (RegAlloc.f
-       (Virtual.f
-	  (Closure.f
-	     (iter !limit
-		(Alpha.f
-		   (KNormal.f
-		      (Typing.f
-			 (Parser.exp Lexer.token l)))))))) in
-    output_string stdout (prep (Emit.string_of_alist p));
-    print_newline ();
-    output_string stdout (Emit.string_of_flist p);
-    print_newline ();
-    output_string stdout (Emit.string_of_binary p)
-      
-(*
-  Id.counter := 0;
-  Typing.extenv := M.empty;
-  Asm.print_prog stdout
-  (RegAlloc.f
-  (Virtual.f
-  (Closure.f
-  (iter !limit
-  (Alpha.f
-  (KNormal.f
-  (Typing.f
-  (Parser.exp Lexer.token l))))))))
-*)
+  let a = Parser.exp Lexer.token l in
+  let b = Typing.f a in
+  let c = KNormal.f b in
+  let d = Alpha.f c in
+  let e = iter !limit d in
+  let f = Closure.f e in
+  let g = Virtual.f f in
+    KNormal.print_prog stdout c
       
 let string s = lexbuf stdout (Lexing.from_string s) (* 文字列をコンパイルして標準出力に表示する (caml2html: main_string) *)
 

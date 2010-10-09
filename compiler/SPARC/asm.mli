@@ -60,6 +60,7 @@ val fzreg : Id.t
 val swreg : Id.t
 val fswreg : Id.t
 val spreg : Id.t
+val hpreg : Id.t
 
 val string_of_vinst : exp -> string
 

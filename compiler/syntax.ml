@@ -61,7 +61,7 @@ let rec sop level e =
     | LetRec _ -> "LetRec" in
   let str = tostr e in
     match e with
-      | Info (_, x) -> sol (sprintf "%s\n%s" str (nsop x))
+      | Info (_, x) -> sop level x
       | Unit -> sol (sprintf "%s\n" str)
       | Bool x -> sol (sprintf "%s(%B)\n" str x)
       | Int x -> sol (sprintf "%s(%d)\n" str x)

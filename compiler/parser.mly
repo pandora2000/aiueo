@@ -103,7 +103,7 @@
 | exp EQUAL exp
 	    {
 	      let p = Parsing.rhs_start_pos 2 in
-		Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Eq($1, $3)) }
+		Info({ln = p.pos_lnum; cn=0 }, Eq($1, $3)) }
 | exp LESS_GREATER exp
 		{
 		  let p = Parsing.rhs_start_pos 2 in
@@ -182,11 +182,10 @@
     Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Array($2, $3)) }
 | error
     {
-  let p = Parsing.rhs_start_pos 1 in
       failwith
 	(Printf.sprintf "parse error near lines %d, characters %d"
-	   p.pos_lnum 
-	   (p.pos_cnum - p.pos_bol) )
+	   !line_num
+	   (Parsing.symbol_start () - !char_num + 2) )
     }
 
     fundef:

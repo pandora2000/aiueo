@@ -25,6 +25,7 @@ let rec deref_typ = function (* 型変数を中身でおきかえる関数 (caml2html: typing_
   | t -> t
 let rec deref_id_typ (x, t) = (x, deref_typ t)
 let rec deref_term = function
+  | Info(_, e) -> deref_term e
   | Not(e) -> Not(deref_term e)
   | Neg(e) -> Neg(deref_term e)
   | Add(e1, e2) -> Add(deref_term e1, deref_term e2)
@@ -87,7 +88,7 @@ let dummy = { ln = - 1; cn = - 1 }
 let tr x y z w =
   try
     y z w
-  with _ -> raise (Type_check_error (Printf.sprintf "lines %d, characters %d" x.ln x.cn))
+  with _ -> raise (Type_check_error (Printf.sprintf "lines %d" x.ln))
     
 
 let rec g info env e = (* 型推論ルーチン (caml2html: typing_g) *)

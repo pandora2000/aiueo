@@ -70,27 +70,27 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
       let env' = M.add x t env in
       let known' = S.add x known in
       let e1' = g (M.add_list yts env') known' e1 in
-      (* 本当に自由変数がなかったか、変換結果e1'を確認する *)
-      (* 注意: e1'にx自身が変数として出現する場合はclosureが必要!
-         (thanks to nuevo-namasute and azounoman; test/cls-bug2.ml参照) *)
+	(* 本当に自由変数がなかったか、変換結果e1'を確認する *)
+	(* 注意: e1'にx自身が変数として出現する場合はclosureが必要!
+           (thanks to nuevo-namasute and azounoman; test/cls-bug2.ml参照) *)
       let zs = S.diff (fv e1') (S.of_list (List.map fst yts)) in
       let known', e1' =
 	if S.is_empty zs then known', e1' else
-	(* 駄目だったら状態(toplevelの値)を戻して、クロージャ変換をやり直す *)
-	(Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
-	 Format.eprintf "function %s cannot be directly applied in fact@." x;
-	 toplevel := toplevel_backup;
-	 let e1' = g (M.add_list yts env') known e1 in
-	 known, e1') in
+	  (* 駄目だったら状態(toplevelの値)を戻して、クロージャ変換をやり直す *)
+	  (Format.eprintf "free variable(s) %s found in function %s@." (Id.pp_list (S.elements zs)) x;
+	   Format.eprintf "function %s cannot be directly applied in fact@." x;
+	   toplevel := toplevel_backup;
+	   let e1' = g (M.add_list yts env') known e1 in
+	     known, e1') in
       let zs = S.elements (S.diff (fv e1') (S.add x (S.of_list (List.map fst yts)))) in (* 自由変数のリスト *)
       let zts = List.map (fun z -> (z, M.find z env')) zs in (* ここで自由変数zの型を引くために引数envが必要 *)
-      toplevel := { name = (Id.L(x), t); args = yts; formal_fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
-      let e2' = g env' known' e2 in
-      if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
-	MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
-      else
-	(Format.eprintf "eliminating closure(s) %s@." x;
-	 e2') (* 出現しなければMakeClsを削除 *)
+	toplevel := { name = (Id.L(x), t); args = yts; formal_fv = zts; body = e1' } :: !toplevel; (* トップレベル関数を追加 *)
+	let e2' = g env' known' e2 in
+	  if S.mem x (fv e2') then (* xが変数としてe2'に出現するか *)
+	    MakeCls((x, t), { entry = Id.L(x); actual_fv = zs }, e2') (* 出現していたら削除しない *)
+	  else
+	    (Format.eprintf "eliminating closure(s) %s@." x;
+	     e2') (* 出現しなければMakeClsを削除 *)
   | KNormal.App(x, ys) when S.mem x known -> (* 関数適用の場合 (caml2html: closure_app) *)
       Format.eprintf "directly applying %s@." x;
       AppDir(Id.L(x), ys)
@@ -105,11 +105,46 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
 let f e =
   toplevel := [];
   let e' = g M.empty S.empty e in
-  Prog(List.rev !toplevel, e')
+    Prog(List.rev !toplevel, e')
+(*
+exception Exit
+
+let flat_if (Prog (l, e)) =
+  let efi e =
+    match e with
+      | MakeCls _
+      | AppCls _ -> raise Exit
+      | Unit 
+      | Int _
+      | Float _
+      | Neg _
+      | Add _
+      | Sub _
+      | FNeg _
+      | FAdd _
+      | FSub _
+      | FMul _
+      | FDiv _
+      | Var _
+      | Get _
+      | Put _
+      | AppDir _
+      | Tuple _
+      | LetTuple _
+      | ExtArray _
+      | IfEq of Id.t * Id.t * t * t
+      | IfLE of Id.t * Id.t * t * t
+      | Let of (Id.t * Type.t) * t * t
+  in
+    Prog (List.map efi l, efi e)
+    *)
 
 let ltostr (Id.L x) = x
+
+let num = ref 0
   
 let rec sop level e =
+  incr num;
   let nl = level + 1 in
   let nsop = sop nl in
   let psol l s = sprintf "%s%s" (String.make l ' ') s in
@@ -151,6 +186,7 @@ let rec sop level e =
 	  sol (sprintf "%s(%s, (%s))\n" (tostr e) x (String.concat ", " y))
 	    
 let print_prog outchan (Prog (l, e)) =
+  num := 0;
   output_string outchan
     (sprintf "%s\n"
        (String.concat ""
@@ -158,6 +194,7 @@ let print_prog outchan (Prog (l, e)) =
 	     (fun x ->
 		sprintf "%s\n%s" (ltostr (fst x.name)) (sop 0 x.body)
 	     ) l)));
-  output_string outchan (sop 0 e)
+  output_string outchan (sop 0 e);
+  output_string outchan (sprintf "%d\n" !num)
 
-  
+    

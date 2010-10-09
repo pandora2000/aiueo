@@ -36,14 +36,18 @@ let lexbuf outchan l = (* バッファをコンパイルしてチャンネルへ出力する (caml2htm
   Id.counter := 0;
   Typing.extenv := M.empty;
   let a = Parser.exp Lexer.token l in
-    Syntax.print_prog stdout a;
+    (*    Syntax.print_prog stdout a;*)
   let b = Typing.f a in
   let c = KNormal.f b in
   let d = Alpha.f c in
   let e = iter !limit d in
   let f = Closure.f e in
   let g = Virtual.f f in
-    KNormal.print_prog stdout c
+  let h = RegAlloc.f g in
+  let i = Emit.f h in
+    KNormal.print_prog stdout e;
+    Asm.print_prog stdout g;
+    output_string stdout (prep (Emit.string_of_alist i))
       
 let string s = lexbuf stdout (Lexing.from_string s) (* 文字列をコンパイルして標準出力に表示する (caml2html: main_string) *)
 

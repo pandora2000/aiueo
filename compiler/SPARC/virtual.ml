@@ -212,7 +212,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	  let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
 	  Ans(CallCls(x, int, float))
 	*)
-  | Closure.MakeCls _ | Closure.AppCls _ -> Ans(Nop)
+  | Closure.MakeCls _ | Closure.AppCls _ -> raise Exit
   | Closure.AppDir(Id.L(x), ys) ->
       (*引数をint listとfloat listに分けてるだけ*)
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
@@ -220,11 +220,7 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	  (*ここまで*)
 	  (*tupleの方針:K正規化後の段階でタプルを全部平坦にして、その後関数適用における
 	    タプルも全部展開する*)
-	  (*
-  | Closure.Tuple(x) ->
-      let y = Id.genid "tpl" in
-		      *)
-	  (*
+	  
   | Closure.Tuple(xs) -> (* 組の生成 (caml2html: virtual_tuple) *)
       let y = Id.genid "tpl" in
       let (offset, store) =
@@ -233,54 +229,51 @@ let rec g env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
 	  (0, Ans(Add(zreg, y)))
 	  (fun x offset store -> seq(Fstore(x, y, offset), store))
 	  (fun x _ offset store -> seq(Store(x, y, offset), store)) in
-	Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Add(zreg, "%r31"),
-	    Let(("%r31", Type.Int), Addi("%r31", offset),
+	Let((y, Type.Tuple(List.map (fun x -> M.find x env) xs)), Add(zreg, hpreg),
+	    Let((hpreg, Type.Int), Addi(hpreg, offset),
 		store))
-	  *)
-  | _ -> Ans(Nop)
-      (*
-	| Closure.LetTuple(xts, y, e2) ->
-	let s = Closure.fv e2 in
-	let (offset, load) =
+  | Closure.LetTuple(xts, y, e2) ->
+      let s = Closure.fv e2 in
+      let (offset, load) =
 	expand
-	xts
-	(0, g (M.add_list xts env) e2)
-	(fun x offset load ->
-	if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
-	fletd(x, LdDF(y, C(offset)), load))
-	(fun x t offset load ->
-	if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
-	Let((x, t), Ld(y, C(offset)), load)) in
+	  xts
+	  (0, g (M.add_list xts env) e2)
+	  (fun x offset load ->
+	     if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
+	       fletd(x, Fload(y, offset), load))
+	  (fun x t offset load ->
+	     if not (S.mem x s) then load else (* [XX] a little ad hoc optimization *)
+	       Let((x, t), Load(y, offset), load)) in
 	load
-	| Closure.Get(x, y) -> (* 配列の読み出し (caml2html: virtual_get) *)
-	let offset = Id.genid "o" in
+  | Closure.Get(x, y) -> (* 配列の読み出し (caml2html: virtual_get) *)
+      let offset = Id.genid "get" in
 	(match M.find x env with
-	| Type.Array(Type.Unit) -> Ans(Nop)
-	| Type.Array(Type.Float) ->
-	Let((offset, Type.Int), SLL(y, C(3)),
-	Ans(LdDF(x, V(offset))))
-	| Type.Array(_) ->
-	Let((offset, Type.Int), SLL(y, C(2)),
-	Ans(Ld(x, V(offset))))
-	| _ -> assert false)
-	| Closure.Put(x, y, z) ->
-	let offset = Id.genid "o" in
+	   | Type.Array(Type.Unit) -> Ans(Nop)
+	   | Type.Array(Type.Float) ->
+	       (*WATCH:たとえばディスプレースメントをレジスタで出来ればこの辺が速くなる*)
+	       Let((offset, Type.Int), Add(x, y),
+		   Ans(Fload(offset, 0)))
+	   | Type.Array(_) ->
+	       Let((offset, Type.Int), Add(x, y),
+		   Ans(Load(offset, 0)))
+	   | _ -> assert false)
+  | Closure.Put(x, y, z) ->
+      let offset = Id.genid "put" in
 	(match M.find x env with
-	| Type.Array(Type.Unit) -> Ans(Nop)
-	| Type.Array(Type.Float) ->
-	Let((offset, Type.Int), SLL(y, C(3)),
-	Ans(StDF(z, x, V(offset))))
-	| Type.Array(_) ->
-	Let((offset, Type.Int), SLL(y, C(2)),
-	Ans(St(z, x, V(offset))))
-	| _ -> assert false)
-	| Closure.ExtArray(Id.L(x)) -> Ans(SetL(Id.L("min_caml_" ^ x)))
-      *)
-      (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
-      (*TODO:*)
+	   | Type.Array(Type.Unit) -> Ans(Nop)
+	   | Type.Array(Type.Float) ->
+	       Let((offset, Type.Int), Add(x, y),
+		   Ans(Fstore(z, offset, 0)))
+	   | Type.Array(_) ->
+	       Let((offset, Type.Int), Add(x, y),
+		   Ans(Store(z, offset, 0)))
+	   | _ -> assert false)
+  | Closure.ExtArray(Id.L(x)) -> Ans(Add(zreg, "min_caml_" ^ x))
+      
+(* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
+(*TODO:ここは何をやってるのか？*)
 let h { Closure.name = (Id.L(x), t); Closure.args = yts;
 	Closure.formal_fv = zts; Closure.body = e } = 
-  
   let (int, float) = separate yts in
   let (offset, load) =
     expand
@@ -293,7 +286,7 @@ let h { Closure.name = (Id.L(x), t); Closure.args = yts;
       | Type.Fun(_, t2) ->
 	  { name = Id.L(x); args = int; fargs = float; body = load; ret = t2 }
       | _ -> assert false
-								
+	  
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
 let f (Closure.Prog(fundefs, e)) =
   data := [];

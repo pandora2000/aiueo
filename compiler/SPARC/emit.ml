@@ -168,13 +168,16 @@ exception Exit2
 let f (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
-  let n = 4095 - List.length p in
+    (*スタックとヒープの境界*)
+  let memhp = 4096 in
+  let n = memhp - 1 - (List.length p) in
   let fli = Array.of_list fl in
   let ret =
     List.flatten
       [[finst0 "nop"; finst0 "nop"];
        [flabel (Id.genid "main");
-	finst3 "addi" spreg zreg (string_of_int n)];
+	finst3 "addi" spreg zreg (string_of_int n);
+	finst3 "addi" hpreg zreg (string_of_int memhp)];
        g p false [] e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->
@@ -201,7 +204,7 @@ let f (Prog (fl, fundefs, e)) =
 
 let string_of_a x =
   if x.ac = - 1 then
-    sprintf "%s : " x.nm
+    sprintf "%s :" x.nm
   else if x.ac = 0 then
     sprintf "\t%s" x.nm
   else if x.ac = 1 then

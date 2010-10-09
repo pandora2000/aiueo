@@ -52,6 +52,7 @@ let insert_let (e, t) k = (* letを挿入する補助関数 (caml2html: knormal_insert) *
 	  Let((x, t), e, e'), t'
 
 let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
+  | Syntax.Info(_, x) -> g env x
   | Syntax.Unit -> Unit, Type.Unit
   | Syntax.Bool(b) -> Int(if b then 1 else 0), Type.Int (* 論理値true, falseを整数1, 0に変換 (caml2html: knormal_bool) *)
   | Syntax.Int(i) -> Int(i), Type.Int
@@ -120,6 +121,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       let e1', t1 = g (M.add_list yts env') e1 in
 	LetRec({ name = (x, t); args = yts; body = e1' }, e2'), t2
   | Syntax.App(Syntax.Var(f), e2s) when not (M.mem f env) -> (* 外部関数の呼び出し (caml2html: knormal_extfunapp) *)
+      
       (match M.find f !Typing.extenv with
 	 | Type.Fun(_, t) ->
 	     let rec bind xs = function (* "xs" are identifiers for the arguments *)
@@ -142,7 +144,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
 		    bind [] e2s) (* left-to-right evaluation *)
 	 | _ -> assert false)
   | Syntax.Tuple(es) ->
-      let rec bind xs ts = function (* "xs" and "ts" are identifiers and types for the elements *)
+      let rec bind xs ts = function
 	| [] -> Tuple(xs), Type.Tuple(ts)
 	| e :: es ->
 	    let _, t as g_e = g env e in
@@ -178,19 +180,50 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
 	   (fun y -> insert_let (g env e3)
 	      (fun z -> Put(x, y, z), Type.Unit)))
 
-let f e = fst (g M.empty e)
+let rec bf e =
+  match e with
+    | Syntax.Info (_, x) -> bf x
+    | Syntax.Not(e) ->Syntax.Not(bf e)
+    | Syntax.Neg(e) ->Syntax.Neg(bf e)
+    | Syntax.Add(e1, e2) ->  Syntax.Add(bf e1,bf e2)
+    | Syntax.Sub(e1, e2) -> Syntax.Sub(bf e1,bf e2)
+    | Syntax.FNeg(e) ->Syntax.FNeg(bf e)
+    | Syntax.FAdd(e1, e2) -> Syntax.FAdd(bf e1,bf e2)
+    | Syntax.FSub(e1, e2) -> Syntax.FSub(bf e1,bf e2)
+    | Syntax.FMul(e1, e2) -> Syntax.FMul(bf e1,bf e2)
+    | Syntax.FDiv(e1, e2) -> Syntax.FDiv(bf e1,bf e2)
+    | Syntax.Eq(x,y) -> Syntax.Eq(bf x,bf y)
+    | Syntax.LE(x,y) -> Syntax.LE(bf x,bf y)
+    | Syntax.If(e1, e3, e4) -> Syntax.If(bf e1, bf e3, bf e4)
+    | Syntax.Let((x, t), e1, e2) -> Syntax.Let((x, t), bf e1, bf e2)
+    | Syntax.Int _
+    | Syntax.Float _
+    | Syntax.Unit  
+    | Syntax.Bool _ 
+    | Syntax.Var _ -> e
+    | Syntax.LetRec({ Syntax.name = (x, t); Syntax.args = yts; Syntax.body = e1 }, e2) ->
+	Syntax.LetRec({ Syntax.name = (x, t); Syntax.args = yts; Syntax.body = bf e1 }, bf e2) 
+    | Syntax.App(e1, e2s) -> Syntax.App(bf e1, List.map (fun x -> bf x) e2s)
+    | Syntax.Tuple(es) -> Syntax.Tuple(List.map (fun x -> bf x) es)
+    | Syntax.LetTuple(xts, e1, e2) -> Syntax.LetTuple(xts, bf e1, bf e2)
+    | Syntax.Array(e1, e2) -> Syntax.Array(bf e1, bf e2)
+    | Syntax.Get(e1, e2) -> Syntax.Get(bf e1, bf e2)
+    | Syntax.Put(e1, e2, e3) -> Syntax.Put(bf e1, bf e2, bf e3)
+
+let f e =
+  fst (g M.empty (bf e))
   
+    
 let ltostr (Id.L x) = x
+
+let num = ref 0
   
 let rec sop level e =
+  incr num;
   let nl = level + 1 in
   let nsop = sop nl in
   let psol l s = sprintf "%s%s" (String.make l ' ') s in
   let sol = psol level in
-    (*
-      | LetRec of fundef * t
-and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
-    *)
   let tostr = function
     | Unit -> "Unit" | Int _ -> "Int" | Float _ -> "Float"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
@@ -232,6 +265,8 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 	  sol (sprintf "%s(%s, (%s))\n" str x (String.concat ", " y))
 	    
 let print_prog outchan e =
-  output_string outchan (sop 0 e)
+  num := 0;
+  output_string outchan (sop 0 e);
+  output_string outchan (sprintf "%d\n" !num)
 
     

@@ -157,6 +157,8 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
 	   let e2', t2 = g (M.add_list xts env) e2 in
 	     LetTuple(xts, y, e2'), t2)
   | Syntax.Array(e1, e2) ->
+      (*引数を手に入れて外部関数として呼んでいるだけ*)
+      (*ヒープで実装できると思う*)
       insert_let (g env e1)
 	(fun x ->
 	   let _, t2 as g_e2 = g env e2 in

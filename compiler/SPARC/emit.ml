@@ -1,10 +1,16 @@
 open Asm
 open Printf
 
+
+let memhp = ref 8192
+let memsp = ref 4095
+
+
+
 let ltostr (Id.L x) = x
 
 
-  
+(*TODO:シャッフル命令数かかるからその辺も含めてもっと一杯レジスタ使って最適化*)  
 (* 関数呼び出しのために引数を並べ替える(register shuffling) (caml2html: emit_shuffle) *)
 let rec shuffle sw xys =
   (* remove identical moves *)
@@ -168,26 +174,30 @@ exception Exit2
 let f (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
-    (*スタックとヒープの境界*)
-  let memhp = 4096 in
-  let n = memhp - 1 - (List.length p) in
+  let n = !memsp - (List.length p) in
   let fli = Array.of_list fl in
   let ret =
     List.flatten
       [[finst0 "nop"; finst0 "nop"];
        [flabel (Id.genid "main");
 	finst3 "addi" spreg zreg (string_of_int n);
-	finst3 "addi" hpreg zreg (string_of_int memhp)];
+	finst3 "addi" hpreg zreg (string_of_int !memhp)];
        g p false [] e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->
 				  let p = get_saves x.ret x.body in
-				  let n = string_of_int (List.length p) in
+				  let ni = List.length p in
+				  let n = string_of_int ni in
 				    List.flatten
-				      [[flabel (ltostr x.name)];
-				       [finst3 "subi" spreg spreg n];
-				       g p true [finst3 "addi" spreg spreg n;
-						 finst0 "return"] x.body])
+				      [
+					[flabel (ltostr x.name)];
+					(if ni = 0 then [] else [finst3 "subi" spreg spreg n]);
+					g p true
+					  (List.flatten [(if ni = 0 then []
+							  else [finst3 "addi" spreg spreg n]);
+							 [finst0 "return"]])
+					  x.body
+				      ])
 			fundefs));
        [flabel en; finst3 "add" "%r3" zreg "%r3"; finst1 "jump" en]] in
   let ret =
@@ -280,5 +290,5 @@ let string_of_flist (_, x) =
     (String.concat "\n"
        (List.map (fun y -> Int32.format "%08X" (Int32.bits_of_float y)) x))
     (*
-let string_of_external_funcs (x, _) =
+      let string_of_external_funcs (x, _) =
     *)

@@ -42,7 +42,7 @@ let lexbuf outchan l = (* バッファをコンパイルしてチャンネルへ出力する (caml2htm
   let d = Alpha.f c in
   let e = iter !limit d in
   let f = Closure.f e in
-  let g = Virtual.f f in
+  let g = Virtual.f ["min_caml_p", 4096] f in
   let h = RegAlloc.f g in
   let i = Emit.f h in
     KNormal.print_prog stdout e;

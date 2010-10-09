@@ -1,1 +1,1 @@
-val f : Closure.prog -> Asm.prog
+val f : (Id.t * int) list -> Closure.prog -> Asm.prog

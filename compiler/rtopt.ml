@@ -11,8 +11,7 @@
 
 (*NOMINCAML open MiniMLRuntime;;*)
 (*NOMINCAML open Globals;;*)
-(*MINCAML*) let true = 1 in 
-(*MINCAML*) let false = 0 in 
+(*ここにあったtrue,falseは削除*)
 (*MINCAML*) let rec xor x y = if x then not y else y in
 
 (******************************************************************************
@@ -1314,8 +1313,8 @@ let rec solve_one_or_network ofs or_group dirvec =
   let head = or_group.(ofs) in
   if head <> -1 then (
     let and_group = and_net.(head) in
-    solve_each_element 0 and_group dirvec;
-    solve_one_or_network (ofs + 1) or_group dirvec
+      solve_each_element 0 and_group dirvec;
+      solve_one_or_network (ofs + 1) or_group dirvec
    ) else ()
 in
 
@@ -2287,9 +2286,15 @@ in
 let rec rt size_x size_y =
 (
  image_size.(0) <- size_x;
- image_size.(1) <- size_y;
- image_center.(0) <- size_x / 2;
- image_center.(1) <- size_y / 2;
+  image_size.(1) <- size_y;
+  (*インライン展開と定数伝播で消えると思う*)
+  (*さらに変更*)
+  image_center.(0) <- 64;
+  image_center.(1) <- 64;
+  (*
+  image_center.(0) <- size_x / 2;
+    image_center.(1) <- size_y / 2;
+  *)
  scan_pitch.(0) <- 128.0 /. float_of_int size_x;
  let prev = create_pixelline () in
  let cur  = create_pixelline () in

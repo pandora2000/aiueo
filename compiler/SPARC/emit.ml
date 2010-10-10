@@ -4,6 +4,7 @@ open Printf
 
 let memhp = ref 8192
 let memsp = ref 4095
+let floffset = ref 0
 
 
 
@@ -25,9 +26,6 @@ let rec shuffle sw xys =
 						| yz -> yz)
 					     xys)
       | xys, acyc -> acyc @ shuffle sw xys
-
-
-type dest = Tail | NonTail of Id.t (* 末尾かどうかを表すデータ型 (caml2html: emit_dest) *)
 
 (*nameだとかぶっちゃってエラー起きる*)
 type a = { nm : string; ac : int; a1 : string;
@@ -132,7 +130,7 @@ let rec h c tl tli e ret =
 		 ret spreg (string_of_int a)]
 	      @ (if tl then tli else [])
 		(*ifはもっと最適化できる今はifだと分岐しない方は結局jump最後にして後続命令にもどる。*)
-		(*それをifごとに倍にしていけばいい(メモリ的にやばいかな？)*)
+		(*WATCH:TODO:それをifごとに倍にしていけばいい(メモリ的にやばいかな？)*)
 	| IfEq(x, y, z, w) ->
 	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
 	| IfGE(x, y, z, w) -> 
@@ -200,13 +198,14 @@ let f (Prog (fl, fundefs, e)) =
 				      ])
 			fundefs));
        [flabel en; finst3 "add" "%r3" zreg "%r3"; finst1 "jump" en]] in
+    (*浮動小数点の割り当て*)
   let ret =
     List.map (fun x ->
 		if x.nm = "fload" && not (is_reg x.a2) then
 		  try
 		    for i = 0 to Array.length fli - 1 do
 		      if (match fli.(i) with (Id.L y, _) -> y) = x.a2 then
-			(x.a2 <- zreg; x.a3 <- string_of_int i; raise Exit)
+			(x.a2 <- zreg; x.a3 <- string_of_int (i + !floffset); raise Exit)
 		    done; x
 		  with Exit -> x
 		else x) ret in

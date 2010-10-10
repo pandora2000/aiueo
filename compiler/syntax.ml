@@ -12,6 +12,7 @@ type t = (* MinCamlの構文を表現するデータ型 (caml2html: syntax_t) *)
   | Neg of t
   | Add of t * t
   | Sub of t * t
+  | Mul of t * t
   | FNeg of t
   | FAdd of t * t
   | FSub of t * t
@@ -52,6 +53,7 @@ let rec sop level e =
   let tostr = function
     | Info _ -> "Info"
     | Unit -> "Unit" | Int _ -> "Int" | Float _ -> "Float" | Bool _ -> "Bool"
+    | Mul _ -> "Mul"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | Array _ -> "Array" | If _ -> "If" | Let _ -> "Let" | Var _ -> "Var"
@@ -70,7 +72,7 @@ let rec sop level e =
       | Neg x | FNeg x | Not x ->
 	  sol (sprintf "%s\n%s" str (nsop x))
       | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | LE (x, y) | Eq (x, y)
-      | FMul (x, y) | FDiv (x, y) | Get (x, y) | Array (x, y) ->
+      | FMul (x, y) | FDiv (x, y) | Get (x, y) | Array (x, y) | Mul (x, y) ->
 	  sol (sprintf "%s\n%s%s" str (nsop x) (nsop y))
       | Put (x, y, z) -> sol (sprintf "%s\n%s%s%s" str (nsop x) (nsop y) (nsop z))
       | If (x, y, z) ->

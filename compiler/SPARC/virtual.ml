@@ -1,4 +1,4 @@
-(* translation into SPARC assembly with infinite number of virtual registers *)
+
 
 open Asm
 
@@ -57,6 +57,7 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
   | Closure.Neg(x) -> Ans(Sub(zreg, x))
   | Closure.Add(x, y) -> Ans(Add(x, y))
   | Closure.Sub(x, y) -> Ans(Sub(x, y))
+  | Closure.Mul(x, y) -> Ans(Mul(x, y))
   | Closure.FNeg(x) -> Ans(Fsub(fzreg, x))
   | Closure.FAdd(x, y) -> Ans(Fadd(x, y))
   | Closure.FSub(x, y) -> Ans(Fsub(x, y))
@@ -158,12 +159,14 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
 	       Let((offset, Type.Int), Add(x, y),
 		   Ans(Store(z, offset, 0)))
 	   | _ -> assert false)
+	  (*TODO:*)
   | Closure.ExtArray(Id.L(x)) ->
       let y = "min_caml_" ^ x in
 	try
 	  let p = List.assoc y al in
 	    Ans(Addi(zreg, p))
-	with Not_found -> raise (NoExtArray y)
+	      (*一時的にNOPに*)
+	with Not_found -> Ans(Nop)(*raise (NoExtArray y)*)
 	  
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
 (*TODO:ここは何をやってるのか？*)

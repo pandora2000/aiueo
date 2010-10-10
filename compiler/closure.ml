@@ -8,6 +8,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | Neg of Id.t
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
+  | Mul of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
@@ -34,7 +35,8 @@ type prog = Prog of fundef list * t
 let rec fv = function
   | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
+  | Add(x, y) | Sub(x, y) | FAdd(x, y) | Mul(x, y)
+  | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
   | Var(x) -> S.singleton x
@@ -53,6 +55,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.Neg(x) -> Neg(x)
   | KNormal.Add(x, y) -> Add(x, y)
   | KNormal.Sub(x, y) -> Sub(x, y)
+  | KNormal.Mul(x, y) -> Mul(x, y)
   | KNormal.FNeg(x) -> FNeg(x)
   | KNormal.FAdd(x, y) -> FAdd(x, y)
   | KNormal.FSub(x, y) -> FSub(x, y)
@@ -102,15 +105,10 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
 
-let f e =
-  toplevel := [];
-  let e' = g M.empty S.empty e in
-    Prog(List.rev !toplevel, e')
-(*
 exception Exit
 
 let flat_if (Prog (l, e)) =
-  let efi e =
+  let rec efi e =
     match e with
       | MakeCls _
       | AppCls _ -> raise Exit
@@ -120,6 +118,7 @@ let flat_if (Prog (l, e)) =
       | Neg _
       | Add _
       | Sub _
+      | Mul _
       | FNeg _
       | FAdd _
       | FSub _
@@ -131,13 +130,26 @@ let flat_if (Prog (l, e)) =
       | AppDir _
       | Tuple _
       | LetTuple _
-      | ExtArray _
-      | IfEq of Id.t * Id.t * t * t
-      | IfLE of Id.t * Id.t * t * t
-      | Let of (Id.t * Type.t) * t * t
+      | ExtArray _ -> e
+      | IfEq (x, y, z, w) -> IfEq (x, y, efi z, efi w)
+      | IfLE (x, y, z, w) -> IfLE (x, y, efi z, efi w)
+      | Let (x, z, w) ->
+	  (match z with
+	     | IfEq (a, b, c, d) ->
+		 IfEq (a, b, efi (Let (x, c, w)), efi (Let (x, d, w)))
+	     | IfLE (a, b, c, d) ->
+		 IfLE (a, b, efi (Let (x, c, w)), efi (Let (x, d, w)))
+	     | _ -> Let (x, z, efi w))
   in
-    Prog (List.map efi l, efi e)
-    *)
+    Prog (List.map (fun x ->
+		      { name = x.name; args = x.args; formal_fv = x.formal_fv;
+			body = efi x.body }) l, efi e)
+
+let f e =
+  toplevel := [];
+  let e' = g M.empty S.empty e in
+    Prog(List.rev !toplevel, e')
+    
 
 let ltostr (Id.L x) = x
 
@@ -150,6 +162,7 @@ let rec sop level e =
   let psol l s = sprintf "%s%s" (String.make l ' ') s in
   let sol = psol level in
   let tostr = function
+    | Mul _ -> "Mul"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | Let _ -> "Let" | Var _ -> "Var"
@@ -161,7 +174,7 @@ let rec sop level e =
       | Int x -> sol (sprintf "Int(%d)\n" x)
       | Float x -> sol (sprintf "Float(%f)\n" x)
       | Neg x | FNeg x | Var x | ExtArray Id.L x -> sol (sprintf "%s(%s)\n" (tostr e) x)
-      | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y)
+      | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) -> sol (sprintf "%s(%s, %s)\n" (tostr e) x y)
       | Put (x, y, z) -> sol (sprintf "%s(%s, %s, %s)\n" (tostr e) x y z)
       | IfEq (x, y, z, w) | IfLE (x, y, z, w) ->

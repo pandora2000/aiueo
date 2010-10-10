@@ -7,6 +7,7 @@ type token =
   | PLUS
   | MINUS_DOT
   | PLUS_DOT
+  | AST
   | AST_DOT
   | SLASH_DOT
   | EQUAL

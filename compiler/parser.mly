@@ -16,6 +16,7 @@
 %token  PLUS
 %token  MINUS_DOT
 %token  PLUS_DOT
+%token AST
 %token  AST_DOT
 %token  SLASH_DOT
 %token  EQUAL
@@ -39,6 +40,7 @@
 %token   LPAREN
 %token   RPAREN
 %token  EOF
+  
 
 /* 優先順位とassociativityの定義（低い方から高い方へ） (caml2html: parser_prior) */
 %right prec_let
@@ -48,7 +50,7 @@
 %left COMMA
 %left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL
 %left PLUS MINUS PLUS_DOT MINUS_DOT
-%left AST_DOT SLASH_DOT
+%left AST_DOT SLASH_DOT AST
 %right prec_unary_minus
 %left prec_app
 %left DOT
@@ -142,6 +144,10 @@
 	{
 	  let p = Parsing.rhs_start_pos 2 in
 	    Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, FSub($1, $3)) }
+| exp AST exp
+	    {
+	      let p = Parsing.rhs_start_pos 2 in
+		Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Mul($1, $3)) }
 | exp AST_DOT exp
 	    {
 	      let p = Parsing.rhs_start_pos 2 in
@@ -173,8 +179,12 @@
 	    {
 	      let p = Parsing.rhs_start_pos 6 in
 		Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Put($1, $4, $7)) }
-| exp SEMICOLON exp
+| exp SEMICOLON
+		{ $1 }
+| exp SEMICOLON exp SEMICOLON
 		{ Let((Id.gentmp Type.Unit, Type.Unit), $1, $3) }
+| exp SEMICOLON exp 
+		    { Let((Id.gentmp Type.Unit, Type.Unit), $1, $3) }
 | ARRAY_CREATE simple_exp simple_exp
 %prec prec_app
 {

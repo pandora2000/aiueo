@@ -2,9 +2,6 @@ open Asm
 open Printf
 
 
-let memhp = ref 8192
-let memsp = ref 4095
-let floffset = ref 0
 
 
 
@@ -169,17 +166,17 @@ let get_saves ret e =
 
 exception Exit2
 
-let f (Prog (fl, fundefs, e)) =
+let f memsp memhp floffset (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
-  let n = !memsp - (List.length p) in
+  let n = memsp - (List.length p) in
   let fli = Array.of_list fl in
   let ret =
     List.flatten
       [[finst0 "nop"; finst0 "nop"];
        [flabel (Id.genid "main");
 	finst3 "addi" spreg zreg (string_of_int n);
-	finst3 "addi" hpreg zreg (string_of_int !memhp)];
+	finst3 "addi" hpreg zreg (string_of_int memhp)];
        g p false [] e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->
@@ -205,7 +202,7 @@ let f (Prog (fl, fundefs, e)) =
 		  try
 		    for i = 0 to Array.length fli - 1 do
 		      if (match fli.(i) with (Id.L y, _) -> y) = x.a2 then
-			(x.a2 <- zreg; x.a3 <- string_of_int (i + !floffset); raise Exit)
+			(x.a2 <- zreg; x.a3 <- string_of_int (i + floffset); raise Exit)
 		    done; x
 		  with Exit -> x
 		else x) ret in
@@ -284,10 +281,13 @@ let string_of_binary (x, _) =
 	 ["00000000\n"; "00000000\n"; "00000000\n"; "00000000\n"; "FFFFFFFF\n"])
 
 let string_of_flist (_, x) =
-  (*  print_endline (string_of_int (List.length x));*)
+  print_endline (string_of_int (List.length x));
   sprintf "%s\n"
     (String.concat "\n"
        (List.map (fun y -> Int32.format "%08X" (Int32.bits_of_float y)) x))
+
+
+    
     (*
       let string_of_external_funcs (x, _) =
     *)

@@ -1,5 +1,5 @@
 
-
+open Printf
 open Asm
 
 let data = ref [] (* 浮動小数点数の定数テーブル (caml2html: virtual_data) *)
@@ -34,6 +34,9 @@ let expand xts ini addf addi =
        (offset + 1, addi x t offset acc))
 
 exception NoExtArray of string
+exception NoExtTuple of string
+
+exception Exit3
 
 let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *)
   | Closure.Unit -> Ans(Nop)
@@ -103,7 +106,7 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
 	  let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
 	  Ans(CallCls(x, int, float))
 	*)
-  | Closure.MakeCls _ | Closure.AppCls _ -> raise Exit
+  | Closure.MakeCls _ | Closure.AppCls _ -> raise Exit3
   | Closure.AppDir(Id.L(x), ys) ->
       (*引数をint listとfloat listに分けてるだけ*)
       let (int, float) = separate (List.map (fun y -> (y, M.find y env)) ys) in
@@ -162,11 +165,23 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
 	  (*TODO:*)
   | Closure.ExtArray(Id.L(x)) ->
       let y = "min_caml_" ^ x in
-	try
-	  let p = List.assoc y al in
-	    Ans(Addi(zreg, p))
-	      (*一時的にNOPに*)
-	with Not_found -> Ans(Nop)(*raise (NoExtArray y)*)
+	(
+	  try
+	    let p = List.assoc y al in
+	      Ans(Addi(zreg, p))
+		(*一時的にNOPに*)
+	  with Not_found -> raise (NoExtArray y)
+	)
+	  (*タプル最適化の時大丈夫かな*)
+  | Closure.ExtTuple(x) ->
+      let y = "min_caml_" ^ x in
+	(
+	  try
+	    let p = List.assoc y al in
+	      Ans(Addi(zreg, p))
+		(*一時的にNOPに*)
+	  with Not_found -> raise (NoExtTuple y)
+	)
 	  
 (* 関数の仮想マシンコード生成 (caml2html: virtual_h) *)
 (*TODO:ここは何をやってるのか？*)
@@ -215,7 +230,7 @@ let caf =
 		     (*これはemitで簡単に解消できそう*)
 		     Ans(Add(zreg, ar))))));
       ret = Type.Array(Type.Float) }
-	  
+      
 let cai =
   let ar = Id.genid "ar" and num = Id.genid "num" and init = Id.genid "init" in
   let nnum = Id.genid "num" and nar = Id.genid "ar" in
@@ -242,8 +257,10 @@ let ca =
       
       
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
-let f al (Closure.Prog(fundefs, e)) =
+let f memext al (Closure.Prog(fundefs, e)) =
   data := [];
+  let al =
+    List.map (fun (x, y) -> (x, y + memext)) al in
   let fundefs =
     cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
   let e = g al M.empty e in

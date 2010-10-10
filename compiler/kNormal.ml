@@ -26,11 +26,12 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | Get of Id.t * Id.t
   | Put of Id.t * Id.t * Id.t
   | ExtArray of Id.t
+  | ExtTuple of Id.t
   | ExtFunApp of Id.t * Id.t list
 and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
-  | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
+  | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | Mul(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
@@ -121,6 +122,7 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       (match M.find x !Typing.extenv with
 	 | Type.Array(_) as t -> ExtArray x, t
 	     (*TODO:ここでタプルに対応すればlight_dirvecができる*)
+	 | Type.Tuple(_) as t -> ExtTuple x, t
 	 | _ -> failwith (Printf.sprintf "external variable %s does not have an array type" x))
   | Syntax.LetRec({ Syntax.name = (x, t); Syntax.args = yts; Syntax.body = e1 }, e2) ->
       let env' = M.add x t env in
@@ -242,13 +244,13 @@ let rec sop level e =
     | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | Let _ -> "Let" | Var _ -> "Var"
     | Tuple _ -> "Tuple" | LetTuple _ -> "LetTuple" | Get _ -> "Get"
     | Put _ -> "Put" | ExtFunApp _ -> "ExtFunApp" | App _ -> "App"
-    | ExtArray _ -> "ExtArray" | LetRec _ -> "LetRec" in
+    | ExtArray _ -> "ExtArray" | LetRec _ -> "LetRec" | ExtTuple _ -> "ExtTuple" in
   let str = tostr e in
     match e with
       | Unit -> sol (sprintf "%s\n" str)
       | Int x -> sol (sprintf "%s(%d)\n" str x)
       | Float x -> sol (sprintf "%s(%f)\n" str x)
-      | Neg x | FNeg x | Var x | ExtArray x ->
+      | Neg x | FNeg x | Var x | ExtArray x | ExtTuple x ->
 	  sol (sprintf "%s(%s)\n" str x)
       | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) ->

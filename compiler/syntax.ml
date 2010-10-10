@@ -103,3 +103,32 @@ let print_prog outchan e =
 
     
 
+let rec addexp b a =
+  match b with
+  | Info (x, y) -> Info (x, addexp y a)
+  | Unit 
+  | Bool _
+  | Int _
+  | Float _
+  | Not _
+  | Neg _
+  | Add _
+  | Sub _
+  | Mul _
+  | FNeg _
+  | FAdd _
+  | FSub _
+  | FMul _
+  | FDiv _
+  | Eq _
+  | LE _
+  | If _
+  | Let _
+  | Var _
+  | App _
+  | Tuple _
+  | LetTuple _
+  | Array _
+  | Get _
+  | Put _ -> a
+  | LetRec (x, y) -> LetRec (x, addexp y a)

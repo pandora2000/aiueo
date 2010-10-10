@@ -94,88 +94,91 @@ let tr e x y z w =
     raise (Type_check_error (Printf.sprintf "lines %d" x.ln))
     
 
-let rec g info env e = (* 型推論ルーチン (caml2html: typing_g) *)
+let rec g al info env e = (* 型推論ルーチン (caml2html: typing_g) *)
   try
     match e with
-      | Info (x, y) -> g x env y
+      | Info (x, y) -> g al x env y
     | Unit -> Type.Unit
     | Bool(_) -> Type.Bool
     | Int(_) -> Type.Int
     | Float(_) -> Type.Float
     | Not(e) ->
-	tr e info unify Type.Bool (g dummy env e);
+	tr e info unify Type.Bool (g al dummy env e);
 	Type.Bool
     | Neg(e) ->
-	tr e info unify Type.Int (g dummy env e);
+	tr e info unify Type.Int (g al dummy env e);
 	Type.Int
     | Add(e1, e2) | Sub(e1, e2) | Mul(e1, e2) ->
-	tr e info unify Type.Int (g dummy env e1);
-	tr e info unify Type.Int (g dummy env e2);
+	tr e info unify Type.Int (g al dummy env e1);
+	tr e info unify Type.Int (g al dummy env e2);
 	Type.Int
     | FNeg(e) ->
-	tr e info unify Type.Float (g dummy env e);
+	tr e info unify Type.Float (g al dummy env e);
 	Type.Float
     | FAdd(e1, e2) | FSub(e1, e2) | FMul(e1, e2) | FDiv(e1, e2) ->
-	tr e info unify Type.Float (g dummy env e1);
-	tr e info unify Type.Float (g dummy env e2);
+	tr e info unify Type.Float (g al dummy env e1);
+	tr e info unify Type.Float (g al dummy env e2);
 	Type.Float
     | Eq(e1, e2) | LE(e1, e2) ->
-	tr e info unify (g dummy env e1) (g dummy env e2);
+	tr e info unify (g al dummy env e1) (g al dummy env e2);
 	Type.Bool
     | If(e1, e2, e3) ->
-	tr e info unify (g dummy env e1) Type.Bool;
-	let t2 = g dummy env e2 in
-	let t3 = g dummy env e3 in
+	tr e info unify (g al dummy env e1) Type.Bool;
+	let t2 = g al dummy env e2 in
+	let t3 = g al dummy env e3 in
 	tr e info unify t2 t3;
 	t2
     | Let((x, t), e1, e2) -> (* letの型推論 (caml2html: typing_let) *)
 	(*このunifyが失敗することはない*)
-	unify t (g dummy env e1);
-	g dummy (M.add x t env) e2
+	unify t (g al dummy env e1);
+	g al dummy (M.add x t env) e2
     | Var(x) when M.mem x env -> M.find x env (* 変数の型推論 (caml2html: typing_var) *)
     | Var(x) when M.mem x !extenv -> M.find x !extenv
     | Var(x) -> (* 外部変数の型推論 (caml2html: typing_extvar) *)
-	Format.eprintf "free variable %s assumed as external@." x;
+	if List.mem_assoc ("min_caml_" ^ x) al then
+	  Format.eprintf "free variable %s assumed as external array@." x
+	else 
+	  Format.eprintf "free variable %s assumed as external function@." x;
 	let t = Type.gentyp () in
 	extenv := M.add x t !extenv;
 	t
     | LetRec({ name = (x, t); args = yts; body = e1 }, e2) -> (* let recの型推論 (caml2html: typing_letrec) *)
 	let env = M.add x t env in
-	tr e info unify t (Type.Fun(List.map snd yts, g dummy (M.add_list yts env) e1));
-	g dummy env e2
+	tr e info unify t (Type.Fun(List.map snd yts, g al dummy (M.add_list yts env) e1));
+	g al dummy env e2
     | App(e, es) -> (* 関数適用の型推論 (caml2html: typing_app) *)
 	let t = Type.gentyp () in
-	tr e info unify (g dummy env e) (Type.Fun(List.map (g dummy env) es, t));
+	tr e info unify (g al dummy env e) (Type.Fun(List.map (g al dummy env) es, t));
 	t
-    | Tuple(es) -> Type.Tuple(List.map (g dummy env) es)
+    | Tuple(es) -> Type.Tuple(List.map (g al dummy env) es)
     | LetTuple(xts, e1, e2) ->
-	tr e info unify (Type.Tuple(List.map snd xts)) (g dummy env e1);
-	g dummy (M.add_list xts env) e2
-    | Array(e1, e2) -> (* must be a primitive for "polymorphic" typing *)
-	tr e info unify (g dummy env e1) Type.Int;
-	Type.Array(g dummy env e2)
+	tr e info unify (Type.Tuple(List.map snd xts)) (g al dummy env e1);
+	g al dummy (M.add_list xts env) e2
+    | Array(e1, e2) -> (* must be a primitive for "polymorphic" typing al *)
+	tr e info unify (g al dummy env e1) Type.Int;
+	Type.Array(g al dummy env e2)
     | Get(e1, e2) ->
 	let t = Type.gentyp () in
-	tr e info unify (Type.Array(t)) (g dummy env e1);
-	tr e info unify Type.Int (g dummy env e2);
+	tr e info unify (Type.Array(t)) (g al dummy env e1);
+	tr e info unify Type.Int (g al dummy env e2);
 	t
     | Put(e1, e2, e3) ->
-	let t = g dummy env e3 in
-	tr e info unify (Type.Array(t)) (g dummy env e1);
-	tr e info unify Type.Int (g dummy env e2);
+	let t = g al dummy env e3 in
+	tr e info unify (Type.Array(t)) (g al dummy env e1);
+	tr e info unify Type.Int (g al dummy env e2);
 	Type.Unit
   with Unify(t1, t2) -> raise (Error(deref_term e, deref_typ t1, deref_typ t2))
 
 exception Fatal_error1
 
-let f e =
+let f al e =
   extenv := M.empty;
 (*
   (match deref_typ (g M.empty e) with
   | Type.Unit -> ()
   | _ -> Format.eprintf "warning: final result does not have type unit@.");
 *)
-  (try unify (Type.Var (ref None)) (g dummy M.empty e)
+  (try unify (Type.Var (ref None)) (g al dummy M.empty e)
   with Unify _ -> raise Fatal_error1);
   extenv := M.map deref_typ !extenv;
   deref_term e

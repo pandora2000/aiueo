@@ -1066,7 +1066,7 @@ and __ocaml_lex_token_rec lexbuf __ocaml_lex_state =
 
   | 31 ->
 # 81 "lexer.mll"
-    ( ARRAY_CREATE )
+ ( ARRAY_CREATE )
 # 1071 "lexer.ml"
 
   | 32 ->

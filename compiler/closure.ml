@@ -25,6 +25,7 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | LetTuple of (Id.t * Type.t) list * Id.t * t
   | Get of Id.t * Id.t
   | Put of Id.t * Id.t * Id.t
+  | ExtTuple of Id.t
   | ExtArray of Id.l
 type fundef = { name : Id.l * Type.t;
 		args : (Id.t * Type.t) list;
@@ -33,7 +34,7 @@ type fundef = { name : Id.l * Type.t;
 type prog = Prog of fundef list * t
 
 let rec fv = function
-  | Unit | Int(_) | Float(_) | ExtArray(_) -> S.empty
+  | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
   | Neg(x) | FNeg(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | Mul(x, y)
   | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
@@ -103,6 +104,7 @@ let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure
   | KNormal.Get(x, y) -> Get(x, y)
   | KNormal.Put(x, y, z) -> Put(x, y, z)
   | KNormal.ExtArray(x) -> ExtArray(Id.L(x))
+  | KNormal.ExtTuple(x) -> ExtTuple(x)
   | KNormal.ExtFunApp(x, ys) -> AppDir(Id.L("min_caml_" ^ x), ys)
 
 exception Exit
@@ -130,6 +132,7 @@ let flat_if (Prog (l, e)) =
       | AppDir _
       | Tuple _
       | LetTuple _
+      | ExtTuple _
       | ExtArray _ -> e
       | IfEq (x, y, z, w) -> IfEq (x, y, efi z, efi w)
       | IfLE (x, y, z, w) -> IfLE (x, y, efi z, efi w)
@@ -154,6 +157,8 @@ let f e =
 let ltostr (Id.L x) = x
 
 let num = ref 0
+
+exception Exit2
   
 let rec sop level e =
   incr num;
@@ -162,18 +167,20 @@ let rec sop level e =
   let psol l s = sprintf "%s%s" (String.make l ' ') s in
   let sol = psol level in
   let tostr = function
-    | Mul _ -> "Mul"
+    | Mul _ -> "Mul" | ExtTuple _ -> "ExtTuple"
+    | Float _ -> "Float" | Int _ -> "Int" | Unit -> "Unit"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | Let _ -> "Let" | Var _ -> "Var"
     | Tuple _ -> "Tuple" | LetTuple _ -> "LetTuple" | Get _ -> "Get"
     | Put _ -> "Put" | ExtArray _ -> "ExtArray" | MakeCls _ -> "MakeCls"
-    | AppCls _ -> "AppCls" | AppDir _ -> "AppDir" | _ -> "" in
+    | AppCls _ -> "AppCls" | AppDir _ -> "AppDir" in
     match e with
       | Unit -> sol "Unit\n"
       | Int x -> sol (sprintf "Int(%d)\n" x)
       | Float x -> sol (sprintf "Float(%f)\n" x)
-      | Neg x | FNeg x | Var x | ExtArray Id.L x -> sol (sprintf "%s(%s)\n" (tostr e) x)
+      | Neg x | FNeg x | Var x | ExtArray Id.L x | ExtTuple x ->
+	  sol (sprintf "%s(%s)\n" (tostr e) x)
       | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) -> sol (sprintf "%s(%s, %s)\n" (tostr e) x y)
       | Put (x, y, z) -> sol (sprintf "%s(%s, %s, %s)\n" (tostr e) x y z)
@@ -189,12 +196,16 @@ let rec sop level e =
 		 (String.concat ", "
 		    (List.map (fun (a, b) -> sprintf "%s : %s" a (Type.string_of_t b)) x))
 		 y (nsop z))
+	    (*
       | MakeCls ((x, y), z, w) ->
+	  
 	  sol (sprintf "%s(%s : %s, (%s, (%s)))\n%s"
 		 (tostr e) x (Type.string_of_t y) (ltostr z.entry)
 		 (String.concat ", " z.actual_fv) (nsop w))
       | AppCls (x, y) ->
-	  sol (sprintf "%s(%s, (%s))\n" (tostr e) x (String.concat ", " y))
+	      sol (sprintf "%s(%s, (%s))\n" (tostr e) x (String.concat ", " y))
+	    *)
+      | MakeCls _ | AppCls _ -> raise Exit2
       | AppDir (Id.L x, y) ->
 	  sol (sprintf "%s(%s, (%s))\n" (tostr e) x (String.concat ", " y))
 	    

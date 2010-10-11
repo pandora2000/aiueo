@@ -29,6 +29,8 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Finv of Id.t * Id.t
   | Fsqrt of Id.t * Id.t
   | Fdiv of Id.t * Id.t
+  | Float_of_int of Id.t
+  | Floor of Id.t
   | Load of Id.t * int
   | Store of Id.t * Id.t * int
   | Fload of Id.t * int
@@ -56,6 +58,7 @@ let ii_tostr = function
   | C x -> string_of_int x
       
 let string_of_vinst = function
+  | Floor _ -> "Floor" | Float_of_int _ -> "Foi"
   | Nop -> "Nop" | Add _ -> "Add" | Sub _ -> "Sub" | Mul _ -> "Mul"
   | And _ -> "And" | Or _ -> "Or" | Nor _ -> "Nor" | Xor _ -> "Xor"
   | Addi _ -> "Addi" | Subi _ -> "Subi" | Muli _ -> "Muli" | Andi _ -> "Andi"
@@ -72,6 +75,8 @@ let rec soe level e =
   let son = string_of_vinst in
     match e with
       | Nop -> sprintf "%s%s\n" i (son e)
+      | Floor(x) | Float_of_int(x) -> 
+	  sprintf "%s%s(%s)\n" i (son e) x
       | Add (x, y) | Sub (x, y) | Mul (x, y) | And (x, y) | Or (x, y)
       | Nor (x, y) | Xor (x, y) | Fadd (x, y) | Fsub (x, y)
       | Fmul (x, y) | Finv (x, y) | Fsqrt (x, y) | Fdiv (x, y) ->
@@ -143,7 +148,7 @@ let rec remove_and_uniq xs = function
       
 let rec fv_exp = function
   | Nop | Restore _ -> []
-  | Save(x, _) -> [x]
+  | Save(x, _) | Floor(x) | Float_of_int(x) -> [x]
   | Add(y, z) | Sub(y, z) | Mul(y, z) | And(y, z) 
   | Or(y, z) | Nor(y, z) | Xor(y, z) | Fadd(y, z) 
   | Fsub(y, z) | Fmul(y, z) | Finv(y, z) | Fsqrt(y, z)

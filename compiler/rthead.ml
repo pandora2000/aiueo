@@ -42,20 +42,16 @@ let rec atan x =
     +. 0.111111111111111105 *. x9 -. 0.142857142857142849 *. x7
     +. 0.2 *. x5 -. 0.333333333333333315 *. x3 +. x in
 let rec sqrt a =
+  let x = 1.0 in
   let h = 1.0 -. a *. x *. x in
-    x *. (1.0 + h *. (0.5 + h *. (0.375 +. h
-				   *. (0.3125 +. h *. (0.2734375 +. h *. 0.24609375))))) in
-    
+    x *. (1.0 +. h *. (0.5 +. h *. (0.375 +. h
+				    *. (0.3125 +. h *. (0.2734375 +. h *. 0.24609375))))) in
     
   ()
   (*
-    sqrt
     read_float
-    cos
-    sin
     read_int
     floor
-    atan
     print_char
     print_int
     int_of_float

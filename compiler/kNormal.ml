@@ -10,11 +10,14 @@ type t = (* K正規化後の式 (caml2html: knormal_t) *)
   | Add of Id.t * Id.t
   | Sub of Id.t * Id.t
   | Mul of Id.t * Id.t
+  | Div of Id.t * Id.t
   | FNeg of Id.t
   | FAdd of Id.t * Id.t
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | Floor of Id.t
+  | Float_of_int of Id.t
   | IfEq of Id.t * Id.t * t * t (* 比較 + 分岐 (caml2html: knormal_branch) *)
   | IfLE of Id.t * Id.t * t * t (* 比較 + 分岐 *)
   | Let of (Id.t * Type.t) * t * t
@@ -32,8 +35,8 @@ and fundef = { name : Id.t * Type.t; args : (Id.t * Type.t) list; body : t }
 
 let rec fv = function (* 式に出現する（自由な）変数 (caml2html: knormal_fv) *)
   | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
-  | Neg(x) | FNeg(x) -> S.singleton x
-  | Add(x, y) | Sub(x, y) | Mul(x, y)
+  | Neg(x) | FNeg(x) | Floor(x) | Float_of_int(x) -> S.singleton x
+  | Add(x, y) | Sub(x, y) | Mul(x, y) | Div(x, y)
   | FAdd(x, y) | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2) | IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
   | Let((x, t), e1, e2) -> S.union (fv e1) (S.remove x (fv e2))
@@ -64,6 +67,12 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
   | Syntax.Neg(e) ->
       insert_let (g env e)
 	(fun x -> Neg(x), Type.Int)
+  | Syntax.Floor(e) ->
+      insert_let (g env e)
+	(fun x -> Floor(x), Type.Float)
+  | Syntax.Float_of_int(e) ->
+      insert_let (g env e)
+	(fun x -> Float_of_int(x), Type.Float)
   | Syntax.Add(e1, e2) -> (* 足し算のK正規化 (caml2html: knormal_add) *)
       insert_let (g env e1)
 	(fun x -> insert_let (g env e2)
@@ -76,6 +85,10 @@ let rec g env = function (* K正規化ルーチン本体 (caml2html: knormal_g) *)
       insert_let (g env e1)
 	(fun x -> insert_let (g env e2)
 	   (fun y -> Mul(x, y), Type.Int))
+  | Syntax.Div(e1, e2) ->
+      insert_let (g env e1)
+	(fun x -> insert_let (g env e2)
+	   (fun y -> Div(x, y), Type.Int))
   | Syntax.FNeg(e) ->
       insert_let (g env e)
 	(fun x -> FNeg(x), Type.Float)
@@ -199,7 +212,10 @@ let rec bf e =
     | Syntax.Add(e1, e2) ->  Syntax.Add(bf e1,bf e2)
     | Syntax.Sub(e1, e2) -> Syntax.Sub(bf e1,bf e2)
     | Syntax.Mul(e1, e2) -> Syntax.Mul(bf e1,bf e2)
+    | Syntax.Div(e1, e2) -> Syntax.Div(bf e1,bf e2)
     | Syntax.FNeg(e) ->Syntax.FNeg(bf e)
+    | Syntax.Floor(e) ->Syntax.Floor(bf e)
+    | Syntax.Float_of_int(e) ->Syntax.Float_of_int(bf e)
     | Syntax.FAdd(e1, e2) -> Syntax.FAdd(bf e1,bf e2)
     | Syntax.FSub(e1, e2) -> Syntax.FSub(bf e1,bf e2)
     | Syntax.FMul(e1, e2) -> Syntax.FMul(bf e1,bf e2)
@@ -239,7 +255,8 @@ let rec sop level e =
   let tostr = function
     | Unit -> "Unit" | Int _ -> "Int" | Float _ -> "Float"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
-    | Mul _ -> "Mul"
+    | Mul _ -> "Mul" | Div _ -> "Div" | Floor _ -> "Floor"
+    | Float_of_int _ -> "Float_of_int"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | Let _ -> "Let" | Var _ -> "Var"
     | Tuple _ -> "Tuple" | LetTuple _ -> "LetTuple" | Get _ -> "Get"
@@ -250,9 +267,10 @@ let rec sop level e =
       | Unit -> sol (sprintf "%s\n" str)
       | Int x -> sol (sprintf "%s(%d)\n" str x)
       | Float x -> sol (sprintf "%s(%f)\n" str x)
-      | Neg x | FNeg x | Var x | ExtArray x | ExtTuple x ->
+      | Neg x | FNeg x | Var x | ExtArray x | ExtTuple x | Floor x
+      | Float_of_int x ->
 	  sol (sprintf "%s(%s)\n" str x)
-      | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y)
+      | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y) | Div (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) ->
 	  sol (sprintf "%s(%s, %s)\n" str x y)
       | Put (x, y, z) -> sol (sprintf "%s(%s, %s, %s)\n" str x y z)

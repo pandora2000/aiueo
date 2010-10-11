@@ -17,9 +17,7 @@ free variable print_char assumed as external function
 free variable print_int assumed as external function
 free variable int_of_float assumed as external function
 free variable float_of_int assumed as external function
-
-free variable read_float assumed as external function
-free variable read_int assumed as external function
+     
 free variable floor assumed as external function
 free variable print_char assumed as external function
 free variable print_int assumed as external function

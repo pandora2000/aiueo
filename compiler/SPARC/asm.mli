@@ -24,6 +24,8 @@ and exp = (* 一つ一つの命令に対応する式 (caml2html: sparcasm_exp) *)
   | Finv of Id.t * Id.t
   | Fsqrt of Id.t * Id.t
   | Fdiv of Id.t * Id.t
+  | Float_of_int of Id.t
+  | Floor of Id.t
   | Load of Id.t * int
   | Store of Id.t * Id.t * int
   | Fload of Id.t * int

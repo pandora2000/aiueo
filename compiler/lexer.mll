@@ -47,6 +47,8 @@ rule token = parse
 	    { AST }
 | "*."
     { AST_DOT }
+| "/"
+    { SLASH }
 | "/."
     { SLASH_DOT }
 | '='
@@ -79,6 +81,10 @@ rule token = parse
     { IDENT(Id.gentmp Type.Unit) }
 | "create_array" (* [XX] ad hoc *)
 	{ ARRAY_CREATE }
+| "float_of_int" (* [XX] ad hoc *)
+	    { FLOAT_OF_INT }
+| "floor" (* [XX] ad hoc *)
+	    { FLOOR }
 | '.'
     { DOT }
 | "<-"

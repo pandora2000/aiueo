@@ -62,6 +62,8 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
   | Closure.Sub(x, y) -> Ans(Sub(x, y))
   | Closure.Mul(x, y) -> Ans(Mul(x, y))
   | Closure.FNeg(x) -> Ans(Fsub(fzreg, x))
+  | Closure.Floor(x) -> Ans(Floor(x))
+  | Closure.Float_of_int(x) -> Ans(Float_of_int(x))
   | Closure.FAdd(x, y) -> Ans(Fadd(x, y))
   | Closure.FSub(x, y) -> Ans(Fsub(x, y))
   | Closure.FMul(x, y) -> Ans(Fmul(x, y))
@@ -254,15 +256,49 @@ let ca =
 		     CallDir(Id.L "min_caml_init_array", [ar; num; init], []),
 		     Ans(Add(zreg, ar))))));
       ret = Type.Array(Type.Int) }
+
+      (*TODO:動作確認*)
+let ri memin =
+  let rl = Id.genid "ri" and rl2 = Id.genid "ri" in
+    { name = Id.L "min_caml_read_int"; args = []; fargs = [];
+      body =
+	(Let((rl, Type.Int), Load(zreg, memin),
+	     Let((rl2, Type.Int), Addi(rl, 1),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Store(rl2, zreg, memin),
+		     Ans(Load(rl, 0))))));
+      ret = Type.Int }
+
+      (*TODO:動作確認*)
+let rf memin =
+  let rl = Id.genid "rf" and rl2 = Id.genid "rf" in
+    { name = Id.L "min_caml_read_float"; args = []; fargs = [];
+      body =
+	(Let((rl, Type.Int), Load(zreg, memin),
+	     Let((rl2, Type.Int), Addi(rl, 1),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Store(rl2, zreg, memin),
+		     Ans(Fload(rl, 0))))));
+      ret = Type.Float }
+
+      (*TODO:動作確認*)
+let pi memout =
+  let pl = Id.genid "pi" and pl2 = Id.genid "pi" and num = Id.genid "num" in
+    { name = Id.L "min_caml_print_int"; args = [num]; fargs = [];
+      body =
+	(Let((pl, Type.Int), Load(zreg, memout),
+	     Let((pl2, Type.Int), Addi(pl, 1),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Store(pl2, zreg, memout),
+		     Ans(Store(num, pl, 0))))));
+      ret = Type.Unit }
       
       
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
-let f memext al (Closure.Prog(fundefs, e)) =
+let f memin memout memext al (Closure.Prog(fundefs, e)) =
   data := [];
   let al =
     List.map (fun (x, y) -> (x, y + memext)) al in
   let fundefs =
-    cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
+    (pi memout) :: (ri memin) :: (rf memin)
+     :: cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
   let e = g al M.empty e in
     Prog(!data, fundefs, e)
       

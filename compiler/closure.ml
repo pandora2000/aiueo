@@ -14,6 +14,8 @@ type t = (* クロージャ変換後の式 (caml2html: closure_t) *)
   | FSub of Id.t * Id.t
   | FMul of Id.t * Id.t
   | FDiv of Id.t * Id.t
+  | Floor of Id.t
+  | Float_of_int of Id.t
   | IfEq of Id.t * Id.t * t * t
   | IfLE of Id.t * Id.t * t * t
   | Let of (Id.t * Type.t) * t * t
@@ -35,7 +37,7 @@ type prog = Prog of fundef list * t
 
 let rec fv = function
   | Unit | Int(_) | Float(_) | ExtArray(_) | ExtTuple(_) -> S.empty
-  | Neg(x) | FNeg(x) -> S.singleton x
+  | Neg(x) | FNeg(x) | Floor(x) | Float_of_int(x) -> S.singleton x
   | Add(x, y) | Sub(x, y) | FAdd(x, y) | Mul(x, y)
   | FSub(x, y) | FMul(x, y) | FDiv(x, y) | Get(x, y) -> S.of_list [x; y]
   | IfEq(x, y, e1, e2)| IfLE(x, y, e1, e2) -> S.add x (S.add y (S.union (fv e1) (fv e2)))
@@ -49,14 +51,19 @@ let rec fv = function
 
 let toplevel : fundef list ref = ref []
 
+exception Exit4
+
 let rec g env known = function (* クロージャ変換ルーチン本体 (caml2html: closure_g) *)
   | KNormal.Unit -> Unit
   | KNormal.Int(i) -> Int(i)
   | KNormal.Float(d) -> Float(d)
   | KNormal.Neg(x) -> Neg(x)
+  | KNormal.Floor(x) -> Floor(x)
+  | KNormal.Float_of_int(x) -> Float_of_int(x)
   | KNormal.Add(x, y) -> Add(x, y)
   | KNormal.Sub(x, y) -> Sub(x, y)
   | KNormal.Mul(x, y) -> Mul(x, y)
+  | KNormal.Div(x, y) -> raise Exit4
   | KNormal.FNeg(x) -> FNeg(x)
   | KNormal.FAdd(x, y) -> FAdd(x, y)
   | KNormal.FSub(x, y) -> FSub(x, y)
@@ -126,6 +133,8 @@ let flat_if (Prog (l, e)) =
       | FSub _
       | FMul _
       | FDiv _
+      | Floor _
+      | Float_of_int _
       | Var _
       | Get _
       | Put _
@@ -152,7 +161,7 @@ let f e =
   toplevel := [];
   let e' = g M.empty S.empty e in
     Prog(List.rev !toplevel, e')
-    
+      
 
 let ltostr (Id.L x) = x
 
@@ -169,6 +178,7 @@ let rec sop level e =
   let tostr = function
     | Mul _ -> "Mul" | ExtTuple _ -> "ExtTuple"
     | Float _ -> "Float" | Int _ -> "Int" | Unit -> "Unit"
+    | Floor _ -> "Floor" | Float_of_int _ -> "Float_of_int"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | Let _ -> "Let" | Var _ -> "Var"
@@ -179,7 +189,8 @@ let rec sop level e =
       | Unit -> sol "Unit\n"
       | Int x -> sol (sprintf "Int(%d)\n" x)
       | Float x -> sol (sprintf "Float(%f)\n" x)
-      | Neg x | FNeg x | Var x | ExtArray Id.L x | ExtTuple x ->
+      | Neg x | FNeg x | Var x | ExtArray Id.L x | ExtTuple x | Floor x
+      | Float_of_int x ->
 	  sol (sprintf "%s(%s)\n" (tostr e) x)
       | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | Mul (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) -> sol (sprintf "%s(%s, %s)\n" (tostr e) x y)
@@ -197,12 +208,12 @@ let rec sop level e =
 		    (List.map (fun (a, b) -> sprintf "%s : %s" a (Type.string_of_t b)) x))
 		 y (nsop z))
 	    (*
-      | MakeCls ((x, y), z, w) ->
-	  
-	  sol (sprintf "%s(%s : %s, (%s, (%s)))\n%s"
-		 (tostr e) x (Type.string_of_t y) (ltostr z.entry)
-		 (String.concat ", " z.actual_fv) (nsop w))
-      | AppCls (x, y) ->
+	      | MakeCls ((x, y), z, w) ->
+	      
+	      sol (sprintf "%s(%s : %s, (%s, (%s)))\n%s"
+	      (tostr e) x (Type.string_of_t y) (ltostr z.entry)
+	      (String.concat ", " z.actual_fv) (nsop w))
+	      | AppCls (x, y) ->
 	      sol (sprintf "%s(%s, (%s))\n" (tostr e) x (String.concat ", " y))
 	    *)
       | MakeCls _ | AppCls _ -> raise Exit2

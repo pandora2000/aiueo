@@ -40,6 +40,10 @@
 %token   LPAREN
 %token   RPAREN
 %token  EOF
+%token FLOAT_OF_INT
+%token FLOOR
+%token SLASH
+  
   
 
 /* 優先順位とassociativityの定義（低い方から高い方へ） (caml2html: parser_prior) */
@@ -50,7 +54,7 @@
 %left COMMA
 %left EQUAL LESS_GREATER LESS GREATER LESS_EQUAL GREATER_EQUAL
 %left PLUS MINUS PLUS_DOT MINUS_DOT
-%left AST_DOT SLASH_DOT AST
+%left AST_DOT SLASH_DOT AST SLASH
 %right prec_unary_minus
 %left prec_app
 %left DOT
@@ -148,6 +152,10 @@
 	    {
 	      let p = Parsing.rhs_start_pos 2 in
 		Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Mul($1, $3)) }
+| exp SLASH exp
+	    {
+	      let p = Parsing.rhs_start_pos 2 in
+		Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Div($1, $3)) }
 | exp AST_DOT exp
 	    {
 	      let p = Parsing.rhs_start_pos 2 in
@@ -190,6 +198,16 @@
 {
   let p = Parsing.rhs_start_pos 1 in
     Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Array($2, $3)) }
+| FLOAT_OF_INT exp
+%prec prec_app
+{
+  let p = Parsing.rhs_start_pos 1 in
+    Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Float_of_int($2)) }
+| FLOOR exp
+%prec prec_app
+{
+  let p = Parsing.rhs_start_pos 1 in
+    Info({ln = p.pos_lnum; cn=p.pos_cnum - p.pos_bol}, Floor($2)) }
 | error
     {
       failwith

@@ -31,6 +31,7 @@ let rec deref_term = function
   | Add(e1, e2) -> Add(deref_term e1, deref_term e2)
   | Sub(e1, e2) -> Sub(deref_term e1, deref_term e2)
   | Mul(e1, e2) -> Mul(deref_term e1, deref_term e2)
+  | Div(e1, e2) -> Div(deref_term e1, deref_term e2)
   | Eq(e1, e2) -> Eq(deref_term e1, deref_term e2)
   | LE(e1, e2) -> LE(deref_term e1, deref_term e2)
   | FNeg(e) -> FNeg(deref_term e)
@@ -38,6 +39,8 @@ let rec deref_term = function
   | FSub(e1, e2) -> FSub(deref_term e1, deref_term e2)
   | FMul(e1, e2) -> FMul(deref_term e1, deref_term e2)
   | FDiv(e1, e2) -> FDiv(deref_term e1, deref_term e2)
+  | Floor(e) -> Floor(deref_term e)
+  | Float_of_int(e) -> Float_of_int(deref_term e)
   | If(e1, e2, e3) -> If(deref_term e1, deref_term e2, deref_term e3)
   | Let(xt, e1, e2) -> Let(deref_id_typ xt, deref_term e1, deref_term e2)
   | LetRec({ name = xt; args = yts; body = e1 }, e2) ->
@@ -108,11 +111,14 @@ let rec g al info env e = (* 型推論ルーチン (caml2html: typing_g) *)
     | Neg(e) ->
 	tr e info unify Type.Int (g al dummy env e);
 	Type.Int
-    | Add(e1, e2) | Sub(e1, e2) | Mul(e1, e2) ->
+    | Float_of_int(e) ->
+	tr e info unify Type.Int (g al dummy env e);
+	Type.Float
+    | Add(e1, e2) | Sub(e1, e2) | Mul(e1, e2) | Div(e1, e2) ->
 	tr e info unify Type.Int (g al dummy env e1);
 	tr e info unify Type.Int (g al dummy env e2);
 	Type.Int
-    | FNeg(e) ->
+    | FNeg(e) | Floor(e) ->
 	tr e info unify Type.Float (g al dummy env e);
 	Type.Float
     | FAdd(e1, e2) | FSub(e1, e2) | FMul(e1, e2) | FDiv(e1, e2) ->

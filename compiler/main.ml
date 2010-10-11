@@ -1,3 +1,5 @@
+open Printf
+
 let limit = ref 1000
 
 let rec iter n e = (* 最適化処理をくりかえす (caml2html: main_iter) *)
@@ -14,9 +16,11 @@ let prep s =
     done; !r
 
       
-let memhp = 8192
+let memhp = 170000
 let memsp = 4095
 let memext = 4096
+let memin = 6144
+let memout = 8192(*memoutの値はmemout+1で初期化*)
 let floffset = 0
 
 let extlist =
@@ -82,9 +86,10 @@ let lexbuf outchan a = (* バッファをコンパイルしてチャンネルへ出力する (caml2htm
   let d = Alpha.f c in
   let e = iter !limit d in
   let f = Closure.f e in
-  let g = Virtual.f memext al f in
+  let g = Virtual.f memin memout memext al f in
   let h = RegAlloc.f g in
-  let i = Emit.f memsp memhp floffset h in
+  let i = Emit.f memext memout memsp memhp floffset h in
+  let j = Emit.string_of_binary i in
     (*
       Closure.print_prog stdout f
       KNormal.print_prog stdout e;
@@ -94,9 +99,12 @@ let lexbuf outchan a = (* バッファをコンパイルしてチャンネルへ出力する (caml2htm
       output_string stdout (prep (Emit.string_of_alist i));
       print_newline ();
     
-    (*
-      output_string stdout (Emit.string_of_binary i)
-    *)
+    
+      output_string stdout j;
+      (*
+      print_newline ();
+	output_string stdout (sprintf "%d\n"
+      *)
     ()
     (*
 let string s = lexbuf stdout (Lexing.from_string s) (* 文字列をコンパイルして標準出力に表示する (caml2html: main_string) *)

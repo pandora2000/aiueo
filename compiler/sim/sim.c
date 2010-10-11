@@ -3,12 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define name_size 10
+#define name_size 20
 
 #define fp_table_max_size 100
 
 typedef struct{
-  char name[name_size][100];
+  char name[name_size][6];
 }instruction;
 
 typedef struct{
@@ -348,6 +348,14 @@ int do_assemble(instruction_set * instruction_set){
     
     if(strcmp(instruction_set->instructions[pc]->name[0],"fsqrt") == 0){
       dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = sqrt(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
+    }
+
+    if(strcmp(instruction_set->instructions[pc]->name[0],"floor") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = floor(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
+    }
+
+    if(strcmp(instruction_set->instructions[pc]->name[0],"foi") == 0){
+      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = (int)(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
     }
     
 

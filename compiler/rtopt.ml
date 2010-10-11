@@ -1918,32 +1918,47 @@ in
    PPMファイルの書き込み関数
  *****************************************************************************)
 let rec write_ppm_header _ =
-  ( 
+  (
+    (*
     print_char 80; (* 'P' *)
     print_char (48 + 3); (* +6 if binary *) (* 48 = '0' *)
-    print_char 10;
+      print_char 10;
+    *)
     print_int image_size.(0);
-    print_char 32;
+    (*
+      print_char 32;
+    *)
     print_int image_size.(1);
-    print_char 32;
+    (*
+      print_char 32;
+    *)
     print_int 255;
-    print_char 10
+    (*
+      print_char 10
+    *)
   )
 in
 
 let rec write_rgb_element x =
-  let ix = int_of_float x in
-  let elem = if ix > 255 then 255 else if ix < 0 then 0 else ix in
-  print_int elem
+  let elem = if x > 255.0 then 255.0 else if x < 0.0 then 0.0 else x in
+  let elem = floor elem in
+    (*CPU側で出力変更*)
+    print_float elem
 in
 
 let rec write_rgb _ =
-   write_rgb_element rgb.(0); (* Red   *)
-   print_char 32;
-   write_rgb_element rgb.(1); (* Green *)
-   print_char 32;
-   write_rgb_element rgb.(2); (* Blue  *)
-   print_char 10
+  write_rgb_element rgb.(0); (* Red   *)
+  (*
+    print_char 32;
+  *)
+  write_rgb_element rgb.(1); (* Green *)
+  (*
+    print_char 32;
+  *)
+  write_rgb_element rgb.(2); (* Blue  *)
+  (*
+    print_char 10
+  *)
 in
 
 (******************************************************************************

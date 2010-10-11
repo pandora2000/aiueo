@@ -289,6 +289,17 @@ let pi memout =
 		 Let((Id.gentmp Type.Unit, Type.Unit), Store(pl2, zreg, memout),
 		     Ans(Store(num, pl, 0))))));
       ret = Type.Unit }
+
+      (*TODO:動作確認*)
+let pf memout =
+  let pl = Id.genid "pf" and pl2 = Id.genid "pf" and num = Id.genid "num" in
+    { name = Id.L "min_caml_print_float"; args = []; fargs = [num];
+      body =
+	(Let((pl, Type.Int), Load(zreg, memout),
+	     Let((pl2, Type.Int), Addi(pl, 1),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Store(pl2, zreg, memout),
+		     Ans(Fstore(num, pl, 0))))));
+      ret = Type.Unit }
       
       
 (* プログラム全体の仮想マシンコード生成 (caml2html: virtual_f) *)
@@ -297,7 +308,7 @@ let f memin memout memext al (Closure.Prog(fundefs, e)) =
   let al =
     List.map (fun (x, y) -> (x, y + memext)) al in
   let fundefs =
-    (pi memout) :: (ri memin) :: (rf memin)
+    (pf memout) :: (pi memout) :: (ri memin) :: (rf memin)
      :: cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
   let e = g al M.empty e in
     Prog(!data, fundefs, e)

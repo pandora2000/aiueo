@@ -1,7 +1,7 @@
 	nop
 	nop
-L_main_371 : 
-	addi	r2 r0 4088
+L_main_8692 : 
+	addi	r2 r0 4095
 	addi	r3 r0 17000
 	muli	r3 r3 10
 	addi	r4 r0 8193
@@ -63,9 +63,9 @@ L_main_371 :
 	store	r0 r0 4150
 	store	r0 r0 4151
 	store	r0 r0 4152
-	fload	f2 r0 4
+	fload	f2 r0 32
 	fstore	f2 r0 4153
-	fload	f2 r0 5
+	fload	f2 r0 33
 	fstore	f2 r0 4154
 	addi	r4 r0 60
 	store	r4 r0 4155
@@ -1358,174 +1358,17 @@ L_main_371 :
 	store	r4 r0 5100
 	addi	r4 r0 1655
 	store	r4 r0 5101
-	addi	r4 r0 10
-	fload	f2 r0 3
-	store	r4 r2 0
-	call	min_caml_create_float_array
-	add	r5 r0 r4
-	load	r4 r2 0
-	store	r5 r2 1
-	store	r4 r2 0
-	call	min_caml_create_array
-	load	r5 r2 0
-	load	r6 r2 1
-	store	r4 r2 2
-	store	r6 r2 1
-	store	r5 r2 0
-	add	r4 r0 r5
-	add	r5 r0 r6
-	call	min_caml_create_array
-	load	r5 r2 0
-	load	r6 r2 1
-	store	r4 r2 3
-	add	r4 r0 r5
-	add	r5 r0 r6
-	call	min_caml_create_array
-	load	r5 r2 2
-	store	r4 r2 4
-	add	r4 r0 r5
-	call	L_init_100
-	load	r5 r2 3
-	store	r4 r2 5
-	add	r4 r0 r5
-	call	L_init_100
-	load	r5 r2 4
-	store	r4 r2 6
-	add	r4 r0 r5
-	call	L_init_100
-	add	r6 r0 r4
-	addi	r4 r0 0
-	load	r5 r2 5
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 0
-	fload	f2 r0 2
-	add	r4 r4 r7
+	addi	r4 r0 128
+	addi	r5 r0 128
+	call	L_rt_2883
+	addi	Tu8691 r0 0
+	jump	L_end_8123
+min_caml_print_float : 
+	load	r4 r0 8192
+	addi	r5 r4 1
+	store	r5 r0 8192
 	fstore	f2 r4 0
-	addi	r4 r0 0
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 1
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 0
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 2
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 0
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 1
-	fload	f2 r0 1
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 2
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 0
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 1
-	fload	f2 r0 3
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r5 r4
-	load	r4 r4 0
-	addi	r7 r0 2
-	fload	f2 r0 0
-	add	r4 r4 r7
-	fstore	f2 r4 0
-	addi	r4 r0 0
-	load	r7 r2 6
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 0
-	fload	f2 r0 2
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 0
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 1
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 0
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 2
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 0
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 1
-	fload	f2 r0 1
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 1
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 2
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 0
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 1
-	fload	f2 r0 3
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	addi	r4 r0 2
-	add	r4 r7 r4
-	load	r4 r4 0
-	addi	r8 r0 2
-	fload	f2 r0 0
-	add	r4 r4 r8
-	fstore	f2 r4 0
-	add	r4 r0 r5
-	add	r5 r0 r7
-	call	L_matmul_120
-	jump	L_end_344
+	return
 min_caml_print_int : 
 	load	r5 r0 8192
 	addi	r6 r5 1
@@ -1547,9 +1390,9 @@ min_caml_read_float :
 min_caml_init_array : 
 	store	r6 r4 0
 	subi	r5 r5 1
-	bne	r5 r0 L_else_349
+	bne	r5 r0 L_else_8129
 	return
-L_else_349 : 
+L_else_8129 : 
 	addi	r4 r4 1
 	jump	min_caml_init_array
 min_caml_create_array : 
@@ -1569,9 +1412,9 @@ min_caml_create_array :
 min_caml_init_float_array : 
 	fstore	f2 r4 0
 	subi	r5 r5 1
-	bne	r5 r0 L_else_353
+	bne	r5 r0 L_else_8133
 	return
-L_else_353 : 
+L_else_8133 : 
 	addi	r4 r4 1
 	jump	min_caml_init_float_array
 min_caml_create_float_array : 
@@ -1587,106 +1430,7505 @@ min_caml_create_float_array :
 	add	r4 r0 r4
 	addi	r2 r2 1
 	return
-L_subinit_97 : 
+L_fiszero_2378 : 
+	fload	f3 r0 31
+	fbne	f2 f3 L_else_8136
+	addi	r4 r0 1
+	return
+L_else_8136 : 
+	addi	r4 r0 0
+	return
+L_fispos_2380 : 
+	fload	f3 r0 31
+	fbgt	f2 f3 L_else_8137
+	addi	r4 r0 0
+	return
+L_else_8137 : 
+	addi	r4 r0 1
+	return
+L_fisneg_2382 : 
+	fload	f3 r0 31
+	fbgt	f3 f2 L_else_8138
+	addi	r4 r0 0
+	return
+L_else_8138 : 
+	addi	r4 r0 1
+	return
+L_fabs_2384 : 
+	fload	f3 r0 31
+	fbgt	f3 f2 L_else_8139
+	fadd	f2 f0 f2
+	return
+L_else_8139 : 
+	fsub	f2 f0 f2
+	return
+L_fless_2386 : 
+	fbgt	f3 f2 L_else_8140
+	addi	r4 r0 0
+	return
+L_else_8140 : 
+	addi	r4 r0 1
+	return
+L_fhalf_2389 : 
+	fload	f3 r0 30
+	fdiv	f2 f2 f3
+	return
+L_fneg_2391 : 
+	fsub	f2 f0 f2
+	return
+L_fsqr_2393 : 
+	fmul	f2 f2 f2
+	return
+L_xor_2399 : 
+	addi	r6 r0 0
+	bne	r4 r6 L_else_8141
+	add	r4 r0 r5
+	return
+L_else_8141 : 
+	addi	r4 r0 0
+	bne	r5 r4 L_else_8142
+	addi	r4 r0 1
+	return
+L_else_8142 : 
+	addi	r4 r0 0
+	return
+L_sgn_2402 : 
+	subi	r2 r2 1
+	fstore	f2 r2 0
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8143
+	fload	f2 r2 0
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8144
+	fload	f2 r0 28
+	addi	r2 r2 1
+	return
+L_else_8144 : 
+	fload	f2 r0 29
+	addi	r2 r2 1
+	return
+L_else_8143 : 
+	fload	f2 r0 31
+	addi	r2 r2 1
+	return
+L_fneg_cond_2404 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8145
+	jump	L_fneg_2391
+L_else_8145 : 
+	fadd	f2 f0 f2
+	return
+L_add_mod5_2407 : 
+	add	r4 r4 r5
+	addi	r5 r0 5
+	bgt	r5 r4 L_else_8146
+	addi	r5 r0 5
+	sub	r4 r4 r5
+	return
+L_else_8146 : 
+	add	r4 r0 r4
+	return
+L_vecset_2410 : 
+	addi	r5 r0 0
+	add	r5 r4 r5
+	fstore	f2 r5 0
+	addi	r5 r0 1
+	add	r5 r4 r5
+	fstore	f3 r5 0
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fstore	f4 r4 0
+	return
+L_vecfill_2415 : 
+	addi	r5 r0 0
+	add	r5 r4 r5
+	fstore	f2 r5 0
+	addi	r5 r0 1
+	add	r5 r4 r5
+	fstore	f2 r5 0
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	return
+L_vecbzero_2418 : 
+	fload	f2 r0 31
+	jump	L_vecfill_2415
+L_veccpy_2420 : 
+	addi	r6 r0 0
+	addi	r7 r0 0
+	add	r7 r5 r7
+	fload	f2 r7 0
+	add	r6 r4 r6
+	fstore	f2 r6 0
+	addi	r6 r0 1
+	addi	r7 r0 1
+	add	r7 r5 r7
+	fload	f2 r7 0
+	add	r6 r4 r6
+	fstore	f2 r6 0
+	addi	r6 r0 2
+	addi	r7 r0 2
+	add	r5 r5 r7
+	fload	f2 r5 0
+	add	r4 r4 r6
+	fstore	f2 r4 0
+	return
+L_vecunit_sgn_2428 : 
+	subi	r2 r2 5
+	addi	r6 r0 0
+	add	r6 r4 r6
+	fload	f2 r6 0
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_fsqr_2393
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	store	r5 r2 1
+	fstore	f2 r2 2
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 2
+	fadd	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	store	r5 r2 1
+	fstore	f2 r2 3
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 3
+	fadd	f2 f3 f2
+	call	min_caml_sqrt
+	fstore	f2 r2 4
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8152
+	addi	r4 r0 0
+	load	r5 r2 0
+	bne	r5 r4 L_else_8154
+	fload	f2 r0 29
+	fload	f3 r2 4
+	fdiv	f2 f2 f3
+	jump	L_endif_8155
+L_else_8154 : 
+	fload	f2 r0 28
+	fload	f3 r2 4
+	fdiv	f2 f2 f3
+L_endif_8155 : 
+	jump	L_endif_8153
+L_else_8152 : 
+	fload	f2 r0 29
+L_endif_8153 : 
+	addi	r4 r0 0
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f3 r5 0
+	fmul	f3 f3 f2
+	add	r4 r6 r4
+	fstore	f3 r4 0
+	addi	r4 r0 1
+	addi	r5 r0 1
+	add	r5 r6 r5
+	fload	f3 r5 0
+	fmul	f3 f3 f2
+	add	r4 r6 r4
+	fstore	f3 r4 0
+	addi	r4 r0 2
+	addi	r5 r0 2
+	add	r5 r6 r5
+	fload	f3 r5 0
+	fmul	f2 f3 f2
+	add	r4 r6 r4
+	fstore	f2 r4 0
+	addi	r2 r2 5
+	return
+L_veciprod_2431 : 
+	addi	r6 r0 0
+	add	r6 r4 r6
+	fload	f2 r6 0
+	addi	r6 r0 0
+	add	r6 r5 r6
+	fload	f3 r6 0
+	fmul	f2 f2 f3
+	addi	r6 r0 1
+	add	r6 r4 r6
+	fload	f3 r6 0
+	addi	r6 r0 1
+	add	r6 r5 r6
+	fload	f4 r6 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	addi	r6 r0 2
+	add	r4 r4 r6
+	fload	f3 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	return
+L_veciprod2_2434 : 
+	addi	r5 r0 0
+	add	r5 r4 r5
+	fload	f5 r5 0
+	fmul	f2 f5 f2
+	addi	r5 r0 1
+	add	r5 r4 r5
+	fload	f5 r5 0
+	fmul	f3 f5 f3
+	fadd	f2 f2 f3
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	return
+L_vecaccum_2439 : 
+	addi	r6 r0 0
+	addi	r7 r0 0
+	add	r7 r4 r7
+	fload	f3 r7 0
+	addi	r7 r0 0
+	add	r7 r5 r7
+	fload	f4 r7 0
+	fmul	f4 f2 f4
+	fadd	f3 f3 f4
+	add	r6 r4 r6
+	fstore	f3 r6 0
+	addi	r6 r0 1
+	addi	r7 r0 1
+	add	r7 r4 r7
+	fload	f3 r7 0
+	addi	r7 r0 1
+	add	r7 r5 r7
+	fload	f4 r7 0
+	fmul	f4 f2 f4
+	fadd	f3 f3 f4
+	add	r6 r4 r6
+	fstore	f3 r6 0
+	addi	r6 r0 2
+	addi	r7 r0 2
+	add	r7 r4 r7
+	fload	f3 r7 0
+	addi	r7 r0 2
+	add	r5 r5 r7
+	fload	f4 r5 0
+	fmul	f2 f2 f4
+	fadd	f2 f3 f2
+	add	r4 r4 r6
+	fstore	f2 r4 0
+	return
+L_vecadd_2443 : 
+	addi	r6 r0 0
+	addi	r7 r0 0
+	add	r7 r4 r7
+	fload	f2 r7 0
+	addi	r7 r0 0
+	add	r7 r5 r7
+	fload	f3 r7 0
+	fadd	f2 f2 f3
+	add	r6 r4 r6
+	fstore	f2 r6 0
+	addi	r6 r0 1
+	addi	r7 r0 1
+	add	r7 r4 r7
+	fload	f2 r7 0
+	addi	r7 r0 1
+	add	r7 r5 r7
+	fload	f3 r7 0
+	fadd	f2 f2 f3
+	add	r6 r4 r6
+	fstore	f2 r6 0
+	addi	r6 r0 2
+	addi	r7 r0 2
+	add	r7 r4 r7
+	fload	f2 r7 0
+	addi	r7 r0 2
+	add	r5 r5 r7
+	fload	f3 r5 0
+	fadd	f2 f2 f3
+	add	r4 r4 r6
+	fstore	f2 r4 0
+	return
+L_vecscale_2449 : 
+	addi	r5 r0 0
+	addi	r6 r0 0
+	add	r6 r4 r6
+	fload	f3 r6 0
+	fmul	f3 f3 f2
+	add	r5 r4 r5
+	fstore	f3 r5 0
+	addi	r5 r0 1
+	addi	r6 r0 1
+	add	r6 r4 r6
+	fload	f3 r6 0
+	fmul	f3 f3 f2
+	add	r5 r4 r5
+	fstore	f3 r5 0
+	addi	r5 r0 2
+	addi	r6 r0 2
+	add	r6 r4 r6
+	fload	f3 r6 0
+	fmul	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	return
+L_vecaccumv_2452 : 
+	addi	r7 r0 0
+	addi	r8 r0 0
+	add	r8 r4 r8
+	fload	f2 r8 0
+	addi	r8 r0 0
+	add	r8 r5 r8
+	fload	f3 r8 0
+	addi	r8 r0 0
+	add	r8 r6 r8
+	fload	f4 r8 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	add	r7 r4 r7
+	fstore	f2 r7 0
+	addi	r7 r0 1
+	addi	r8 r0 1
+	add	r8 r4 r8
+	fload	f2 r8 0
+	addi	r8 r0 1
+	add	r8 r5 r8
+	fload	f3 r8 0
+	addi	r8 r0 1
+	add	r8 r6 r8
+	fload	f4 r8 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	add	r7 r4 r7
+	fstore	f2 r7 0
+	addi	r7 r0 2
+	addi	r8 r0 2
+	add	r8 r4 r8
+	fload	f2 r8 0
+	addi	r8 r0 2
+	add	r5 r5 r8
+	fload	f3 r5 0
+	addi	r5 r0 2
+	add	r5 r6 r5
+	fload	f4 r5 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	add	r4 r4 r7
+	fstore	f2 r4 0
+	return
+L_o_texturetype_2456 : 
+	load	r4 r4 0
+	add	r4 r0 r4
+	return
+L_o_form_2458 : 
+	load	r4 r4 1
+	add	r4 r0 r4
+	return
+L_o_reflectiontype_2460 : 
+	load	r4 r4 2
+	add	r4 r0 r4
+	return
+L_o_isinvert_2462 : 
+	load	r4 r4 6
+	add	r4 r0 r4
+	return
+L_o_isrot_2464 : 
+	load	r4 r4 3
+	add	r4 r0 r4
+	return
+L_o_param_a_2466 : 
+	load	r4 r4 4
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_b_2468 : 
+	load	r4 r4 4
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_c_2470 : 
+	load	r4 r4 4
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_abc_2472 : 
+	load	r4 r4 4
+	add	r4 r0 r4
+	return
+L_o_param_x_2474 : 
+	load	r4 r4 5
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_y_2476 : 
+	load	r4 r4 5
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_z_2478 : 
+	load	r4 r4 5
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_diffuse_2480 : 
+	load	r4 r4 7
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_hilight_2482 : 
+	load	r4 r4 7
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_color_red_2484 : 
+	load	r4 r4 8
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_color_green_2486 : 
+	load	r4 r4 8
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_color_blue_2488 : 
+	load	r4 r4 8
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_r1_2490 : 
+	load	r4 r4 9
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_r2_2492 : 
+	load	r4 r4 9
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_r3_2494 : 
+	load	r4 r4 9
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r4 0
+	return
+L_o_param_ctbl_2496 : 
+	load	r4 r4 10
+	add	r4 r0 r4
+	return
+L_p_rgb_2498 : 
+	load	r4 r4 0
+	add	r4 r0 r4
+	return
+L_p_intersection_points_2500 : 
+	load	r4 r4 1
+	add	r4 r0 r4
+	return
+L_p_surface_ids_2502 : 
+	load	r4 r4 2
+	add	r4 r0 r4
+	return
+L_p_calc_diffuse_2504 : 
+	load	r4 r4 3
+	add	r4 r0 r4
+	return
+L_p_energy_2506 : 
+	load	r4 r4 4
+	add	r4 r0 r4
+	return
+L_p_received_ray_20percent_2508 : 
+	load	r4 r4 5
+	add	r4 r0 r4
+	return
+L_p_group_id_2510 : 
+	load	r4 r4 6
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	return
+L_p_set_group_id_2512 : 
+	load	r4 r4 6
+	addi	r6 r0 0
+	add	r4 r4 r6
+	store	r5 r4 0
+	return
+L_p_nvectors_2515 : 
+	load	r4 r4 7
+	add	r4 r0 r4
+	return
+L_d_vec_2517 : 
+	load	r4 r4 0
+	add	r4 r0 r4
+	return
+L_d_const_2519 : 
+	load	r4 r4 1
+	add	r4 r0 r4
+	return
+L_r_surface_id_2521 : 
+	load	r4 r4 0
+	add	r4 r0 r4
+	return
+L_r_dvec_2523 : 
+	load	r4 r4 1
+	add	r4 r0 r4
+	return
+L_r_bright_2525 : 
+	fload	f2 r4 2
+	fadd	f2 f0 f2
+	return
+L_rad_2527 : 
+	fload	f3 r0 27
+	fmul	f2 f2 f3
+	return
+L_read_screen_settings_2529 : 
+	subi	r2 r2 20
+	addi	r4 r0 4096
+	addi	r5 r0 0
+	store	r5 r2 0
+	store	r4 r2 1
+	call	min_caml_read_float
+	load	r4 r2 0
+	load	r5 r2 1
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4096
+	addi	r5 r0 1
+	store	r5 r2 2
+	store	r4 r2 3
+	call	min_caml_read_float
+	load	r4 r2 2
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4096
+	addi	r5 r0 2
+	store	r5 r2 4
+	store	r4 r2 5
+	call	min_caml_read_float
+	load	r4 r2 4
+	load	r5 r2 5
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	call	min_caml_read_float
+	call	L_rad_2527
+	fstore	f2 r2 6
+	call	min_caml_cos
+	fload	f3 r2 6
+	fstore	f2 r2 7
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	fstore	f2 r2 8
+	call	min_caml_read_float
+	call	L_rad_2527
+	fstore	f2 r2 9
+	call	min_caml_cos
+	fload	f3 r2 9
+	fstore	f2 r2 10
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	addi	r4 r0 4099
+	addi	r5 r0 0
+	fload	f3 r2 7
+	fmul	f4 f3 f2
+	fload	f5 r0 26
+	fmul	f4 f4 f5
+	add	r4 r4 r5
+	fstore	f4 r4 0
+	addi	r4 r0 4099
+	addi	r5 r0 1
+	fload	f4 r0 25
+	fload	f5 r2 8
+	fmul	f4 f5 f4
+	add	r4 r4 r5
+	fstore	f4 r4 0
+	addi	r4 r0 4099
+	addi	r5 r0 2
+	fload	f4 r2 10
+	fmul	f6 f3 f4
+	fload	f7 r0 26
+	fmul	f6 f6 f7
+	add	r4 r4 r5
+	fstore	f6 r4 0
+	addi	r4 r0 4102
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fstore	f4 r4 0
+	addi	r4 r0 4102
+	addi	r5 r0 1
+	fload	f6 r0 31
+	add	r4 r4 r5
+	fstore	f6 r4 0
+	addi	r4 r0 4102
+	addi	r5 r0 2
+	fstore	f4 r2 10
+	fstore	f3 r2 7
+	fstore	f2 r2 11
+	fstore	f5 r2 8
+	store	r5 r2 12
+	store	r4 r2 13
+	call	L_fneg_2391
+	load	r4 r2 12
+	load	r5 r2 13
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4105
+	addi	r5 r0 0
+	fload	f2 r2 8
+	fstore	f2 r2 8
+	store	r5 r2 14
+	store	r4 r2 15
+	call	L_fneg_2391
+	fload	f3 r2 11
+	fmul	f2 f2 f3
+	load	r4 r2 14
+	load	r5 r2 15
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4105
+	addi	r5 r0 1
+	fload	f2 r2 7
+	store	r5 r2 16
+	store	r4 r2 17
+	call	L_fneg_2391
+	load	r4 r2 16
+	load	r5 r2 17
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4105
+	addi	r5 r0 2
+	fload	f2 r2 8
+	store	r5 r2 18
+	store	r4 r2 19
+	call	L_fneg_2391
+	fload	f3 r2 10
+	fmul	f2 f2 f3
+	load	r4 r2 18
+	load	r5 r2 19
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4108
+	addi	r5 r0 0
+	addi	r6 r0 4096
+	addi	r7 r0 0
+	add	r6 r6 r7
+	fload	f2 r6 0
+	addi	r6 r0 4099
+	addi	r7 r0 0
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fsub	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 4108
+	addi	r5 r0 1
+	addi	r6 r0 4096
+	addi	r7 r0 1
+	add	r6 r6 r7
+	fload	f2 r6 0
+	addi	r6 r0 4099
+	addi	r7 r0 1
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fsub	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 4108
+	addi	r5 r0 2
+	addi	r6 r0 4096
+	addi	r7 r0 2
+	add	r6 r6 r7
+	fload	f2 r6 0
+	addi	r6 r0 4099
+	addi	r7 r0 2
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fsub	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 20
+	return
+L_read_light_2531 : 
+	subi	r2 r2 7
+	call	min_caml_read_int
+	call	min_caml_read_float
+	call	L_rad_2527
+	fstore	f2 r2 0
+	call	min_caml_sin
+	addi	r4 r0 4111
+	addi	r5 r0 1
+	store	r5 r2 1
+	store	r4 r2 2
+	call	L_fneg_2391
+	load	r4 r2 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	call	min_caml_read_float
+	call	L_rad_2527
+	fload	f3 r2 0
+	fstore	f2 r2 3
+	fadd	f2 f0 f3
+	call	min_caml_cos
+	fload	f3 r2 3
+	fstore	f3 r2 3
+	fstore	f2 r2 4
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	addi	r4 r0 4111
+	addi	r5 r0 0
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	fload	f2 r2 3
+	fstore	f3 r2 4
+	call	min_caml_cos
+	addi	r4 r0 4111
+	addi	r5 r0 2
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 4153
+	addi	r5 r0 0
+	store	r5 r2 5
+	store	r4 r2 6
+	call	min_caml_read_float
+	load	r4 r2 5
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r2 r2 7
+	return
+L_rotate_quadratic_matrix_2533 : 
+	subi	r2 r2 28
+	addi	r6 r0 0
+	add	r6 r5 r6
+	fload	f2 r6 0
+	store	r4 r2 0
+	store	r5 r2 1
+	call	min_caml_cos
+	addi	r4 r0 0
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fstore	f2 r2 2
+	store	r5 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fstore	f2 r2 3
+	store	r5 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_cos
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fstore	f2 r2 4
+	store	r5 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	addi	r4 r0 2
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fstore	f2 r2 5
+	store	r5 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_cos
+	addi	r4 r0 2
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	store	r5 r2 1
+	fstore	f2 r2 6
+	fadd	f2 f0 f3
+	call	min_caml_sin
+	fload	f3 r2 6
+	fload	f4 r2 4
+	fmul	f5 f4 f3
+	fload	f6 r2 5
+	fload	f7 r2 3
+	fmul	f8 f7 f6
+	fmul	f8 f8 f3
+	fload	f9 r2 2
+	fmul	f10 f9 f2
+	fsub	f8 f8 f10
+	fmul	f10 f9 f6
+	fmul	f10 f10 f3
+	fmul	f11 f7 f2
+	fadd	f10 f10 f11
+	fmul	f11 f4 f2
+	fmul	f12 f7 f6
+	fmul	f12 f12 f2
+	fmul	f13 f9 f3
+	fadd	f12 f12 f13
+	fmul	f13 f9 f6
+	fmul	f2 f13 f2
+	fmul	f3 f7 f3
+	fsub	f2 f2 f3
+	fstore	f2 r2 7
+	fstore	f10 r2 8
+	fstore	f12 r2 9
+	fstore	f8 r2 10
+	fstore	f11 r2 11
+	fstore	f5 r2 12
+	fstore	f9 r2 2
+	fstore	f4 r2 4
+	fstore	f7 r2 3
+	fadd	f2 f0 f6
+	call	L_fneg_2391
+	fload	f3 r2 4
+	fload	f4 r2 3
+	fmul	f4 f4 f3
+	fload	f5 r2 2
+	fmul	f3 f5 f3
+	addi	r4 r0 0
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f5 r4 0
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f6 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f7 r4 0
+	addi	r4 r0 0
+	fload	f8 r2 12
+	fstore	f8 r2 12
+	fstore	f3 r2 13
+	fstore	f4 r2 14
+	store	r4 r2 15
+	store	r5 r2 0
+	fstore	f7 r2 16
+	fstore	f2 r2 17
+	fstore	f6 r2 18
+	fstore	f5 r2 19
+	fadd	f2 f0 f8
+	call	L_fsqr_2393
+	fload	f3 r2 19
+	fmul	f2 f3 f2
+	fload	f4 r2 11
+	fstore	f4 r2 11
+	fstore	f3 r2 19
+	fstore	f2 r2 20
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 18
+	fmul	f2 f3 f2
+	fload	f4 r2 20
+	fadd	f2 f4 f2
+	fload	f4 r2 17
+	fstore	f4 r2 17
+	fstore	f3 r2 18
+	fstore	f2 r2 21
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 16
+	fmul	f2 f3 f2
+	fload	f4 r2 21
+	fadd	f2 f4 f2
+	load	r4 r2 15
+	load	r5 r2 0
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	fload	f2 r2 10
+	fstore	f2 r2 10
+	store	r4 r2 22
+	store	r5 r2 0
+	fstore	f3 r2 16
+	call	L_fsqr_2393
+	fload	f3 r2 19
+	fmul	f2 f3 f2
+	fload	f4 r2 9
+	fstore	f4 r2 9
+	fstore	f3 r2 19
+	fstore	f2 r2 23
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 18
+	fmul	f2 f3 f2
+	fload	f4 r2 23
+	fadd	f2 f4 f2
+	fload	f4 r2 14
+	fstore	f4 r2 14
+	fstore	f3 r2 18
+	fstore	f2 r2 24
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 16
+	fmul	f2 f3 f2
+	fload	f4 r2 24
+	fadd	f2 f4 f2
+	load	r4 r2 22
+	load	r5 r2 0
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	fload	f2 r2 8
+	fstore	f2 r2 8
+	store	r4 r2 25
+	store	r5 r2 0
+	fstore	f3 r2 16
+	call	L_fsqr_2393
+	fload	f3 r2 19
+	fmul	f2 f3 f2
+	fload	f4 r2 7
+	fstore	f4 r2 7
+	fstore	f3 r2 19
+	fstore	f2 r2 26
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 18
+	fmul	f2 f3 f2
+	fload	f4 r2 26
+	fadd	f2 f4 f2
+	fload	f4 r2 13
+	fstore	f4 r2 13
+	fstore	f3 r2 18
+	fstore	f2 r2 27
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 16
+	fmul	f2 f3 f2
+	fload	f4 r2 27
+	fadd	f2 f4 f2
+	load	r4 r2 25
+	load	r5 r2 0
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 0
+	fload	f2 r0 30
+	fload	f4 r2 10
+	fload	f5 r2 19
+	fmul	f6 f5 f4
+	fload	f7 r2 8
+	fmul	f6 f6 f7
+	fload	f8 r2 9
+	fload	f9 r2 18
+	fmul	f10 f9 f8
+	fload	f11 r2 7
+	fmul	f10 f10 f11
+	fadd	f6 f6 f10
+	fload	f10 r2 14
+	fmul	f12 f3 f10
+	fload	f13 r2 13
+	fmul	f12 f12 f13
+	fadd	f6 f6 f12
+	fmul	f2 f2 f6
+	load	r5 r2 1
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	fload	f2 r0 30
+	fload	f6 r2 12
+	fmul	f12 f5 f6
+	fmul	f7 f12 f7
+	fload	f12 r2 11
+	fmul	f14 f9 f12
+	fmul	f11 f14 f11
+	fadd	f7 f7 f11
+	fload	f11 r2 17
+	fmul	f14 f3 f11
+	fmul	f13 f14 f13
+	fadd	f7 f7 f13
+	fmul	f2 f2 f7
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	fload	f2 r0 30
+	fmul	f5 f5 f6
+	fmul	f4 f5 f4
+	fmul	f5 f9 f12
+	fmul	f5 f5 f8
+	fadd	f4 f4 f5
+	fmul	f3 f3 f11
+	fmul	f3 f3 f10
+	fadd	f3 f4 f3
+	fmul	f2 f2 f3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r2 r2 28
+	return
+L_read_nth_object_2536 : 
+	subi	r2 r2 35
+	store	r4 r2 0
+	call	min_caml_read_int
+	addi	r5 r0 -1
+	bne	r4 r5 L_else_8164
+	addi	r4 r0 0
+	addi	r2 r2 35
+	return
+L_else_8164 : 
+	store	r4 r2 1
+	call	min_caml_read_int
+	store	r4 r2 2
+	call	min_caml_read_int
+	store	r4 r2 3
+	call	min_caml_read_int
+	addi	r5 r0 3
+	fload	f2 r0 31
+	store	r4 r2 4
+	add	r4 r0 r5
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	store	r5 r2 5
+	store	r4 r2 6
+	call	min_caml_read_float
+	load	r4 r2 5
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 7
+	store	r5 r2 6
+	call	min_caml_read_float
+	load	r4 r2 7
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	store	r4 r2 8
+	store	r5 r2 6
+	call	min_caml_read_float
+	load	r4 r2 8
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	fload	f2 r0 31
+	store	r5 r2 6
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	store	r5 r2 9
+	store	r4 r2 10
+	call	min_caml_read_float
+	load	r4 r2 9
+	load	r5 r2 10
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 11
+	store	r5 r2 10
+	call	min_caml_read_float
+	load	r4 r2 11
+	load	r5 r2 10
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	store	r4 r2 12
+	store	r5 r2 10
+	call	min_caml_read_float
+	load	r4 r2 12
+	load	r5 r2 10
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	store	r5 r2 10
+	call	min_caml_read_float
+	call	L_fisneg_2382
+	addi	r5 r0 2
+	fload	f2 r0 31
+	store	r4 r2 13
+	add	r4 r0 r5
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	store	r5 r2 14
+	store	r4 r2 15
+	call	min_caml_read_float
+	load	r4 r2 14
+	load	r5 r2 15
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 16
+	store	r5 r2 15
+	call	min_caml_read_float
+	load	r4 r2 16
+	load	r5 r2 15
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	fload	f2 r0 31
+	store	r5 r2 15
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	store	r5 r2 17
+	store	r4 r2 18
+	call	min_caml_read_float
+	load	r4 r2 17
+	load	r5 r2 18
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 19
+	store	r5 r2 18
+	call	min_caml_read_float
+	load	r4 r2 19
+	load	r5 r2 18
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	store	r4 r2 20
+	store	r5 r2 18
+	call	min_caml_read_float
+	load	r4 r2 20
+	load	r5 r2 18
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	fload	f2 r0 31
+	store	r5 r2 18
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	load	r6 r2 4
+	store	r6 r2 4
+	store	r4 r2 21
+	bne	r6 r5 L_else_8187
+	jump	L_endif_8188
+L_else_8187 : 
+	addi	r5 r0 0
+	store	r6 r2 4
+	store	r5 r2 22
+	store	r4 r2 21
+	call	min_caml_read_float
+	call	L_rad_2527
+	load	r4 r2 22
+	load	r5 r2 21
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 23
+	store	r5 r2 21
+	call	min_caml_read_float
+	call	L_rad_2527
+	load	r4 r2 23
+	load	r5 r2 21
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	store	r4 r2 24
+	store	r5 r2 21
+	call	min_caml_read_float
+	call	L_rad_2527
+	load	r4 r2 24
+	load	r5 r2 21
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8188 : 
+	addi	r4 r0 2
+	load	r5 r2 2
+	bne	r5 r4 L_else_8185
+	addi	r4 r0 1
+	jump	L_endif_8186
+L_else_8185 : 
+	load	r4 r2 13
+	add	r4 r0 r4
+L_endif_8186 : 
+	addi	r6 r0 4
+	fload	f2 r0 31
+	store	r5 r2 2
+	store	r4 r2 25
+	add	r4 r0 r6
+	call	min_caml_create_float_array
+	add	r5 r0 r3
+	addi	r3 r3 11
+	store	r4 r5 10
+	load	r4 r2 21
+	store	r4 r5 9
+	load	r6 r2 18
+	store	r6 r5 8
+	load	r6 r2 15
+	store	r6 r5 7
+	load	r6 r2 25
+	store	r6 r5 6
+	load	r6 r2 10
+	store	r6 r5 5
+	load	r6 r2 6
+	store	r6 r5 4
+	load	r7 r2 4
+	store	r7 r5 3
+	load	r8 r2 3
+	store	r8 r5 2
+	load	r8 r2 2
+	store	r8 r5 1
+	load	r9 r2 1
+	store	r9 r5 0
+	add	r5 r0 r5
+	addi	r9 r0 5042
+	load	r10 r2 0
+	add	r9 r9 r10
+	store	r5 r9 0
+	addi	r5 r0 3
+	store	r4 r2 21
+	store	r6 r2 6
+	store	r7 r2 4
+	bne	r8 r5 L_else_8169
+	addi	r5 r0 0
+	add	r5 r6 r5
+	fload	f2 r5 0
+	addi	r5 r0 0
+	store	r4 r2 21
+	store	r7 r2 4
+	store	r5 r2 26
+	store	r6 r2 6
+	fstore	f2 r2 27
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8183
+	fload	f2 r2 27
+	fstore	f2 r2 27
+	call	L_sgn_2402
+	fload	f3 r2 27
+	fstore	f2 r2 28
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 28
+	fdiv	f2 f3 f2
+	jump	L_endif_8184
+L_else_8183 : 
+	fload	f2 r0 31
+L_endif_8184 : 
+	load	r4 r2 26
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f2 r4 0
+	addi	r4 r0 1
+	store	r4 r2 29
+	store	r5 r2 6
+	fstore	f2 r2 30
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8181
+	fload	f2 r2 30
+	fstore	f2 r2 30
+	call	L_sgn_2402
+	fload	f3 r2 30
+	fstore	f2 r2 31
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 31
+	fdiv	f2 f3 f2
+	jump	L_endif_8182
+L_else_8181 : 
+	fload	f2 r0 31
+L_endif_8182 : 
+	load	r4 r2 29
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	addi	r4 r0 2
+	store	r4 r2 32
+	store	r5 r2 6
+	fstore	f2 r2 33
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8179
+	fload	f2 r2 33
+	fstore	f2 r2 33
+	call	L_sgn_2402
+	fload	f3 r2 33
+	fstore	f2 r2 34
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 34
+	fdiv	f2 f3 f2
+	jump	L_endif_8180
+L_else_8179 : 
+	fload	f2 r0 31
+L_endif_8180 : 
+	load	r4 r2 32
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8170
+L_else_8169 : 
+	addi	r5 r0 2
+	store	r4 r2 21
+	store	r6 r2 6
+	store	r7 r2 4
+	bne	r8 r5 L_else_8172
+	addi	r5 r0 0
+	load	r8 r2 13
+	bne	r8 r5 L_else_8176
+	addi	r4 r0 1
+	jump	L_endif_8177
+L_else_8176 : 
+	addi	r4 r0 0
+L_endif_8177 : 
+	store	r4 r2 21
+	store	r6 r2 6
+	store	r7 r2 4
+	add	r4 r0 r6
+	call	L_vecunit_sgn_2428
+	jump	L_endif_8173
+L_else_8172 : 
+L_endif_8173 : 
+L_endif_8170 : 
+	addi	r4 r0 0
+	load	r5 r2 4
+	bne	r5 r4 L_else_8165
+	jump	L_endif_8166
+L_else_8165 : 
+	load	r4 r2 6
+	load	r5 r2 21
+	call	L_rotate_quadratic_matrix_2533
+L_endif_8166 : 
+	addi	r4 r0 1
+	addi	r2 r2 35
+	return
+L_read_object_2538 : 
+	subi	r2 r2 1
+	addi	r5 r0 60
+	bgt	r5 r4 L_else_8192
+	addi	r2 r2 1
+	return
+L_else_8192 : 
+	store	r4 r2 0
+	call	L_read_nth_object_2536
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8194
+	addi	r4 r0 4144
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r5 r2 0
+	store	r5 r4 0
+	addi	r2 r2 1
+	return
+L_else_8194 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r4 r5 r4
+	addi	r2 r2 1
+	jump	L_read_object_2538
+L_read_all_object_2540 : 
+	addi	r4 r0 0
+	jump	L_read_object_2538
+L_read_net_item_2542 : 
 	subi	r2 r2 2
-	addi	r6 r0 10
-	bne	r5 r6 L_else_356
+	store	r4 r2 0
+	call	min_caml_read_int
+	addi	r5 r0 -1
+	bne	r4 r5 L_else_8199
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r4 r5 r4
+	addi	r5 r0 -1
+	addi	r2 r2 2
+	jump	min_caml_create_array
+L_else_8199 : 
+	addi	r5 r0 1
+	load	r6 r2 0
+	add	r5 r6 r5
+	store	r4 r2 1
+	store	r6 r2 0
+	add	r4 r0 r5
+	call	L_read_net_item_2542
+	load	r5 r2 0
+	add	r5 r4 r5
+	load	r6 r2 1
+	store	r6 r5 0
 	add	r4 r0 r4
 	addi	r2 r2 2
 	return
-L_else_356 : 
+L_read_or_network_2544 : 
+	subi	r2 r2 2
+	addi	r5 r0 0
+	store	r4 r2 0
+	add	r4 r0 r5
+	call	L_read_net_item_2542
+	add	r5 r0 r4
+	addi	r4 r0 0
+	add	r4 r5 r4
+	load	r4 r4 0
+	addi	r6 r0 -1
+	bne	r4 r6 L_else_8200
+	addi	r4 r0 1
+	load	r6 r2 0
+	add	r4 r6 r4
+	addi	r2 r2 2
+	jump	min_caml_create_array
+L_else_8200 : 
+	addi	r4 r0 1
+	load	r6 r2 0
+	add	r4 r6 r4
+	store	r5 r2 1
+	store	r6 r2 0
+	call	L_read_or_network_2544
+	load	r5 r2 0
+	add	r5 r4 r5
+	load	r6 r2 1
+	store	r6 r5 0
+	add	r4 r0 r4
+	addi	r2 r2 2
+	return
+L_read_and_network_2546 : 
+	subi	r2 r2 1
+	addi	r5 r0 0
+	store	r4 r2 0
+	add	r4 r0 r5
+	call	L_read_net_item_2542
+	addi	r5 r0 0
+	add	r5 r4 r5
+	load	r5 r5 0
+	addi	r6 r0 -1
+	bne	r5 r6 L_else_8202
+	addi	r2 r2 1
+	return
+L_else_8202 : 
+	addi	r5 r0 4157
+	load	r6 r2 0
+	add	r5 r5 r6
+	store	r4 r5 0
+	addi	r4 r0 1
+	add	r4 r6 r4
+	addi	r2 r2 1
+	jump	L_read_and_network_2546
+L_read_parameter_2548 : 
+	subi	r2 r2 2
+	call	L_read_screen_settings_2529
+	call	L_read_light_2531
+	call	L_read_all_object_2540
+	addi	r4 r0 0
+	call	L_read_and_network_2546
+	addi	r4 r0 4155
+	addi	r5 r0 0
+	addi	r6 r0 0
+	store	r5 r2 0
+	store	r4 r2 1
+	add	r4 r0 r6
+	call	L_read_or_network_2544
+	load	r5 r2 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	store	r4 r5 0
+	addi	r2 r2 2
+	return
+L_solver_rect_surface_2550 : 
+	subi	r2 r2 11
+	add	r9 r5 r6
+	fload	f5 r9 0
+	fstore	f4 r2 0
+	store	r8 r2 1
+	fstore	f3 r2 2
+	store	r7 r2 3
+	fstore	f2 r2 4
+	store	r6 r2 5
+	store	r5 r2 6
+	store	r4 r2 7
+	fadd	f2 f0 f5
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8206
+	load	r4 r2 7
+	store	r4 r2 7
+	call	L_o_param_abc_2472
+	load	r5 r2 7
+	store	r4 r2 8
+	add	r4 r0 r5
+	call	L_o_isinvert_2462
+	load	r5 r2 5
+	load	r6 r2 6
+	add	r7 r6 r5
+	fload	f2 r7 0
+	store	r6 r2 6
+	store	r5 r2 5
+	store	r4 r2 9
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 9
+	call	L_xor_2399
+	load	r5 r2 5
+	load	r6 r2 8
+	add	r7 r6 r5
+	fload	f2 r7 0
+	store	r6 r2 8
+	store	r5 r2 5
+	call	L_fneg_cond_2404
+	fload	f3 r2 4
+	fsub	f2 f2 f3
+	load	r4 r2 5
+	load	r5 r2 6
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fdiv	f2 f2 f3
+	load	r4 r2 3
+	add	r6 r5 r4
+	fload	f3 r6 0
+	fmul	f3 f2 f3
+	fload	f4 r2 2
+	fadd	f3 f3 f4
+	fstore	f2 r2 10
+	store	r5 r2 6
+	store	r4 r2 3
+	fadd	f2 f0 f3
+	call	L_fabs_2384
+	load	r4 r2 3
+	load	r5 r2 8
+	add	r4 r5 r4
+	fload	f3 r4 0
+	store	r5 r2 8
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8207
+	addi	r4 r0 0
+	addi	r2 r2 11
+	return
+L_else_8207 : 
+	load	r4 r2 1
+	load	r5 r2 6
+	add	r5 r5 r4
+	fload	f2 r5 0
+	fload	f3 r2 10
+	fmul	f2 f3 f2
+	fload	f4 r2 0
+	fadd	f2 f2 f4
+	fstore	f3 r2 10
+	store	r4 r2 1
+	call	L_fabs_2384
+	load	r4 r2 1
+	load	r5 r2 8
+	add	r4 r5 r4
+	fload	f3 r4 0
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8208
+	addi	r4 r0 0
+	addi	r2 r2 11
+	return
+L_else_8208 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 10
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 11
+	return
+L_else_8206 : 
+	addi	r4 r0 0
+	addi	r2 r2 11
+	return
+L_solver_rect_2559 : 
+	subi	r2 r2 5
+	addi	r6 r0 0
+	addi	r7 r0 1
+	addi	r8 r0 2
+	fstore	f2 r2 0
+	fstore	f4 r2 1
+	fstore	f3 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	call	L_solver_rect_surface_2550
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8209
+	addi	r6 r0 1
+	addi	r7 r0 2
+	addi	r8 r0 0
+	fload	f2 r2 2
+	fload	f3 r2 1
+	fload	f4 r2 0
+	load	r4 r2 4
+	load	r5 r2 3
+	fstore	f2 r2 2
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	store	r5 r2 3
+	store	r4 r2 4
+	call	L_solver_rect_surface_2550
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8210
+	addi	r6 r0 2
+	addi	r7 r0 0
+	addi	r8 r0 1
+	fload	f2 r2 1
+	fload	f3 r2 0
+	fload	f4 r2 2
+	load	r4 r2 4
+	load	r5 r2 3
+	call	L_solver_rect_surface_2550
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8211
+	addi	r4 r0 0
+	addi	r2 r2 5
+	return
+L_else_8211 : 
+	addi	r4 r0 3
+	addi	r2 r2 5
+	return
+L_else_8210 : 
+	addi	r4 r0 2
+	addi	r2 r2 5
+	return
+L_else_8209 : 
+	addi	r4 r0 1
+	addi	r2 r2 5
+	return
+L_solver_surface_2565 : 
+	subi	r2 r2 8
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	store	r5 r2 3
+	call	L_o_param_abc_2472
+	add	r5 r0 r4
+	load	r4 r2 3
+	store	r5 r2 4
+	call	L_veciprod_2431
+	fstore	f2 r2 5
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8212
+	addi	r4 r0 0
+	addi	r2 r2 8
+	return
+L_else_8212 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f2 r2 2
+	fload	f3 r2 1
+	fload	f4 r2 0
+	load	r6 r2 4
+	store	r5 r2 6
+	store	r4 r2 7
+	add	r4 r0 r6
+	call	L_veciprod2_2434
+	call	L_fneg_2391
+	fload	f3 r2 5
+	fdiv	f2 f2 f3
+	load	r4 r2 6
+	load	r5 r2 7
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 8
+	return
+L_quadratic_2571 : 
+	subi	r2 r2 15
+	fstore	f2 r2 0
+	fstore	f4 r2 1
+	fstore	f3 r2 2
+	store	r4 r2 3
+	call	L_fsqr_2393
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f2 r2 4
+	call	L_o_param_a_2466
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	fload	f3 r2 2
+	fstore	f3 r2 2
+	fstore	f2 r2 5
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f2 r2 6
+	call	L_o_param_b_2468
+	fload	f3 r2 6
+	fmul	f2 f3 f2
+	fload	f3 r2 5
+	fadd	f2 f3 f2
+	fload	f3 r2 1
+	fstore	f3 r2 1
+	fstore	f2 r2 7
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f2 r2 8
+	call	L_o_param_c_2470
+	fload	f3 r2 8
+	fmul	f2 f3 f2
+	fload	f3 r2 7
+	fadd	f2 f3 f2
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f2 r2 9
+	call	L_o_isrot_2464
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8213
+	fload	f2 r2 9
+	fadd	f2 f0 f2
+	addi	r2 r2 15
+	return
+L_else_8213 : 
+	fload	f2 r2 1
+	fload	f3 r2 2
+	fmul	f4 f3 f2
+	load	r4 r2 3
+	fstore	f3 r2 2
+	store	r4 r2 3
+	fstore	f2 r2 1
+	fstore	f4 r2 10
+	call	L_o_param_r1_2490
+	fload	f3 r2 10
+	fmul	f2 f3 f2
+	fload	f3 r2 9
+	fadd	f2 f3 f2
+	fload	f3 r2 0
+	fload	f4 r2 1
+	fmul	f4 f4 f3
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f3 r2 0
+	fstore	f2 r2 11
+	fstore	f4 r2 12
+	call	L_o_param_r2_2492
+	fload	f3 r2 12
+	fmul	f2 f3 f2
+	fload	f3 r2 11
+	fadd	f2 f3 f2
+	fload	f3 r2 2
+	fload	f4 r2 0
+	fmul	f3 f4 f3
+	load	r4 r2 3
+	fstore	f2 r2 13
+	fstore	f3 r2 14
+	call	L_o_param_r3_2494
+	fload	f3 r2 14
+	fmul	f2 f3 f2
+	fload	f3 r2 13
+	fadd	f2 f3 f2
+	addi	r2 r2 15
+	return
+L_bilinear_2576 : 
+	subi	r2 r2 18
+	fmul	f8 f2 f5
+	fstore	f5 r2 0
+	fstore	f2 r2 1
+	fstore	f7 r2 2
+	fstore	f4 r2 3
+	store	r4 r2 4
+	fstore	f6 r2 5
+	fstore	f3 r2 6
+	fstore	f8 r2 7
+	call	L_o_param_a_2466
+	fload	f3 r2 7
+	fmul	f2 f3 f2
+	fload	f3 r2 5
+	fload	f4 r2 6
+	fmul	f5 f4 f3
+	load	r4 r2 4
+	fstore	f4 r2 6
+	fstore	f3 r2 5
+	store	r4 r2 4
+	fstore	f2 r2 8
+	fstore	f5 r2 9
+	call	L_o_param_b_2468
+	fload	f3 r2 9
+	fmul	f2 f3 f2
+	fload	f3 r2 8
+	fadd	f2 f3 f2
+	fload	f3 r2 2
+	fload	f4 r2 3
+	fmul	f5 f4 f3
+	load	r4 r2 4
+	fstore	f3 r2 2
+	fstore	f4 r2 3
+	store	r4 r2 4
+	fstore	f2 r2 10
+	fstore	f5 r2 11
+	call	L_o_param_c_2470
+	fload	f3 r2 11
+	fmul	f2 f3 f2
+	fload	f3 r2 10
+	fadd	f2 f3 f2
+	load	r4 r2 4
+	store	r4 r2 4
+	fstore	f2 r2 12
+	call	L_o_isrot_2464
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8214
+	fload	f2 r2 12
+	fadd	f2 f0 f2
+	addi	r2 r2 18
+	return
+L_else_8214 : 
+	fload	f2 r2 5
+	fload	f3 r2 3
+	fmul	f4 f3 f2
+	fload	f5 r2 2
+	fload	f6 r2 6
+	fmul	f7 f6 f5
+	fadd	f4 f4 f7
+	load	r4 r2 4
+	fstore	f6 r2 6
+	fstore	f2 r2 5
+	store	r4 r2 4
+	fstore	f3 r2 3
+	fstore	f5 r2 2
+	fstore	f4 r2 13
+	call	L_o_param_r1_2490
+	fload	f3 r2 13
+	fmul	f2 f3 f2
+	fload	f3 r2 2
+	fload	f4 r2 1
+	fmul	f3 f4 f3
+	fload	f5 r2 0
+	fload	f6 r2 3
+	fmul	f6 f6 f5
+	fadd	f3 f3 f6
+	load	r4 r2 4
+	store	r4 r2 4
+	fstore	f5 r2 0
+	fstore	f4 r2 1
+	fstore	f2 r2 14
+	fstore	f3 r2 15
+	call	L_o_param_r2_2492
+	fload	f3 r2 15
+	fmul	f2 f3 f2
+	fload	f3 r2 14
+	fadd	f2 f3 f2
+	fload	f3 r2 5
+	fload	f4 r2 1
+	fmul	f3 f4 f3
+	fload	f4 r2 0
+	fload	f5 r2 6
+	fmul	f4 f5 f4
+	fadd	f3 f3 f4
+	load	r4 r2 4
+	fstore	f2 r2 16
+	fstore	f3 r2 17
+	call	L_o_param_r3_2494
+	fload	f3 r2 17
+	fmul	f2 f3 f2
+	fload	f3 r2 16
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 12
+	fadd	f2 f3 f2
+	addi	r2 r2 18
+	return
+L_solver_second_2584 : 
+	subi	r2 r2 11
+	addi	r6 r0 0
+	add	r6 r5 r6
+	fload	f5 r6 0
+	addi	r6 r0 1
+	add	r6 r5 r6
+	fload	f6 r6 0
+	addi	r6 r0 2
+	add	r6 r5 r6
+	fload	f7 r6 0
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	store	r4 r2 3
+	store	r5 r2 4
+	fadd	f4 f0 f7
+	fadd	f3 f0 f6
+	fadd	f2 f0 f5
+	call	L_quadratic_2571
+	fstore	f2 r2 5
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8215
+	addi	r4 r0 0
+	load	r5 r2 4
+	add	r4 r5 r4
+	fload	f2 r4 0
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fload	f5 r2 2
+	fload	f6 r2 1
+	fload	f7 r2 0
+	load	r4 r2 3
+	fstore	f7 r2 0
+	fstore	f6 r2 1
+	fstore	f5 r2 2
+	store	r4 r2 3
+	call	L_bilinear_2576
+	fload	f3 r2 2
+	fload	f4 r2 1
+	fload	f5 r2 0
+	load	r4 r2 3
+	fstore	f2 r2 6
+	store	r4 r2 3
+	fadd	f2 f0 f3
+	fadd	f3 f0 f4
+	fadd	f4 f0 f5
+	call	L_quadratic_2571
+	load	r4 r2 3
+	store	r4 r2 3
+	fstore	f2 r2 7
+	call	L_o_form_2458
+	addi	r5 r0 3
+	bne	r4 r5 L_else_8219
+	fload	f2 r0 29
+	fload	f3 r2 7
+	fsub	f2 f3 f2
+	jump	L_endif_8220
+L_else_8219 : 
+	fload	f2 r2 7
+	fadd	f2 f0 f2
+L_endif_8220 : 
+	fload	f3 r2 6
+	fstore	f3 r2 6
+	fstore	f2 r2 8
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 8
+	fload	f4 r2 5
+	fmul	f3 f4 f3
+	fsub	f2 f2 f3
+	fstore	f4 r2 5
+	fstore	f2 r2 9
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8216
+	addi	r4 r0 0
+	addi	r2 r2 11
+	return
+L_else_8216 : 
+	fload	f2 r2 9
+	call	min_caml_sqrt
+	load	r4 r2 3
+	fstore	f2 r2 10
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8217
+	fload	f2 r2 10
+	call	L_fneg_2391
+	jump	L_endif_8218
+L_else_8217 : 
+	fload	f2 r2 10
+	fadd	f2 f0 f2
+L_endif_8218 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f3 r2 6
+	fsub	f2 f2 f3
+	fload	f3 r2 5
+	fdiv	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 11
+	return
+L_else_8215 : 
+	addi	r4 r0 0
+	addi	r2 r2 11
+	return
+L_solver_2590 : 
+	subi	r2 r2 9
+	addi	r7 r0 5042
+	add	r4 r7 r4
+	load	r4 r4 0
+	addi	r7 r0 0
+	add	r7 r6 r7
+	fload	f2 r7 0
+	store	r5 r2 0
+	store	r4 r2 1
+	store	r6 r2 2
+	fstore	f2 r2 3
+	call	L_o_param_x_2474
+	fload	f3 r2 3
+	fsub	f2 f3 f2
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 1
+	fstore	f2 r2 4
+	store	r4 r2 1
+	store	r5 r2 2
+	fstore	f3 r2 5
+	call	L_o_param_y_2476
+	fload	f3 r2 5
+	fsub	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 1
+	fstore	f2 r2 6
+	store	r4 r2 1
+	fstore	f3 r2 7
+	call	L_o_param_z_2478
+	fload	f3 r2 7
+	fsub	f2 f3 f2
+	load	r4 r2 1
+	fstore	f2 r2 8
+	store	r4 r2 1
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8221
+	fload	f2 r2 4
+	fload	f3 r2 6
+	fload	f4 r2 8
+	load	r4 r2 1
+	load	r5 r2 0
+	addi	r2 r2 9
+	jump	L_solver_rect_2559
+L_else_8221 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8222
+	fload	f2 r2 4
+	fload	f3 r2 6
+	fload	f4 r2 8
+	load	r4 r2 1
+	load	r5 r2 0
+	addi	r2 r2 9
+	jump	L_solver_surface_2565
+L_else_8222 : 
+	fload	f2 r2 4
+	fload	f3 r2 6
+	fload	f4 r2 8
+	load	r4 r2 1
+	load	r5 r2 0
+	addi	r2 r2 9
+	jump	L_solver_second_2584
+L_solver_rect_fast_2594 : 
+	subi	r2 r2 15
+	addi	r7 r0 0
+	add	r7 r6 r7
+	fload	f5 r7 0
+	fsub	f5 f5 f2
+	addi	r7 r0 1
+	add	r7 r6 r7
+	fload	f6 r7 0
+	fmul	f5 f5 f6
+	addi	r7 r0 1
+	add	r7 r5 r7
+	fload	f6 r7 0
+	fmul	f6 f5 f6
+	fadd	f6 f6 f3
+	fstore	f2 r2 0
+	fstore	f3 r2 1
+	store	r6 r2 2
+	fstore	f4 r2 3
+	fstore	f5 r2 4
+	store	r5 r2 5
+	store	r4 r2 6
+	fadd	f2 f0 f6
+	call	L_fabs_2384
+	load	r4 r2 6
+	store	r4 r2 6
+	fstore	f2 r2 7
+	call	L_o_param_b_2468
+	add	f3 r0 f2
+	fload	f2 r2 7
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8238
+	addi	r4 r0 0
+	jump	L_endif_8239
+L_else_8238 : 
+	addi	r4 r0 2
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	fload	f4 r2 3
+	fadd	f2 f2 f4
+	fstore	f3 r2 4
+	fstore	f4 r2 3
+	store	r5 r2 5
+	call	L_fabs_2384
+	load	r4 r2 6
+	store	r4 r2 6
+	fstore	f2 r2 8
+	call	L_o_param_c_2470
+	add	f3 r0 f2
+	fload	f2 r2 8
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8240
+	addi	r4 r0 0
+	jump	L_endif_8241
+L_else_8240 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	store	r5 r2 2
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8242
+	addi	r4 r0 1
+	jump	L_endif_8243
+L_else_8242 : 
+	addi	r4 r0 0
+L_endif_8243 : 
+L_endif_8241 : 
+L_endif_8239 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8223
+	addi	r4 r0 2
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 1
+	fsub	f2 f2 f3
+	addi	r4 r0 3
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fmul	f2 f2 f4
+	addi	r4 r0 0
+	load	r6 r2 5
+	add	r4 r6 r4
+	fload	f4 r4 0
+	fmul	f4 f2 f4
+	fload	f5 r2 0
+	fadd	f4 f4 f5
+	fstore	f3 r2 1
+	fstore	f5 r2 0
+	store	r5 r2 2
+	fstore	f2 r2 9
+	store	r6 r2 5
+	fadd	f2 f0 f4
+	call	L_fabs_2384
+	load	r4 r2 6
+	store	r4 r2 6
+	fstore	f2 r2 10
+	call	L_o_param_a_2466
+	add	f3 r0 f2
+	fload	f2 r2 10
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8232
+	addi	r4 r0 0
+	jump	L_endif_8233
+L_else_8232 : 
+	addi	r4 r0 2
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 9
+	fmul	f2 f3 f2
+	fload	f4 r2 3
+	fadd	f2 f2 f4
+	fstore	f3 r2 9
+	store	r5 r2 5
+	fstore	f4 r2 3
+	call	L_fabs_2384
+	load	r4 r2 6
+	store	r4 r2 6
+	fstore	f2 r2 11
+	call	L_o_param_c_2470
+	add	f3 r0 f2
+	fload	f2 r2 11
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8234
+	addi	r4 r0 0
+	jump	L_endif_8235
+L_else_8234 : 
+	addi	r4 r0 3
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	store	r5 r2 2
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8236
+	addi	r4 r0 1
+	jump	L_endif_8237
+L_else_8236 : 
+	addi	r4 r0 0
+L_endif_8237 : 
+L_endif_8235 : 
+L_endif_8233 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8224
+	addi	r4 r0 4
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 3
+	fsub	f2 f2 f3
+	addi	r4 r0 5
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	addi	r4 r0 0
+	load	r6 r2 5
+	add	r4 r6 r4
+	fload	f3 r4 0
+	fmul	f3 f2 f3
+	fload	f4 r2 0
+	fadd	f3 f3 f4
+	store	r5 r2 2
+	fstore	f2 r2 12
+	store	r6 r2 5
+	fadd	f2 f0 f3
+	call	L_fabs_2384
+	load	r4 r2 6
+	store	r4 r2 6
+	fstore	f2 r2 13
+	call	L_o_param_a_2466
+	add	f3 r0 f2
+	fload	f2 r2 13
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8226
+	addi	r4 r0 0
+	jump	L_endif_8227
+L_else_8226 : 
+	addi	r4 r0 1
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 12
+	fmul	f2 f3 f2
+	fload	f4 r2 1
+	fadd	f2 f2 f4
+	fstore	f3 r2 12
+	call	L_fabs_2384
+	load	r4 r2 6
+	fstore	f2 r2 14
+	call	L_o_param_b_2468
+	add	f3 r0 f2
+	fload	f2 r2 14
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8228
+	addi	r4 r0 0
+	jump	L_endif_8229
+L_else_8228 : 
+	addi	r4 r0 5
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r4 0
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8230
+	addi	r4 r0 1
+	jump	L_endif_8231
+L_else_8230 : 
+	addi	r4 r0 0
+L_endif_8231 : 
+L_endif_8229 : 
+L_endif_8227 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8225
+	addi	r4 r0 0
+	addi	r2 r2 15
+	return
+L_else_8225 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 12
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	addi	r2 r2 15
+	return
+L_else_8224 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 9
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	addi	r2 r2 15
+	return
+L_else_8223 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 15
+	return
+L_solver_surface_fast_2601 : 
+	subi	r2 r2 4
+	addi	r4 r0 0
+	add	r4 r5 r4
+	fload	f5 r4 0
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	store	r5 r2 3
+	fadd	f2 f0 f5
+	call	L_fisneg_2382
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8244
+	addi	r4 r0 0
+	addi	r2 r2 4
+	return
+L_else_8244 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	addi	r6 r0 1
+	load	r7 r2 3
+	add	r6 r7 r6
+	fload	f2 r6 0
+	fload	f3 r2 2
+	fmul	f2 f2 f3
+	addi	r6 r0 2
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fload	f4 r2 1
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	addi	r6 r0 3
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fload	f4 r2 0
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 4
+	return
+L_solver_second_fast_2607 : 
+	subi	r2 r2 14
+	addi	r6 r0 0
+	add	r6 r5 r6
+	fload	f5 r6 0
+	fstore	f5 r2 0
+	store	r4 r2 1
+	fstore	f4 r2 2
+	fstore	f3 r2 3
+	fstore	f2 r2 4
+	store	r5 r2 5
+	fadd	f2 f0 f5
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8245
+	addi	r4 r0 1
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 4
+	fmul	f2 f2 f3
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fload	f5 r2 3
+	fmul	f4 f4 f5
+	fadd	f2 f2 f4
+	addi	r4 r0 3
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fload	f6 r2 2
+	fmul	f4 f4 f6
+	fadd	f2 f2 f4
+	load	r4 r2 1
+	store	r5 r2 5
+	fstore	f2 r2 6
+	store	r4 r2 1
+	fadd	f4 f0 f6
+	fadd	f2 f0 f3
+	fadd	f3 f0 f5
+	call	L_quadratic_2571
+	load	r4 r2 1
+	store	r4 r2 1
+	fstore	f2 r2 7
+	call	L_o_form_2458
+	addi	r5 r0 3
+	bne	r4 r5 L_else_8251
+	fload	f2 r0 29
+	fload	f3 r2 7
+	fsub	f2 f3 f2
+	jump	L_endif_8252
+L_else_8251 : 
+	fload	f2 r2 7
+	fadd	f2 f0 f2
+L_endif_8252 : 
+	fload	f3 r2 6
+	fstore	f3 r2 6
+	fstore	f2 r2 8
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 8
+	fload	f4 r2 0
+	fmul	f3 f4 f3
+	fsub	f2 f2 f3
+	fstore	f2 r2 9
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8246
+	addi	r4 r0 0
+	addi	r2 r2 14
+	return
+L_else_8246 : 
+	load	r4 r2 1
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8247
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f2 r2 9
+	store	r5 r2 10
+	store	r4 r2 11
+	call	min_caml_sqrt
+	fload	f3 r2 6
+	fsub	f2 f3 f2
+	addi	r4 r0 4
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	load	r4 r2 10
+	load	r5 r2 11
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8248
+L_else_8247 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f2 r2 9
+	store	r5 r2 12
+	store	r4 r2 13
+	call	min_caml_sqrt
+	fload	f3 r2 6
+	fadd	f2 f3 f2
+	addi	r4 r0 4
+	load	r5 r2 5
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	load	r4 r2 12
+	load	r5 r2 13
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8248 : 
+	addi	r4 r0 1
+	addi	r2 r2 14
+	return
+L_else_8245 : 
+	addi	r4 r0 0
+	addi	r2 r2 14
+	return
+L_solver_fast_2613 : 
+	subi	r2 r2 11
+	addi	r7 r0 5042
+	add	r7 r7 r4
+	load	r7 r7 0
+	addi	r8 r0 0
+	add	r8 r6 r8
+	fload	f2 r8 0
+	store	r4 r2 0
+	store	r5 r2 1
+	store	r7 r2 2
+	store	r6 r2 3
+	fstore	f2 r2 4
+	add	r4 r0 r7
+	call	L_o_param_x_2474
+	fload	f3 r2 4
+	fsub	f2 f3 f2
+	addi	r4 r0 1
+	load	r5 r2 3
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 2
+	fstore	f2 r2 5
+	store	r4 r2 2
+	store	r5 r2 3
+	fstore	f3 r2 6
+	call	L_o_param_y_2476
+	fload	f3 r2 6
+	fsub	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 3
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 2
+	fstore	f2 r2 7
+	store	r4 r2 2
+	fstore	f3 r2 8
+	call	L_o_param_z_2478
+	fload	f3 r2 8
+	fsub	f2 f3 f2
+	load	r4 r2 1
+	fstore	f2 r2 9
+	store	r4 r2 1
+	call	L_d_const_2519
+	load	r5 r2 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	load	r5 r2 2
+	store	r4 r2 10
+	store	r5 r2 2
+	add	r4 r0 r5
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8253
+	load	r4 r2 1
+	call	L_d_vec_2517
+	add	r5 r0 r4
+	fload	f2 r2 5
+	fload	f3 r2 7
+	fload	f4 r2 9
+	load	r4 r2 2
+	load	r6 r2 10
+	addi	r2 r2 11
+	jump	L_solver_rect_fast_2594
+L_else_8253 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8254
+	fload	f2 r2 5
+	fload	f3 r2 7
+	fload	f4 r2 9
+	load	r4 r2 2
+	load	r5 r2 10
+	addi	r2 r2 11
+	jump	L_solver_surface_fast_2601
+L_else_8254 : 
+	fload	f2 r2 5
+	fload	f3 r2 7
+	fload	f4 r2 9
+	load	r4 r2 2
+	load	r5 r2 10
+	addi	r2 r2 11
+	jump	L_solver_second_fast_2607
+L_solver_surface_fast2_2617 : 
+	subi	r2 r2 2
+	addi	r4 r0 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	store	r6 r2 0
+	store	r5 r2 1
+	call	L_fisneg_2382
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8255
+	addi	r4 r0 0
+	addi	r2 r2 2
+	return
+L_else_8255 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	addi	r6 r0 0
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	addi	r6 r0 3
+	load	r7 r2 0
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fmul	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r2 r2 2
+	return
+L_solver_second_fast2_2624 : 
+	subi	r2 r2 14
+	addi	r7 r0 0
+	add	r7 r5 r7
+	fload	f5 r7 0
+	store	r4 r2 0
+	fstore	f5 r2 1
+	store	r6 r2 2
+	fstore	f4 r2 3
+	fstore	f3 r2 4
+	fstore	f2 r2 5
+	store	r5 r2 6
+	fadd	f2 f0 f5
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8256
+	addi	r4 r0 1
+	load	r5 r2 6
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r2 5
+	fmul	f2 f2 f3
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fload	f4 r2 4
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	addi	r4 r0 3
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fload	f4 r2 3
+	fmul	f3 f3 f4
+	fadd	f2 f2 f3
+	addi	r4 r0 3
+	load	r6 r2 2
+	add	r4 r6 r4
+	fload	f3 r4 0
+	store	r5 r2 6
+	fstore	f2 r2 7
+	fstore	f3 r2 8
+	call	L_fsqr_2393
+	fload	f3 r2 8
+	fload	f4 r2 1
+	fmul	f3 f4 f3
+	fsub	f2 f2 f3
+	fstore	f2 r2 9
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8257
+	addi	r4 r0 0
+	addi	r2 r2 14
+	return
+L_else_8257 : 
+	load	r4 r2 0
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8258
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f2 r2 9
+	store	r5 r2 10
+	store	r4 r2 11
+	call	min_caml_sqrt
+	fload	f3 r2 7
+	fsub	f2 f3 f2
+	addi	r4 r0 4
+	load	r5 r2 6
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	load	r4 r2 10
+	load	r5 r2 11
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8259
+L_else_8258 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	fload	f2 r2 9
+	store	r5 r2 12
+	store	r4 r2 13
+	call	min_caml_sqrt
+	fload	f3 r2 7
+	fadd	f2 f3 f2
+	addi	r4 r0 4
+	load	r5 r2 6
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	load	r4 r2 12
+	load	r5 r2 13
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8259 : 
+	addi	r4 r0 1
+	addi	r2 r2 14
+	return
+L_else_8256 : 
+	addi	r4 r0 0
+	addi	r2 r2 14
+	return
+L_solver_fast2_2631 : 
+	subi	r2 r2 8
+	addi	r6 r0 5042
+	add	r6 r6 r4
+	load	r6 r6 0
+	store	r6 r2 0
+	store	r4 r2 1
+	store	r5 r2 2
+	add	r4 r0 r6
+	call	L_o_param_ctbl_2496
+	addi	r5 r0 0
+	add	r5 r4 r5
+	fload	f2 r5 0
+	addi	r5 r0 1
+	add	r5 r4 r5
+	fload	f3 r5 0
+	addi	r5 r0 2
+	add	r5 r4 r5
+	fload	f4 r5 0
+	load	r5 r2 2
+	store	r4 r2 3
+	fstore	f4 r2 4
+	fstore	f3 r2 5
+	fstore	f2 r2 6
+	store	r5 r2 2
+	add	r4 r0 r5
+	call	L_d_const_2519
+	load	r5 r2 1
+	add	r4 r4 r5
+	load	r4 r4 0
+	load	r5 r2 0
+	store	r4 r2 7
+	store	r5 r2 0
+	add	r4 r0 r5
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8262
+	load	r4 r2 2
+	call	L_d_vec_2517
+	add	r5 r0 r4
+	fload	f2 r2 6
+	fload	f3 r2 5
+	fload	f4 r2 4
+	load	r4 r2 0
+	load	r6 r2 7
+	addi	r2 r2 8
+	jump	L_solver_rect_fast_2594
+L_else_8262 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8263
+	fload	f2 r2 6
+	fload	f3 r2 5
+	fload	f4 r2 4
+	load	r4 r2 0
+	load	r5 r2 7
+	load	r6 r2 3
+	addi	r2 r2 8
+	jump	L_solver_surface_fast2_2617
+L_else_8263 : 
+	fload	f2 r2 6
+	fload	f3 r2 5
+	fload	f4 r2 4
+	load	r4 r2 0
+	load	r5 r2 7
+	load	r6 r2 3
+	addi	r2 r2 8
+	jump	L_solver_second_fast2_2624
+L_setup_rect_table_2634 : 
+	subi	r2 r2 12
+	addi	r6 r0 6
+	fload	f2 r0 31
+	store	r5 r2 0
+	store	r4 r2 1
+	add	r4 r0 r6
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	store	r4 r2 2
+	store	r6 r2 1
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8272
+	addi	r4 r0 0
+	load	r5 r2 0
+	store	r4 r2 3
+	store	r5 r2 0
+	add	r4 r0 r5
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	store	r6 r2 1
+	store	r4 r2 4
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 4
+	call	L_xor_2399
+	load	r5 r2 0
+	store	r5 r2 0
+	store	r4 r2 5
+	add	r4 r0 r5
+	call	L_o_param_a_2466
+	load	r4 r2 5
+	call	L_fneg_cond_2404
+	load	r4 r2 3
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	fload	f2 r0 29
+	addi	r6 r0 0
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fdiv	f2 f2 f3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8273
+L_else_8272 : 
+	addi	r4 r0 1
+	fload	f2 r0 31
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8273 : 
+	addi	r4 r0 1
+	load	r6 r2 1
+	add	r4 r6 r4
+	fload	f2 r4 0
+	store	r5 r2 2
+	store	r6 r2 1
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8268
+	addi	r4 r0 2
+	load	r5 r2 0
+	store	r4 r2 6
+	store	r5 r2 0
+	add	r4 r0 r5
+	call	L_o_isinvert_2462
+	addi	r5 r0 1
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	store	r6 r2 1
+	store	r4 r2 7
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 7
+	call	L_xor_2399
+	load	r5 r2 0
+	store	r5 r2 0
+	store	r4 r2 8
+	add	r4 r0 r5
+	call	L_o_param_b_2468
+	load	r4 r2 8
+	call	L_fneg_cond_2404
+	load	r4 r2 6
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	fload	f2 r0 29
+	addi	r6 r0 1
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fdiv	f2 f2 f3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8269
+L_else_8268 : 
+	addi	r4 r0 3
+	fload	f2 r0 31
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8269 : 
+	addi	r4 r0 2
+	load	r6 r2 1
+	add	r4 r6 r4
+	fload	f2 r4 0
+	store	r5 r2 2
+	store	r6 r2 1
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8264
+	addi	r4 r0 4
+	load	r5 r2 0
+	store	r4 r2 9
+	store	r5 r2 0
+	add	r4 r0 r5
+	call	L_o_isinvert_2462
+	addi	r5 r0 2
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	store	r6 r2 1
+	store	r4 r2 10
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 10
+	call	L_xor_2399
+	load	r5 r2 0
+	store	r4 r2 11
+	add	r4 r0 r5
+	call	L_o_param_c_2470
+	load	r4 r2 11
+	call	L_fneg_cond_2404
+	load	r4 r2 9
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 5
+	fload	f2 r0 29
+	addi	r6 r0 2
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f3 r6 0
+	fdiv	f2 f2 f3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8265
+L_else_8264 : 
+	addi	r4 r0 5
+	fload	f2 r0 31
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8265 : 
+	add	r4 r0 r5
+	addi	r2 r2 12
+	return
+L_setup_surface_table_2637 : 
+	subi	r2 r2 12
+	addi	r6 r0 4
+	fload	f2 r0 31
+	store	r5 r2 0
+	store	r4 r2 1
+	add	r4 r0 r6
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	load	r5 r2 0
+	store	r4 r2 2
+	store	r5 r2 0
+	store	r6 r2 1
+	fstore	f2 r2 3
+	add	r4 r0 r5
+	call	L_o_param_a_2466
+	fload	f3 r2 3
+	fmul	f2 f3 f2
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 4
+	fstore	f3 r2 5
+	call	L_o_param_b_2468
+	fload	f3 r2 5
+	fmul	f2 f3 f2
+	fload	f3 r2 4
+	fadd	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	store	r4 r2 0
+	fstore	f2 r2 6
+	fstore	f3 r2 7
+	call	L_o_param_c_2470
+	fload	f3 r2 7
+	fmul	f2 f3 f2
+	fload	f3 r2 6
+	fadd	f2 f3 f2
+	fstore	f2 r2 8
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8276
+	addi	r4 r0 0
+	fload	f2 r0 31
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8277
+L_else_8276 : 
+	addi	r4 r0 0
+	fload	f2 r0 28
+	fload	f3 r2 8
+	fdiv	f2 f2 f3
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	load	r6 r2 0
+	store	r6 r2 0
+	store	r4 r2 9
+	store	r5 r2 2
+	fstore	f3 r2 8
+	add	r4 r0 r6
+	call	L_o_param_a_2466
+	fload	f3 r2 8
+	fdiv	f2 f2 f3
+	fstore	f3 r2 8
+	call	L_fneg_2391
+	load	r4 r2 9
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	load	r6 r2 0
+	store	r6 r2 0
+	store	r4 r2 10
+	store	r5 r2 2
+	add	r4 r0 r6
+	call	L_o_param_b_2468
+	fload	f3 r2 8
+	fdiv	f2 f2 f3
+	fstore	f3 r2 8
+	call	L_fneg_2391
+	load	r4 r2 10
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	load	r6 r2 0
+	store	r4 r2 11
+	store	r5 r2 2
+	add	r4 r0 r6
+	call	L_o_param_c_2470
+	fload	f3 r2 8
+	fdiv	f2 f2 f3
+	call	L_fneg_2391
+	load	r4 r2 11
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8277 : 
+	add	r4 r0 r5
+	addi	r2 r2 12
+	return
+L_setup_second_table_2640 : 
+	subi	r2 r2 22
+	addi	r6 r0 5
+	fload	f2 r0 31
+	store	r5 r2 0
+	store	r4 r2 1
+	add	r4 r0 r6
+	call	min_caml_create_float_array
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	addi	r5 r0 1
+	add	r5 r6 r5
+	fload	f3 r5 0
+	addi	r5 r0 2
+	add	r5 r6 r5
+	fload	f4 r5 0
+	load	r5 r2 0
+	store	r4 r2 2
+	store	r5 r2 0
+	store	r6 r2 1
+	add	r4 r0 r5
+	call	L_quadratic_2571
+	addi	r4 r0 0
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	fstore	f2 r2 3
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f3 r2 4
+	call	L_o_param_a_2466
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	call	L_fneg_2391
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	fstore	f2 r2 5
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f3 r2 6
+	call	L_o_param_b_2468
+	fload	f3 r2 6
+	fmul	f2 f3 f2
+	call	L_fneg_2391
+	addi	r4 r0 2
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 7
+	store	r4 r2 0
+	fstore	f3 r2 8
+	call	L_o_param_c_2470
+	fload	f3 r2 8
+	fmul	f2 f3 f2
+	call	L_fneg_2391
+	addi	r4 r0 0
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f3 r2 3
+	fstore	f3 r4 0
+	load	r4 r2 0
+	fstore	f3 r2 3
+	store	r4 r2 0
+	fstore	f2 r2 9
+	store	r5 r2 2
+	call	L_o_isrot_2464
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8284
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	fload	f2 r2 5
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f2 r2 7
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	add	r4 r5 r4
+	fload	f2 r2 9
+	fstore	f2 r4 0
+	jump	L_endif_8285
+L_else_8284 : 
+	addi	r4 r0 1
+	addi	r5 r0 2
+	load	r6 r2 1
+	add	r5 r6 r5
+	fload	f2 r5 0
+	load	r5 r2 0
+	store	r4 r2 10
+	store	r5 r2 0
+	store	r6 r2 1
+	fstore	f2 r2 11
+	add	r4 r0 r5
+	call	L_o_param_r2_2492
+	fload	f3 r2 11
+	fmul	f2 f3 f2
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 12
+	fstore	f3 r2 13
+	call	L_o_param_r3_2494
+	fload	f3 r2 13
+	fmul	f2 f3 f2
+	fload	f3 r2 12
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 5
+	fsub	f2 f3 f2
+	load	r4 r2 10
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	addi	r6 r0 2
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	load	r6 r2 0
+	store	r4 r2 14
+	store	r5 r2 2
+	store	r6 r2 0
+	store	r7 r2 1
+	fstore	f2 r2 15
+	add	r4 r0 r6
+	call	L_o_param_r1_2490
+	fload	f3 r2 15
+	fmul	f2 f3 f2
+	addi	r4 r0 0
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 16
+	fstore	f3 r2 17
+	call	L_o_param_r3_2494
+	fload	f3 r2 17
+	fmul	f2 f3 f2
+	fload	f3 r2 16
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 7
+	fsub	f2 f3 f2
+	load	r4 r2 14
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 3
+	addi	r6 r0 1
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	load	r6 r2 0
+	store	r4 r2 18
+	store	r5 r2 2
+	store	r6 r2 0
+	store	r7 r2 1
+	fstore	f2 r2 19
+	add	r4 r0 r6
+	call	L_o_param_r1_2490
+	fload	f3 r2 19
+	fmul	f2 f3 f2
+	addi	r4 r0 0
+	load	r5 r2 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 0
+	fstore	f2 r2 20
+	fstore	f3 r2 21
+	call	L_o_param_r2_2492
+	fload	f3 r2 21
+	fmul	f2 f3 f2
+	fload	f3 r2 20
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 9
+	fsub	f2 f3 f2
+	load	r4 r2 18
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8285 : 
+	fload	f2 r2 3
+	store	r5 r2 2
+	fstore	f2 r2 3
+	call	L_fiszero_2378
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8280
+	addi	r4 r0 4
+	fload	f2 r0 29
+	fload	f3 r2 3
+	fdiv	f2 f2 f3
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8281
+L_else_8280 : 
+L_endif_8281 : 
+	load	r4 r2 2
+	add	r4 r0 r4
+	addi	r2 r2 22
+	return
+L_iter_setup_dirvec_constants_2643 : 
+	subi	r2 r2 5
+	addi	r6 r0 0
+	bgt	r6 r5 L_else_8289
+	addi	r6 r0 5042
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	store	r6 r2 1
+	store	r4 r2 2
+	call	L_d_const_2519
+	load	r5 r2 2
+	store	r5 r2 2
+	store	r4 r2 3
+	add	r4 r0 r5
+	call	L_d_vec_2517
+	load	r5 r2 1
+	store	r5 r2 1
+	store	r4 r2 4
+	add	r4 r0 r5
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8292
+	load	r4 r2 4
+	load	r5 r2 1
+	call	L_setup_rect_table_2634
+	load	r5 r2 0
+	load	r6 r2 3
+	add	r6 r6 r5
+	store	r4 r6 0
+	jump	L_endif_8293
+L_else_8292 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8295
+	load	r4 r2 4
+	load	r5 r2 1
+	call	L_setup_surface_table_2637
+	load	r5 r2 0
+	load	r6 r2 3
+	add	r6 r6 r5
+	store	r4 r6 0
+	jump	L_endif_8296
+L_else_8295 : 
+	load	r4 r2 4
+	load	r5 r2 1
+	call	L_setup_second_table_2640
+	load	r5 r2 0
+	load	r6 r2 3
+	add	r6 r6 r5
+	store	r4 r6 0
+L_endif_8296 : 
+L_endif_8293 : 
+	addi	r4 r0 1
+	sub	r5 r5 r4
+	load	r4 r2 2
+	addi	r2 r2 5
+	jump	L_iter_setup_dirvec_constants_2643
+L_else_8289 : 
+	addi	r2 r2 5
+	return
+L_setup_dirvec_constants_2646 : 
+	addi	r5 r0 4144
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	addi	r6 r0 1
+	sub	r5 r5 r6
+	jump	L_iter_setup_dirvec_constants_2643
+L_setup_startp_constants_2648 : 
+	subi	r2 r2 12
+	addi	r6 r0 0
+	bgt	r6 r5 L_else_8302
+	addi	r6 r0 5042
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	store	r4 r2 1
+	store	r6 r2 2
+	add	r4 r0 r6
+	call	L_o_param_ctbl_2496
+	load	r5 r2 2
+	store	r4 r2 3
+	store	r5 r2 2
+	add	r4 r0 r5
+	call	L_o_form_2458
+	addi	r5 r0 0
+	addi	r6 r0 0
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	load	r6 r2 2
+	store	r4 r2 4
+	store	r6 r2 2
+	store	r7 r2 1
+	store	r5 r2 5
+	fstore	f2 r2 6
+	add	r4 r0 r6
+	call	L_o_param_x_2474
+	fload	f3 r2 6
+	fsub	f2 f3 f2
+	load	r4 r2 5
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	addi	r6 r0 1
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	load	r6 r2 2
+	store	r6 r2 2
+	store	r7 r2 1
+	store	r4 r2 7
+	store	r5 r2 3
+	fstore	f2 r2 8
+	add	r4 r0 r6
+	call	L_o_param_y_2476
+	fload	f3 r2 8
+	fsub	f2 f3 f2
+	load	r4 r2 7
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	addi	r6 r0 2
+	load	r7 r2 1
+	add	r6 r7 r6
+	fload	f2 r6 0
+	load	r6 r2 2
+	store	r7 r2 1
+	store	r6 r2 2
+	store	r4 r2 9
+	store	r5 r2 3
+	fstore	f2 r2 10
+	add	r4 r0 r6
+	call	L_o_param_z_2478
+	fload	f3 r2 10
+	fsub	f2 f3 f2
+	load	r4 r2 9
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 2
+	load	r6 r2 4
+	bne	r6 r4 L_else_8305
+	addi	r4 r0 3
+	load	r6 r2 2
+	store	r4 r2 11
+	store	r5 r2 3
+	add	r4 r0 r6
+	call	L_o_param_abc_2472
+	addi	r5 r0 0
+	load	r6 r2 3
+	add	r5 r6 r5
+	fload	f2 r5 0
+	addi	r5 r0 1
+	add	r5 r6 r5
+	fload	f3 r5 0
+	addi	r5 r0 2
+	add	r5 r6 r5
+	fload	f4 r5 0
+	store	r6 r2 3
+	call	L_veciprod2_2434
+	load	r4 r2 11
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	jump	L_endif_8306
+L_else_8305 : 
+	addi	r4 r0 2
+	bgt	r6 r4 L_else_8308
+	jump	L_endif_8309
+L_else_8308 : 
+	addi	r4 r0 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f3 r4 0
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f4 r4 0
+	load	r4 r2 2
+	store	r5 r2 3
+	store	r6 r2 4
+	call	L_quadratic_2571
+	addi	r4 r0 3
+	addi	r5 r0 3
+	load	r6 r2 4
+	bne	r6 r5 L_else_8311
+	fload	f3 r0 29
+	fsub	f2 f2 f3
+	jump	L_endif_8312
+L_else_8311 : 
+	fadd	f2 f0 f2
+L_endif_8312 : 
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8309 : 
+L_endif_8306 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	sub	r5 r5 r4
+	load	r4 r2 1
+	addi	r2 r2 12
+	jump	L_setup_startp_constants_2648
+L_else_8302 : 
+	addi	r2 r2 12
+	return
+L_setup_startp_2651 : 
+	subi	r2 r2 1
+	addi	r5 r0 4138
+	store	r4 r2 0
+	add	r1 r0 r5
+	add	r5 r0 r4
+	add	r4 r0 r1
+	call	L_veccpy_2420
+	addi	r4 r0 4144
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r5 r0 1
+	sub	r5 r4 r5
+	load	r4 r2 0
+	addi	r2 r2 1
+	jump	L_setup_startp_constants_2648
+L_is_rect_outside_2653 : 
+	subi	r2 r2 6
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	store	r4 r2 2
+	call	L_fabs_2384
+	load	r4 r2 2
+	store	r4 r2 2
+	fstore	f2 r2 3
+	call	L_o_param_a_2466
+	add	f3 r0 f2
+	fload	f2 r2 3
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8318
+	addi	r4 r0 0
+	jump	L_endif_8319
+L_else_8318 : 
+	fload	f2 r2 1
+	call	L_fabs_2384
+	load	r4 r2 2
+	store	r4 r2 2
+	fstore	f2 r2 4
+	call	L_o_param_b_2468
+	add	f3 r0 f2
+	fload	f2 r2 4
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8320
+	addi	r4 r0 0
+	jump	L_endif_8321
+L_else_8320 : 
+	fload	f2 r2 0
+	call	L_fabs_2384
+	load	r4 r2 2
+	store	r4 r2 2
+	fstore	f2 r2 5
+	call	L_o_param_c_2470
+	add	f3 r0 f2
+	fload	f2 r2 5
+	call	L_fless_2386
+L_endif_8321 : 
+L_endif_8319 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8316
+	load	r4 r2 2
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8317
+	addi	r4 r0 1
+	addi	r2 r2 6
+	return
+L_else_8317 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_else_8316 : 
+	load	r4 r2 2
+	addi	r2 r2 6
+	jump	L_o_isinvert_2462
+L_is_plane_outside_2658 : 
+	subi	r2 r2 6
+	store	r4 r2 0
+	fstore	f4 r2 1
+	fstore	f3 r2 2
+	fstore	f2 r2 3
+	call	L_o_param_abc_2472
+	fload	f2 r2 3
+	fload	f3 r2 2
+	fload	f4 r2 1
+	call	L_veciprod2_2434
+	load	r4 r2 0
+	fstore	f2 r2 4
+	call	L_o_isinvert_2462
+	fload	f2 r2 4
+	store	r4 r2 5
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 5
+	call	L_xor_2399
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8322
+	addi	r4 r0 1
+	addi	r2 r2 6
+	return
+L_else_8322 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_is_second_outside_2663 : 
+	subi	r2 r2 4
+	store	r4 r2 0
+	call	L_quadratic_2571
+	load	r4 r2 0
+	store	r4 r2 0
+	fstore	f2 r2 1
+	call	L_o_form_2458
+	addi	r5 r0 3
+	bne	r4 r5 L_else_8324
+	fload	f2 r0 29
+	fload	f3 r2 1
+	fsub	f2 f3 f2
+	jump	L_endif_8325
+L_else_8324 : 
+	fload	f2 r2 1
+	fadd	f2 f0 f2
+L_endif_8325 : 
+	load	r4 r2 0
+	fstore	f2 r2 2
+	call	L_o_isinvert_2462
+	fload	f2 r2 2
+	store	r4 r2 3
+	call	L_fisneg_2382
+	add	r5 r0 r4
+	load	r4 r2 3
+	call	L_xor_2399
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8323
+	addi	r4 r0 1
+	addi	r2 r2 4
+	return
+L_else_8323 : 
+	addi	r4 r0 0
+	addi	r2 r2 4
+	return
+L_is_outside_2668 : 
+	subi	r2 r2 7
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	store	r4 r2 2
+	fstore	f2 r2 3
+	call	L_o_param_x_2474
+	fload	f3 r2 3
+	fsub	f2 f3 f2
+	load	r4 r2 2
+	fstore	f2 r2 4
+	store	r4 r2 2
+	call	L_o_param_y_2476
+	fload	f3 r2 1
+	fsub	f2 f3 f2
+	load	r4 r2 2
+	fstore	f2 r2 5
+	store	r4 r2 2
+	call	L_o_param_z_2478
+	fload	f3 r2 0
+	fsub	f2 f3 f2
+	load	r4 r2 2
+	fstore	f2 r2 6
+	store	r4 r2 2
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8326
+	fload	f2 r2 4
+	fload	f3 r2 5
+	fload	f4 r2 6
+	load	r4 r2 2
+	addi	r2 r2 7
+	jump	L_is_rect_outside_2653
+L_else_8326 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8327
+	fload	f2 r2 4
+	fload	f3 r2 5
+	fload	f4 r2 6
+	load	r4 r2 2
+	addi	r2 r2 7
+	jump	L_is_plane_outside_2658
+L_else_8327 : 
+	fload	f2 r2 4
+	fload	f3 r2 5
+	fload	f4 r2 6
+	load	r4 r2 2
+	addi	r2 r2 7
+	jump	L_is_second_outside_2663
+L_check_all_inside_2673 : 
+	subi	r2 r2 5
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 -1
+	bne	r6 r7 L_else_8328
+	addi	r4 r0 1
+	addi	r2 r2 5
+	return
+L_else_8328 : 
+	addi	r7 r0 5042
+	add	r6 r7 r6
+	load	r6 r6 0
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	add	r4 r0 r6
+	call	L_is_outside_2668
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8329
+	addi	r4 r0 1
+	load	r5 r2 4
+	add	r4 r5 r4
+	fload	f2 r2 2
+	fload	f3 r2 1
+	fload	f4 r2 0
+	load	r5 r2 3
+	addi	r2 r2 5
+	jump	L_check_all_inside_2673
+L_else_8329 : 
+	addi	r4 r0 0
+	addi	r2 r2 5
+	return
+L_shadow_check_and_group_2679 : 
+	subi	r2 r2 4
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 -1
+	bne	r6 r7 L_else_8330
+	addi	r4 r0 0
+	addi	r2 r2 4
+	return
+L_else_8330 : 
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 4977
+	addi	r8 r0 4114
+	store	r5 r2 0
+	store	r4 r2 1
+	store	r6 r2 2
+	add	r5 r0 r7
+	add	r4 r0 r6
+	add	r6 r0 r8
+	call	L_solver_fast_2613
+	addi	r5 r0 4145
+	addi	r6 r0 0
+	add	r5 r5 r6
+	fload	f2 r5 0
+	addi	r5 r0 0
+	fstore	f2 r2 3
+	bne	r4 r5 L_else_8334
+	addi	r4 r0 0
+	jump	L_endif_8335
+L_else_8334 : 
+	fload	f3 r0 24
+	fstore	f2 r2 3
+	call	L_fless_2386
+L_endif_8335 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8331
+	addi	r4 r0 5042
+	load	r5 r2 2
+	add	r4 r4 r5
+	load	r4 r4 0
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8333
+	addi	r4 r0 0
+	addi	r2 r2 4
+	return
+L_else_8333 : 
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r5 r2 0
+	addi	r2 r2 4
+	jump	L_shadow_check_and_group_2679
+L_else_8331 : 
+	fload	f2 r0 23
+	fload	f3 r2 3
+	fadd	f2 f3 f2
+	addi	r4 r0 4111
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fmul	f3 f3 f2
+	addi	r4 r0 4114
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f4 r4 0
+	fadd	f3 f3 f4
+	addi	r4 r0 4111
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f4 r4 0
+	fmul	f4 f4 f2
+	addi	r4 r0 4114
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f5 r4 0
+	fadd	f4 f4 f5
+	addi	r4 r0 4111
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f5 r4 0
+	fmul	f2 f5 f2
+	addi	r4 r0 4114
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f5 r4 0
+	fadd	f2 f2 f5
+	addi	r4 r0 0
+	load	r5 r2 0
+	store	r5 r2 0
+	fadd	f1 f0 f4
+	fadd	f4 f0 f2
+	fadd	f2 f0 f3
+	fadd	f3 f0 f1
+	call	L_check_all_inside_2673
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8332
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r5 r2 0
+	addi	r2 r2 4
+	jump	L_shadow_check_and_group_2679
+L_else_8332 : 
+	addi	r4 r0 1
+	addi	r2 r2 4
+	return
+L_shadow_check_one_or_group_2682 : 
+	subi	r2 r2 2
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 -1
+	bne	r6 r7 L_else_8336
+	addi	r4 r0 0
+	addi	r2 r2 2
+	return
+L_else_8336 : 
+	addi	r7 r0 4157
+	add	r6 r7 r6
+	load	r6 r6 0
+	addi	r7 r0 0
+	store	r5 r2 0
+	store	r4 r2 1
+	add	r5 r0 r6
+	add	r4 r0 r7
+	call	L_shadow_check_and_group_2679
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8337
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r5 r2 0
+	addi	r2 r2 2
+	jump	L_shadow_check_one_or_group_2682
+L_else_8337 : 
+	addi	r4 r0 1
+	addi	r2 r2 2
+	return
+L_shadow_check_one_or_matrix_2685 : 
+	subi	r2 r2 3
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 0
+	add	r7 r6 r7
+	load	r7 r7 0
+	addi	r8 r0 -1
+	bne	r7 r8 L_else_8338
+	addi	r4 r0 0
+	addi	r2 r2 3
+	return
+L_else_8338 : 
+	addi	r8 r0 99
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	bne	r7 r8 L_else_8341
+	addi	r4 r0 1
+	jump	L_endif_8342
+L_else_8341 : 
+	addi	r8 r0 4977
+	addi	r9 r0 4114
+	store	r5 r2 1
+	store	r4 r2 2
+	store	r6 r2 0
+	add	r6 r0 r9
+	add	r5 r0 r8
+	add	r4 r0 r7
+	call	L_solver_fast_2613
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8343
+	addi	r4 r0 0
+	jump	L_endif_8344
+L_else_8343 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	fload	f3 r0 22
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8345
+	addi	r4 r0 0
+	jump	L_endif_8346
+L_else_8345 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	store	r5 r2 0
+	call	L_shadow_check_one_or_group_2682
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8347
+	addi	r4 r0 0
+	jump	L_endif_8348
+L_else_8347 : 
+	addi	r4 r0 1
+L_endif_8348 : 
+L_endif_8346 : 
+L_endif_8344 : 
+L_endif_8342 : 
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8339
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	addi	r2 r2 3
+	jump	L_shadow_check_one_or_matrix_2685
+L_else_8339 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	call	L_shadow_check_one_or_group_2682
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8340
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	addi	r2 r2 3
+	jump	L_shadow_check_one_or_matrix_2685
+L_else_8340 : 
+	addi	r4 r0 1
+	addi	r2 r2 3
+	return
+L_solve_each_element_2688 : 
+	subi	r2 r2 10
+	add	r7 r5 r4
+	load	r7 r7 0
+	addi	r8 r0 -1
+	bne	r7 r8 L_else_8350
+	addi	r2 r2 10
+	return
+L_else_8350 : 
+	addi	r8 r0 4135
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	store	r7 r2 3
+	add	r5 r0 r6
+	add	r4 r0 r7
+	add	r6 r0 r8
+	call	L_solver_2590
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8352
+	addi	r4 r0 5042
+	load	r5 r2 3
+	add	r4 r4 r5
+	load	r4 r4 0
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8367
+	addi	r2 r2 10
+	return
+L_else_8367 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 10
+	jump	L_solve_each_element_2688
+L_else_8352 : 
+	addi	r5 r0 4145
+	addi	r6 r0 0
+	add	r5 r5 r6
+	fload	f3 r5 0
+	fload	f2 r0 31
+	store	r4 r2 4
+	fstore	f3 r2 5
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8354
+	jump	L_endif_8355
+L_else_8354 : 
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fload	f2 r2 5
+	fstore	f2 r2 5
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8357
+	jump	L_endif_8358
+L_else_8357 : 
+	fload	f2 r0 23
+	fload	f3 r2 5
+	fadd	f2 f3 f2
+	addi	r4 r0 0
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f3 f3 f2
+	addi	r4 r0 4135
+	addi	r6 r0 0
+	add	r4 r4 r6
+	fload	f4 r4 0
+	fadd	f3 f3 f4
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fmul	f4 f4 f2
+	addi	r4 r0 4135
+	addi	r6 r0 1
+	add	r4 r4 r6
+	fload	f5 r4 0
+	fadd	f4 f4 f5
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f5 r4 0
+	fmul	f5 f5 f2
+	addi	r4 r0 4135
+	addi	r6 r0 2
+	add	r4 r4 r6
+	fload	f6 r4 0
+	fadd	f5 f5 f6
+	addi	r4 r0 0
+	load	r6 r2 1
+	store	r5 r2 0
+	store	r6 r2 1
+	fstore	f5 r2 6
+	fstore	f4 r2 7
+	fstore	f3 r2 8
+	fstore	f2 r2 9
+	add	r5 r0 r6
+	fadd	f2 f0 f3
+	fadd	f3 f0 f4
+	fadd	f4 f0 f5
+	call	L_check_all_inside_2673
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8360
+	jump	L_endif_8361
+L_else_8360 : 
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 9
+	fstore	f2 r4 0
+	addi	r4 r0 4114
+	fload	f2 r2 8
+	fload	f3 r2 7
+	fload	f4 r2 6
+	call	L_vecset_2410
+	addi	r4 r0 4115
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r5 r2 3
+	store	r5 r4 0
+	addi	r4 r0 4146
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r5 r2 4
+	store	r5 r4 0
+L_endif_8361 : 
+L_endif_8358 : 
+L_endif_8355 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 10
+	jump	L_solve_each_element_2688
+L_solve_one_or_network_2692 : 
+	subi	r2 r2 3
+	add	r7 r5 r4
+	load	r7 r7 0
+	addi	r8 r0 -1
+	bne	r7 r8 L_else_8372
+	addi	r2 r2 3
+	return
+L_else_8372 : 
+	addi	r8 r0 4157
+	add	r7 r8 r7
+	load	r7 r7 0
+	addi	r8 r0 0
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r5 r0 r7
+	add	r4 r0 r8
+	call	L_solve_each_element_2688
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 3
+	jump	L_solve_one_or_network_2692
+L_trace_or_matrix_2696 : 
+	subi	r2 r2 4
+	add	r7 r5 r4
+	load	r7 r7 0
+	addi	r8 r0 0
+	add	r8 r7 r8
+	load	r8 r8 0
+	addi	r9 r0 -1
+	bne	r8 r9 L_else_8376
+	addi	r2 r2 4
+	return
+L_else_8376 : 
+	addi	r9 r0 99
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	bne	r8 r9 L_else_8378
+	addi	r8 r0 1
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r5 r0 r7
+	add	r4 r0 r8
+	call	L_solve_one_or_network_2692
+	jump	L_endif_8379
+L_else_8378 : 
+	addi	r9 r0 4135
+	store	r5 r2 1
+	store	r4 r2 2
+	store	r6 r2 0
+	store	r7 r2 3
+	add	r5 r0 r6
+	add	r4 r0 r8
+	add	r6 r0 r9
+	call	L_solver_2590
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8381
+	jump	L_endif_8382
+L_else_8381 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8384
+	jump	L_endif_8385
+L_else_8384 : 
+	addi	r4 r0 1
+	load	r5 r2 3
+	load	r6 r2 0
+	store	r6 r2 0
+	call	L_solve_one_or_network_2692
+L_endif_8385 : 
+L_endif_8382 : 
+L_endif_8379 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 4
+	jump	L_trace_or_matrix_2696
+L_judge_intersection_2700 : 
+	subi	r2 r2 1
+	addi	r5 r0 4154
+	addi	r6 r0 0
+	fload	f2 r0 21
+	add	r5 r5 r6
+	fstore	f2 r5 0
+	addi	r5 r0 0
+	addi	r6 r0 4155
+	addi	r7 r0 0
+	add	r6 r6 r7
+	load	r6 r6 0
+	add	r1 r0 r6
+	add	r6 r0 r4
+	add	r4 r0 r5
+	add	r5 r0 r1
+	call	L_trace_or_matrix_2696
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fload	f2 r0 22
+	fstore	f3 r2 0
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8391
+	addi	r4 r0 0
+	addi	r2 r2 1
+	return
+L_else_8391 : 
+	fload	f3 r0 20
+	fload	f2 r2 0
+	addi	r2 r2 1
+	jump	L_fless_2386
+L_solve_each_element_fast_2702 : 
+	subi	r2 r2 11
+	store	r6 r2 0
+	store	r4 r2 1
+	store	r5 r2 2
+	add	r4 r0 r6
+	call	L_d_vec_2517
+	load	r5 r2 1
+	load	r6 r2 2
+	add	r7 r6 r5
+	load	r7 r7 0
+	addi	r8 r0 -1
+	bne	r7 r8 L_else_8393
+	addi	r2 r2 11
+	return
+L_else_8393 : 
+	load	r8 r2 0
+	store	r4 r2 3
+	store	r8 r2 0
+	store	r6 r2 2
+	store	r5 r2 1
+	store	r7 r2 4
+	add	r5 r0 r8
+	add	r4 r0 r7
+	call	L_solver_fast2_2631
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8395
+	addi	r4 r0 5042
+	load	r5 r2 4
+	add	r4 r4 r5
+	load	r4 r4 0
+	call	L_o_isinvert_2462
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8410
+	addi	r2 r2 11
+	return
+L_else_8410 : 
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r5 r2 2
+	load	r6 r2 0
+	addi	r2 r2 11
+	jump	L_solve_each_element_fast_2702
+L_else_8395 : 
+	addi	r5 r0 4145
+	addi	r6 r0 0
+	add	r5 r5 r6
+	fload	f3 r5 0
+	fload	f2 r0 31
+	store	r4 r2 5
+	fstore	f3 r2 6
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8397
+	jump	L_endif_8398
+L_else_8397 : 
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fload	f2 r2 6
+	fstore	f2 r2 6
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8400
+	jump	L_endif_8401
+L_else_8400 : 
+	fload	f2 r0 23
+	fload	f3 r2 6
+	fadd	f2 f3 f2
+	addi	r4 r0 0
+	load	r5 r2 3
+	add	r4 r5 r4
+	fload	f3 r4 0
+	fmul	f3 f3 f2
+	addi	r4 r0 4138
+	addi	r6 r0 0
+	add	r4 r4 r6
+	fload	f4 r4 0
+	fadd	f3 f3 f4
+	addi	r4 r0 1
+	add	r4 r5 r4
+	fload	f4 r4 0
+	fmul	f4 f4 f2
+	addi	r4 r0 4138
+	addi	r6 r0 1
+	add	r4 r4 r6
+	fload	f5 r4 0
+	fadd	f4 f4 f5
+	addi	r4 r0 2
+	add	r4 r5 r4
+	fload	f5 r4 0
+	fmul	f5 f5 f2
+	addi	r4 r0 4138
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f6 r4 0
+	fadd	f5 f5 f6
+	addi	r4 r0 0
+	load	r5 r2 2
+	store	r5 r2 2
+	fstore	f5 r2 7
+	fstore	f4 r2 8
+	fstore	f3 r2 9
+	fstore	f2 r2 10
+	fadd	f2 f0 f3
+	fadd	f3 f0 f4
+	fadd	f4 f0 f5
+	call	L_check_all_inside_2673
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8403
+	jump	L_endif_8404
+L_else_8403 : 
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 10
+	fstore	f2 r4 0
+	addi	r4 r0 4114
+	fload	f2 r2 9
+	fload	f3 r2 8
+	fload	f4 r2 7
+	call	L_vecset_2410
+	addi	r4 r0 4115
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r5 r2 4
+	store	r5 r4 0
+	addi	r4 r0 4146
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r5 r2 5
+	store	r5 r4 0
+L_endif_8404 : 
+L_endif_8401 : 
+L_endif_8398 : 
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r5 r2 2
+	load	r6 r2 0
+	addi	r2 r2 11
+	jump	L_solve_each_element_fast_2702
+L_solve_one_or_network_fast_2706 : 
+	subi	r2 r2 3
+	add	r7 r5 r4
+	load	r7 r7 0
+	addi	r8 r0 -1
+	bne	r7 r8 L_else_8415
+	addi	r2 r2 3
+	return
+L_else_8415 : 
+	addi	r8 r0 4157
+	add	r7 r8 r7
+	load	r7 r7 0
+	addi	r8 r0 0
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r5 r0 r7
+	add	r4 r0 r8
+	call	L_solve_each_element_fast_2702
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 3
+	jump	L_solve_one_or_network_fast_2706
+L_trace_or_matrix_fast_2710 : 
+	subi	r2 r2 4
+	add	r7 r5 r4
+	load	r7 r7 0
+	addi	r8 r0 0
+	add	r8 r7 r8
+	load	r8 r8 0
+	addi	r9 r0 -1
+	bne	r8 r9 L_else_8419
+	addi	r2 r2 4
+	return
+L_else_8419 : 
+	addi	r9 r0 99
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	bne	r8 r9 L_else_8421
+	addi	r8 r0 1
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r5 r0 r7
+	add	r4 r0 r8
+	call	L_solve_one_or_network_fast_2706
+	jump	L_endif_8422
+L_else_8421 : 
+	store	r5 r2 1
+	store	r4 r2 2
+	store	r6 r2 0
+	store	r7 r2 3
+	add	r5 r0 r6
+	add	r4 r0 r8
+	call	L_solver_fast2_2631
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8424
+	jump	L_endif_8425
+L_else_8424 : 
+	addi	r4 r0 4145
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8427
+	jump	L_endif_8428
+L_else_8427 : 
+	addi	r4 r0 1
+	load	r5 r2 3
+	load	r6 r2 0
+	store	r6 r2 0
+	call	L_solve_one_or_network_fast_2706
+L_endif_8428 : 
+L_endif_8425 : 
+L_endif_8422 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 4
+	jump	L_trace_or_matrix_fast_2710
+L_judge_intersection_fast_2714 : 
+	subi	r2 r2 1
+	addi	r5 r0 4154
+	addi	r6 r0 0
+	fload	f2 r0 21
+	add	r5 r5 r6
+	fstore	f2 r5 0
+	addi	r5 r0 0
+	addi	r6 r0 4155
+	addi	r7 r0 0
+	add	r6 r6 r7
+	load	r6 r6 0
+	add	r1 r0 r6
+	add	r6 r0 r4
+	add	r4 r0 r5
+	add	r5 r0 r1
+	call	L_trace_or_matrix_fast_2710
+	addi	r4 r0 4154
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fload	f2 r0 22
+	fstore	f3 r2 0
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8434
+	addi	r4 r0 0
+	addi	r2 r2 1
+	return
+L_else_8434 : 
+	fload	f3 r0 20
+	fload	f2 r2 0
+	addi	r2 r2 1
+	jump	L_fless_2386
+L_get_nvector_rect_2716 : 
+	subi	r2 r2 4
+	addi	r5 r0 4146
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	addi	r6 r0 4118
+	store	r4 r2 0
+	store	r5 r2 1
+	add	r4 r0 r6
+	call	L_vecbzero_2418
+	addi	r4 r0 4118
+	addi	r5 r0 1
+	load	r6 r2 1
+	sub	r5 r6 r5
+	addi	r7 r0 1
+	sub	r6 r6 r7
+	load	r7 r2 0
+	add	r6 r7 r6
+	fload	f2 r6 0
+	store	r5 r2 2
+	store	r4 r2 3
+	call	L_sgn_2402
+	call	L_fneg_2391
+	load	r4 r2 2
+	load	r5 r2 3
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r2 r2 4
+	return
+L_get_nvector_plane_2718 : 
+	subi	r2 r2 7
+	addi	r5 r0 4118
+	addi	r6 r0 0
+	store	r4 r2 0
+	store	r6 r2 1
+	store	r5 r2 2
+	call	L_o_param_a_2466
+	call	L_fneg_2391
+	load	r4 r2 1
+	load	r5 r2 2
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 1
+	load	r6 r2 0
+	store	r6 r2 0
+	store	r5 r2 3
+	store	r4 r2 4
+	add	r4 r0 r6
+	call	L_o_param_b_2468
+	call	L_fneg_2391
+	load	r4 r2 3
+	load	r5 r2 4
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 2
+	load	r6 r2 0
+	store	r5 r2 5
+	store	r4 r2 6
+	add	r4 r0 r6
+	call	L_o_param_c_2470
+	call	L_fneg_2391
+	load	r4 r2 5
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r2 r2 7
+	return
+L_get_nvector_second_2720 : 
+	subi	r2 r2 20
+	addi	r5 r0 4114
+	addi	r6 r0 0
+	add	r5 r5 r6
+	fload	f2 r5 0
+	store	r4 r2 0
+	fstore	f2 r2 1
+	call	L_o_param_x_2474
+	fload	f3 r2 1
+	fsub	f2 f3 f2
+	addi	r4 r0 4114
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f3 r4 0
+	load	r4 r2 0
+	fstore	f2 r2 2
+	store	r4 r2 0
+	fstore	f3 r2 3
+	call	L_o_param_y_2476
+	fload	f3 r2 3
+	fsub	f2 f3 f2
+	addi	r4 r0 4114
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f3 r4 0
+	load	r4 r2 0
+	fstore	f2 r2 4
+	store	r4 r2 0
+	fstore	f3 r2 5
+	call	L_o_param_z_2478
+	fload	f3 r2 5
+	fsub	f2 f3 f2
+	load	r4 r2 0
+	fstore	f2 r2 6
+	store	r4 r2 0
+	call	L_o_param_a_2466
+	fload	f3 r2 2
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	fstore	f3 r2 2
+	fstore	f2 r2 7
+	store	r4 r2 0
+	call	L_o_param_b_2468
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	fstore	f3 r2 4
+	fstore	f2 r2 8
+	store	r4 r2 0
+	call	L_o_param_c_2470
+	fload	f3 r2 6
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	fstore	f3 r2 6
+	store	r4 r2 0
+	fstore	f2 r2 9
+	call	L_o_isrot_2464
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8438
+	addi	r4 r0 4118
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r2 7
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r2 8
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r2 9
+	fstore	f2 r4 0
+	jump	L_endif_8439
+L_else_8438 : 
+	addi	r4 r0 4118
+	addi	r5 r0 0
+	load	r6 r2 0
+	store	r5 r2 10
+	store	r4 r2 11
+	store	r6 r2 0
+	add	r4 r0 r6
+	call	L_o_param_r3_2494
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	fstore	f3 r2 4
+	store	r4 r2 0
+	fstore	f2 r2 12
+	call	L_o_param_r2_2492
+	fload	f3 r2 6
+	fmul	f2 f3 f2
+	fload	f4 r2 12
+	fadd	f2 f4 f2
+	fstore	f3 r2 6
+	call	L_fhalf_2389
+	fload	f3 r2 7
+	fadd	f2 f3 f2
+	load	r4 r2 10
+	load	r5 r2 11
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 1
+	load	r6 r2 0
+	store	r5 r2 13
+	store	r4 r2 14
+	store	r6 r2 0
+	add	r4 r0 r6
+	call	L_o_param_r3_2494
+	fload	f3 r2 2
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	fstore	f3 r2 2
+	store	r4 r2 0
+	fstore	f2 r2 15
+	call	L_o_param_r1_2490
+	fload	f3 r2 6
+	fmul	f2 f3 f2
+	fload	f3 r2 15
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 8
+	fadd	f2 f3 f2
+	load	r4 r2 13
+	load	r5 r2 14
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4118
+	addi	r5 r0 2
+	load	r6 r2 0
+	store	r5 r2 16
+	store	r4 r2 17
+	store	r6 r2 0
+	add	r4 r0 r6
+	call	L_o_param_r2_2492
+	fload	f3 r2 2
+	fmul	f2 f3 f2
+	load	r4 r2 0
+	store	r4 r2 0
+	fstore	f2 r2 18
+	call	L_o_param_r1_2490
+	fload	f3 r2 4
+	fmul	f2 f3 f2
+	fload	f3 r2 18
+	fadd	f2 f3 f2
+	call	L_fhalf_2389
+	fload	f3 r2 9
+	fadd	f2 f3 f2
+	load	r4 r2 16
+	load	r5 r2 17
+	add	r4 r5 r4
+	fstore	f2 r4 0
+L_endif_8439 : 
+	addi	r4 r0 4118
+	load	r5 r2 0
+	store	r4 r2 19
+	add	r4 r0 r5
+	call	L_o_isinvert_2462
+	add	r5 r0 r4
+	load	r4 r2 19
+	addi	r2 r2 20
+	jump	L_vecunit_sgn_2428
+L_get_nvector_2722 : 
+	subi	r2 r2 2
+	store	r4 r2 0
+	store	r5 r2 1
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8443
+	load	r4 r2 1
+	addi	r2 r2 2
+	jump	L_get_nvector_rect_2716
+L_else_8443 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8445
+	load	r4 r2 0
+	addi	r2 r2 2
+	jump	L_get_nvector_plane_2718
+L_else_8445 : 
+	load	r4 r2 0
+	addi	r2 r2 2
+	jump	L_get_nvector_second_2720
+L_utexture_2725 : 
+	subi	r2 r2 33
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_o_texturetype_2456
+	addi	r5 r0 4121
+	addi	r6 r0 0
+	load	r7 r2 1
+	store	r4 r2 2
+	store	r7 r2 1
+	store	r6 r2 3
+	store	r5 r2 4
+	add	r4 r0 r7
+	call	L_o_color_red_2484
+	load	r4 r2 3
+	load	r5 r2 4
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4121
+	addi	r5 r0 1
+	load	r6 r2 1
+	store	r6 r2 1
+	store	r5 r2 5
+	store	r4 r2 6
+	add	r4 r0 r6
+	call	L_o_color_green_2486
+	load	r4 r2 5
+	load	r5 r2 6
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 4121
+	addi	r5 r0 2
+	load	r6 r2 1
+	store	r6 r2 1
+	store	r5 r2 7
+	store	r4 r2 8
+	add	r4 r0 r6
+	call	L_o_color_blue_2488
+	load	r4 r2 7
+	load	r5 r2 8
+	add	r4 r5 r4
+	fstore	f2 r4 0
+	addi	r4 r0 1
+	load	r5 r2 2
+	bne	r5 r4 L_else_8450
+	addi	r4 r0 0
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	load	r4 r2 1
+	store	r4 r2 1
+	store	r5 r2 0
+	fstore	f2 r2 9
+	call	L_o_param_x_2474
+	fload	f3 r2 9
+	fsub	f2 f3 f2
+	fload	f3 r0 9
+	fmul	f3 f2 f3
+	floor	f3 f3
+	fload	f4 r0 8
+	fmul	f3 f3 f4
+	fsub	f2 f2 f3
+	fload	f3 r0 11
+	call	L_fless_2386
+	addi	r5 r0 2
+	load	r6 r2 0
+	add	r5 r6 r5
+	fload	f2 r5 0
+	load	r5 r2 1
+	store	r4 r2 10
+	fstore	f2 r2 11
+	add	r4 r0 r5
+	call	L_o_param_z_2478
+	fload	f3 r2 11
+	fsub	f2 f3 f2
+	fload	f3 r0 9
+	fmul	f3 f2 f3
+	floor	f3 f3
+	fload	f4 r0 8
+	fmul	f3 f3 f4
+	fsub	f2 f2 f3
+	fload	f3 r0 11
+	call	L_fless_2386
+	addi	r5 r0 4121
+	addi	r6 r0 1
+	addi	r7 r0 0
+	load	r8 r2 10
+	bne	r8 r7 L_else_8468
+	addi	r7 r0 0
+	bne	r4 r7 L_else_8472
+	fload	f2 r0 13
+	jump	L_endif_8473
+L_else_8472 : 
+	fload	f2 r0 31
+L_endif_8473 : 
+	jump	L_endif_8469
+L_else_8468 : 
+	addi	r7 r0 0
+	bne	r4 r7 L_else_8470
+	fload	f2 r0 31
+	jump	L_endif_8471
+L_else_8470 : 
+	fload	f2 r0 13
+L_endif_8471 : 
+L_endif_8469 : 
+	add	r4 r5 r6
+	fstore	f2 r4 0
+	addi	r2 r2 33
+	return
+L_else_8450 : 
+	addi	r4 r0 2
+	bne	r5 r4 L_else_8452
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	fload	f3 r0 10
+	fmul	f2 f2 f3
+	call	min_caml_sin
+	call	L_fsqr_2393
+	addi	r4 r0 4121
+	addi	r5 r0 0
+	fload	f3 r0 13
+	fmul	f3 f3 f2
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4121
+	addi	r5 r0 1
+	fload	f3 r0 13
+	fload	f4 r0 29
+	fsub	f2 f4 f2
+	fmul	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 33
+	return
+L_else_8452 : 
+	addi	r4 r0 3
+	bne	r5 r4 L_else_8454
+	addi	r4 r0 0
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	load	r4 r2 1
+	store	r4 r2 1
+	store	r5 r2 0
+	fstore	f2 r2 12
+	call	L_o_param_x_2474
+	fload	f3 r2 12
+	fsub	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 1
+	fstore	f2 r2 13
+	fstore	f3 r2 14
+	call	L_o_param_z_2478
+	fload	f3 r2 14
+	fsub	f2 f3 f2
+	fload	f3 r2 13
+	fstore	f2 r2 15
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 15
+	fstore	f2 r2 16
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 16
+	fadd	f2 f3 f2
+	call	min_caml_sqrt
+	fload	f3 r0 11
+	fdiv	f2 f2 f3
+	floor	f3 f2
+	fsub	f2 f2 f3
+	fload	f3 r0 16
+	fmul	f2 f2 f3
+	call	min_caml_cos
+	call	L_fsqr_2393
+	addi	r4 r0 4121
+	addi	r5 r0 1
+	fload	f3 r0 13
+	fmul	f3 f2 f3
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4121
+	addi	r5 r0 2
+	fload	f3 r0 29
+	fsub	f2 f3 f2
+	fload	f3 r0 13
+	fmul	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 33
+	return
+L_else_8454 : 
+	addi	r4 r0 4
+	bne	r5 r4 L_else_8456
+	addi	r4 r0 0
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f2 r4 0
+	load	r4 r2 1
+	store	r5 r2 0
+	store	r4 r2 1
+	fstore	f2 r2 17
+	call	L_o_param_x_2474
+	fload	f3 r2 17
+	fsub	f2 f3 f2
+	load	r4 r2 1
+	store	r4 r2 1
+	fstore	f2 r2 18
+	call	L_o_param_a_2466
+	call	min_caml_sqrt
+	fload	f3 r2 18
+	fmul	f2 f3 f2
+	addi	r4 r0 2
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 1
+	store	r5 r2 0
+	fstore	f2 r2 19
+	store	r4 r2 1
+	fstore	f3 r2 20
+	call	L_o_param_z_2478
+	fload	f3 r2 20
+	fsub	f2 f3 f2
+	load	r4 r2 1
+	store	r4 r2 1
+	fstore	f2 r2 21
+	call	L_o_param_c_2470
+	call	min_caml_sqrt
+	fload	f3 r2 21
+	fmul	f2 f3 f2
+	fload	f3 r2 19
+	fstore	f3 r2 19
+	fstore	f2 r2 22
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 22
+	fstore	f3 r2 22
+	fstore	f2 r2 23
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 23
+	fadd	f2 f3 f2
+	fload	f3 r2 19
+	fstore	f2 r2 24
+	fstore	f3 r2 19
+	fadd	f2 f0 f3
+	call	L_fabs_2384
+	fload	f3 r0 19
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8463
+	fload	f2 r2 19
+	fload	f3 r2 22
+	fdiv	f2 f3 f2
+	call	L_fabs_2384
+	call	min_caml_atan
+	fload	f3 r0 17
+	fmul	f2 f2 f3
+	fload	f3 r0 16
+	fdiv	f2 f2 f3
+	jump	L_endif_8464
+L_else_8463 : 
+	fload	f2 r0 18
+L_endif_8464 : 
+	floor	f3 f2
+	fsub	f2 f2 f3
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r4 r5 r4
+	fload	f3 r4 0
+	load	r4 r2 1
+	fstore	f2 r2 25
+	store	r4 r2 1
+	fstore	f3 r2 26
+	call	L_o_param_y_2476
+	fload	f3 r2 26
+	fsub	f2 f3 f2
+	load	r4 r2 1
+	fstore	f2 r2 27
+	call	L_o_param_b_2468
+	call	min_caml_sqrt
+	fload	f3 r2 27
+	fmul	f2 f3 f2
+	fload	f3 r2 24
+	fstore	f3 r2 24
+	fstore	f2 r2 28
+	fadd	f2 f0 f3
+	call	L_fabs_2384
+	fload	f3 r0 19
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8461
+	fload	f2 r2 24
+	fload	f3 r2 28
+	fdiv	f2 f3 f2
+	call	L_fabs_2384
+	call	min_caml_atan
+	fload	f3 r0 17
+	fmul	f2 f2 f3
+	fload	f3 r0 16
+	fdiv	f2 f2 f3
+	jump	L_endif_8462
+L_else_8461 : 
+	fload	f2 r0 18
+L_endif_8462 : 
+	floor	f3 f2
+	fsub	f2 f2 f3
+	fload	f3 r0 15
+	fload	f4 r0 14
+	fload	f5 r2 25
+	fsub	f4 f4 f5
+	fstore	f2 r2 29
+	fstore	f3 r2 30
+	fadd	f2 f0 f4
+	call	L_fsqr_2393
+	fload	f3 r2 30
+	fsub	f2 f3 f2
+	fload	f3 r0 14
+	fload	f4 r2 29
+	fsub	f3 f3 f4
+	fstore	f2 r2 31
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 31
+	fsub	f2 f3 f2
+	fstore	f2 r2 32
+	call	L_fisneg_2382
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8459
+	fload	f2 r2 32
+	fadd	f2 f0 f2
+	jump	L_endif_8460
+L_else_8459 : 
+	fload	f2 r0 31
+L_endif_8460 : 
+	addi	r4 r0 4121
+	addi	r5 r0 2
+	fload	f3 r0 13
+	fmul	f2 f3 f2
+	fload	f3 r0 12
+	fdiv	f2 f2 f3
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 33
+	return
+L_else_8456 : 
+	addi	r2 r2 33
+	return
+L_add_light_2728 : 
+	subi	r2 r2 3
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8478
+	jump	L_endif_8479
+L_else_8478 : 
+	addi	r4 r0 4127
+	addi	r5 r0 4121
+	fload	f2 r2 2
+	call	L_vecaccum_2439
+L_endif_8479 : 
+	fload	f2 r2 1
+	fstore	f2 r2 1
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8475
+	addi	r2 r2 3
+	return
+L_else_8475 : 
+	fload	f2 r2 1
+	call	L_fsqr_2393
+	call	L_fsqr_2393
+	fload	f3 r2 0
+	fmul	f2 f2 f3
+	addi	r4 r0 4127
+	addi	r5 r0 0
+	addi	r6 r0 4127
+	addi	r7 r0 0
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f3 f3 f2
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4127
+	addi	r5 r0 1
+	addi	r6 r0 4127
+	addi	r7 r0 1
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f3 f3 f2
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4127
+	addi	r5 r0 2
+	addi	r6 r0 4127
+	addi	r7 r0 2
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 3
+	return
+L_trace_reflections_2732 : 
+	subi	r2 r2 11
+	addi	r6 r0 0
+	bgt	r6 r4 L_else_8483
+	addi	r6 r0 4257
+	add	r6 r6 r4
+	load	r6 r6 0
+	store	r4 r2 0
+	fstore	f3 r2 1
+	store	r5 r2 2
+	fstore	f2 r2 3
+	store	r6 r2 4
+	add	r4 r0 r6
+	call	L_r_dvec_2523
+	store	r4 r2 5
+	call	L_judge_intersection_fast_2714
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8486
+	jump	L_endif_8487
+L_else_8486 : 
+	addi	r4 r0 4115
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r5 r0 4
+	mul	r4 r4 r5
+	addi	r5 r0 4146
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	add	r4 r4 r5
+	load	r5 r2 4
+	store	r5 r2 4
+	store	r4 r2 6
+	add	r4 r0 r5
+	call	L_r_surface_id_2521
+	load	r5 r2 6
+	bne	r5 r4 L_else_8489
+	addi	r4 r0 0
+	addi	r5 r0 4155
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	call	L_shadow_check_one_or_matrix_2685
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8493
+	addi	r4 r0 4118
+	load	r5 r2 5
+	store	r5 r2 5
+	store	r4 r2 7
+	add	r4 r0 r5
+	call	L_d_vec_2517
+	add	r5 r0 r4
+	load	r4 r2 7
+	call	L_veciprod_2431
+	load	r4 r2 4
+	fstore	f2 r2 8
+	call	L_r_bright_2525
+	fload	f3 r2 3
+	fmul	f4 f2 f3
+	fload	f5 r2 8
+	fmul	f4 f4 f5
+	load	r4 r2 5
+	fstore	f3 r2 3
+	fstore	f4 r2 9
+	fstore	f2 r2 10
+	call	L_d_vec_2517
+	add	r5 r0 r4
+	load	r4 r2 2
+	store	r4 r2 2
+	call	L_veciprod_2431
+	fload	f3 r2 10
+	fmul	f3 f3 f2
+	fload	f2 r2 9
+	fload	f4 r2 1
+	fstore	f4 r2 1
+	call	L_add_light_2728
+	jump	L_endif_8494
+L_else_8493 : 
+L_endif_8494 : 
+	jump	L_endif_8490
+L_else_8489 : 
+L_endif_8490 : 
+L_endif_8487 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	sub	r4 r5 r4
+	fload	f2 r2 3
+	fload	f3 r2 1
+	load	r5 r2 2
+	addi	r2 r2 11
+	jump	L_trace_reflections_2732
+L_else_8483 : 
+	addi	r2 r2 11
+	return
+L_trace_ray_2737 : 
+	subi	r2 r2 17
+	addi	r7 r0 4
+	bgt	r4 r7 L_else_8499
+	fstore	f3 r2 0
+	store	r6 r2 1
+	fstore	f2 r2 2
+	store	r4 r2 3
+	store	r5 r2 4
+	add	r4 r0 r6
+	call	L_p_surface_ids_2502
+	load	r5 r2 4
+	store	r5 r2 4
+	store	r4 r2 5
+	add	r4 r0 r5
+	call	L_judge_intersection_2700
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8502
+	addi	r4 r0 -1
+	load	r5 r2 3
+	load	r6 r2 5
+	add	r6 r6 r5
+	store	r4 r6 0
+	addi	r4 r0 0
+	bne	r5 r4 L_else_8523
+	addi	r2 r2 17
+	return
+L_else_8523 : 
+	addi	r5 r0 4111
+	load	r4 r2 4
+	call	L_veciprod_2431
+	call	L_fneg_2391
+	fstore	f2 r2 6
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8525
+	addi	r2 r2 17
+	return
+L_else_8525 : 
+	fload	f2 r2 6
+	fstore	f2 r2 6
+	call	L_fsqr_2393
+	fload	f3 r2 6
+	fmul	f2 f2 f3
+	fload	f3 r2 2
+	fmul	f2 f2 f3
+	addi	r4 r0 4153
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fmul	f2 f2 f3
+	addi	r4 r0 4127
+	addi	r5 r0 0
+	addi	r6 r0 4127
+	addi	r7 r0 0
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f3 f3 f2
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4127
+	addi	r5 r0 1
+	addi	r6 r0 4127
+	addi	r7 r0 1
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f3 f3 f2
+	add	r4 r4 r5
+	fstore	f3 r4 0
+	addi	r4 r0 4127
+	addi	r5 r0 2
+	addi	r6 r0 4127
+	addi	r7 r0 2
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fadd	f2 f3 f2
+	add	r4 r4 r5
+	fstore	f2 r4 0
+	addi	r2 r2 17
+	return
+L_else_8502 : 
+	addi	r4 r0 4115
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r5 r0 5042
+	add	r5 r5 r4
+	load	r5 r5 0
+	store	r4 r2 7
+	store	r5 r2 8
+	add	r4 r0 r5
+	call	L_o_reflectiontype_2460
+	load	r5 r2 8
+	store	r4 r2 9
+	store	r5 r2 8
+	add	r4 r0 r5
+	call	L_o_diffuse_2480
+	fload	f3 r2 2
+	fmul	f2 f2 f3
+	load	r4 r2 8
+	load	r5 r2 4
+	fstore	f3 r2 2
+	store	r5 r2 4
+	fstore	f2 r2 10
+	store	r4 r2 8
+	call	L_get_nvector_2722
+	addi	r4 r0 4135
+	addi	r5 r0 4114
+	call	L_veccpy_2420
+	addi	r5 r0 4114
+	load	r4 r2 8
+	store	r4 r2 8
+	call	L_utexture_2725
+	addi	r4 r0 4
+	load	r5 r2 7
+	mul	r4 r5 r4
+	addi	r5 r0 4146
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	add	r4 r4 r5
+	load	r5 r2 3
+	load	r6 r2 5
+	add	r7 r6 r5
+	store	r4 r7 0
+	load	r4 r2 1
+	store	r6 r2 5
+	store	r4 r2 1
+	store	r5 r2 3
+	call	L_p_intersection_points_2500
+	load	r5 r2 3
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 4114
+	store	r5 r2 3
+	add	r5 r0 r6
+	call	L_veccpy_2420
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_p_calc_diffuse_2504
+	load	r5 r2 8
+	store	r5 r2 8
+	store	r4 r2 11
+	add	r4 r0 r5
+	call	L_o_diffuse_2480
+	fload	f3 r0 14
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8518
+	addi	r4 r0 1
+	load	r5 r2 3
+	load	r6 r2 11
+	add	r6 r6 r5
+	store	r4 r6 0
+	load	r4 r2 1
+	store	r4 r2 1
+	store	r5 r2 3
+	call	L_p_energy_2506
+	load	r5 r2 3
+	add	r6 r4 r5
+	load	r6 r6 0
+	addi	r7 r0 4121
+	store	r5 r2 3
+	store	r4 r2 12
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_veccpy_2420
+	load	r4 r2 3
+	load	r5 r2 12
+	add	r5 r5 r4
+	load	r5 r5 0
+	fload	f2 r0 7
+	fload	f3 r2 10
+	fmul	f2 f2 f3
+	fstore	f3 r2 10
+	store	r4 r2 3
+	add	r4 r0 r5
+	call	L_vecscale_2449
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_p_nvectors_2515
+	load	r5 r2 3
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 4118
+	store	r5 r2 3
+	add	r5 r0 r6
+	call	L_veccpy_2420
+	jump	L_endif_8519
+L_else_8518 : 
+	addi	r4 r0 0
+	load	r5 r2 3
+	load	r6 r2 11
+	add	r6 r6 r5
+	store	r4 r6 0
+L_endif_8519 : 
+	fload	f2 r0 6
+	addi	r5 r0 4118
+	load	r4 r2 4
+	store	r4 r2 4
+	fstore	f2 r2 13
+	call	L_veciprod_2431
+	fload	f3 r2 13
+	fmul	f2 f3 f2
+	addi	r5 r0 4118
+	load	r4 r2 4
+	store	r4 r2 4
+	call	L_vecaccum_2439
+	load	r4 r2 8
+	store	r4 r2 8
+	call	L_o_hilight_2482
+	fload	f3 r2 2
+	fmul	f2 f3 f2
+	addi	r4 r0 0
+	addi	r5 r0 4155
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	fstore	f3 r2 2
+	fstore	f2 r2 14
+	call	L_shadow_check_one_or_matrix_2685
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8514
+	addi	r4 r0 4118
+	addi	r5 r0 4111
+	call	L_veciprod_2431
+	call	L_fneg_2391
+	fload	f3 r2 10
+	fmul	f2 f2 f3
+	addi	r5 r0 4111
+	load	r4 r2 4
+	fstore	f3 r2 10
+	store	r4 r2 4
+	fstore	f2 r2 15
+	call	L_veciprod_2431
+	call	L_fneg_2391
+	add	f3 r0 f2
+	fload	f2 r2 15
+	fload	f4 r2 14
+	fstore	f4 r2 14
+	call	L_add_light_2728
+	jump	L_endif_8515
+L_else_8514 : 
+L_endif_8515 : 
+	addi	r4 r0 4114
+	call	L_setup_startp_2651
+	addi	r4 r0 4147
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r5 r0 1
+	sub	r4 r4 r5
+	fload	f2 r2 10
+	fload	f3 r2 14
+	load	r5 r2 4
+	store	r5 r2 4
+	call	L_trace_reflections_2732
+	fload	f2 r0 5
+	fload	f3 r2 2
+	fstore	f3 r2 2
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8504
+	addi	r2 r2 17
+	return
+L_else_8504 : 
+	addi	r4 r0 4
+	load	r5 r2 3
+	bgt	r4 r5 L_else_8509
+	jump	L_endif_8510
+L_else_8509 : 
+	addi	r4 r0 1
+	add	r4 r5 r4
+	addi	r6 r0 -1
+	load	r7 r2 5
+	add	r4 r7 r4
+	store	r6 r4 0
+L_endif_8510 : 
+	addi	r4 r0 2
+	load	r6 r2 9
+	bne	r6 r4 L_else_8506
+	fload	f2 r0 29
+	load	r4 r2 8
+	store	r5 r2 3
+	fstore	f2 r2 16
+	call	L_o_diffuse_2480
+	fload	f3 r2 16
+	fsub	f2 f3 f2
+	fload	f3 r2 2
+	fmul	f2 f3 f2
+	addi	r4 r0 1
+	load	r5 r2 3
+	add	r4 r5 r4
+	addi	r5 r0 4154
+	addi	r6 r0 0
+	add	r5 r5 r6
+	fload	f3 r5 0
+	fload	f4 r2 0
+	fadd	f3 f4 f3
+	load	r5 r2 4
+	load	r6 r2 1
+	addi	r2 r2 17
+	jump	L_trace_ray_2737
+L_else_8506 : 
+	addi	r2 r2 17
+	return
+L_else_8499 : 
+	addi	r2 r2 17
+	return
+L_trace_diffuse_ray_2743 : 
+	subi	r2 r2 6
+	fstore	f2 r2 0
+	store	r4 r2 1
+	call	L_judge_intersection_fast_2714
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8530
+	addi	r2 r2 6
+	return
+L_else_8530 : 
+	addi	r4 r0 5042
+	addi	r5 r0 4115
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	load	r5 r2 1
+	store	r4 r2 2
+	add	r4 r0 r5
+	call	L_d_vec_2517
+	add	r5 r0 r4
+	load	r4 r2 2
+	store	r4 r2 2
+	call	L_get_nvector_2722
+	addi	r5 r0 4114
+	load	r4 r2 2
+	store	r4 r2 2
+	call	L_utexture_2725
+	addi	r4 r0 0
+	addi	r5 r0 4155
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	call	L_shadow_check_one_or_matrix_2685
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8532
+	addi	r4 r0 4118
+	addi	r5 r0 4111
+	call	L_veciprod_2431
+	call	L_fneg_2391
+	fstore	f2 r2 3
+	call	L_fispos_2380
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8535
+	fload	f2 r0 31
+	jump	L_endif_8536
+L_else_8535 : 
+	fload	f2 r2 3
+	fadd	f2 f0 f2
+L_endif_8536 : 
+	addi	r4 r0 4124
+	fload	f3 r2 0
+	fmul	f2 f3 f2
+	load	r5 r2 2
+	store	r4 r2 4
+	fstore	f2 r2 5
+	add	r4 r0 r5
+	call	L_o_diffuse_2480
+	fload	f3 r2 5
+	fmul	f2 f3 f2
+	addi	r5 r0 4121
+	load	r4 r2 4
+	addi	r2 r2 6
+	jump	L_vecaccum_2439
+L_else_8532 : 
+	addi	r2 r2 6
+	return
+L_iter_trace_diffuse_rays_2746 : 
+	subi	r2 r2 5
+	addi	r8 r0 0
+	bgt	r8 r7 L_else_8539
+	add	r8 r4 r7
+	load	r8 r8 0
+	store	r6 r2 0
+	store	r7 r2 1
+	store	r4 r2 2
+	store	r5 r2 3
+	add	r4 r0 r8
+	call	L_d_vec_2517
+	load	r5 r2 3
+	store	r5 r2 3
+	call	L_veciprod_2431
+	fstore	f2 r2 4
+	call	L_fisneg_2382
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8542
+	load	r4 r2 1
+	load	r5 r2 2
+	add	r6 r5 r4
+	load	r6 r6 0
 	fload	f2 r0 3
+	fload	f3 r2 4
+	fdiv	f2 f3 f2
+	store	r5 r2 2
+	store	r4 r2 1
+	add	r4 r0 r6
+	call	L_trace_diffuse_ray_2743
+	jump	L_endif_8543
+L_else_8542 : 
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	load	r6 r2 2
+	add	r4 r6 r4
+	load	r4 r4 0
+	fload	f2 r0 4
+	fload	f3 r2 4
+	fdiv	f2 f3 f2
+	store	r6 r2 2
+	store	r5 r2 1
+	call	L_trace_diffuse_ray_2743
+L_endif_8543 : 
+	addi	r4 r0 2
+	load	r5 r2 1
+	sub	r7 r5 r4
+	load	r4 r2 2
+	load	r5 r2 3
+	load	r6 r2 0
+	addi	r2 r2 5
+	jump	L_iter_trace_diffuse_rays_2746
+L_else_8539 : 
+	addi	r2 r2 5
+	return
+L_trace_diffuse_rays_2751 : 
+	subi	r2 r2 3
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r4 r0 r6
+	call	L_setup_startp_2651
+	addi	r7 r0 118
+	load	r4 r2 2
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 3
+	jump	L_iter_trace_diffuse_rays_2746
+L_trace_diffuse_ray_80percent_2755 : 
+	subi	r2 r2 3
+	addi	r7 r0 0
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	bne	r4 r7 L_else_8563
+	jump	L_endif_8564
+L_else_8563 : 
+	addi	r7 r0 4148
+	addi	r8 r0 0
+	add	r7 r7 r8
+	load	r7 r7 0
+	store	r6 r2 0
+	store	r5 r2 1
+	store	r4 r2 2
+	add	r4 r0 r7
+	call	L_trace_diffuse_rays_2751
+L_endif_8564 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	store	r5 r2 2
+	bne	r5 r4 L_else_8559
+	jump	L_endif_8560
+L_else_8559 : 
+	addi	r4 r0 4148
+	addi	r6 r0 1
+	add	r4 r4 r6
+	load	r4 r4 0
+	load	r6 r2 1
+	load	r7 r2 0
+	store	r7 r2 0
+	store	r6 r2 1
+	store	r5 r2 2
+	add	r5 r0 r6
+	add	r6 r0 r7
+	call	L_trace_diffuse_rays_2751
+L_endif_8560 : 
+	addi	r4 r0 2
+	load	r5 r2 2
+	store	r5 r2 2
+	bne	r5 r4 L_else_8555
+	jump	L_endif_8556
+L_else_8555 : 
+	addi	r4 r0 4148
+	addi	r6 r0 2
+	add	r4 r4 r6
+	load	r4 r4 0
+	load	r6 r2 1
+	load	r7 r2 0
+	store	r7 r2 0
+	store	r6 r2 1
+	store	r5 r2 2
+	add	r5 r0 r6
+	add	r6 r0 r7
+	call	L_trace_diffuse_rays_2751
+L_endif_8556 : 
+	addi	r4 r0 3
+	load	r5 r2 2
+	store	r5 r2 2
+	bne	r5 r4 L_else_8551
+	jump	L_endif_8552
+L_else_8551 : 
+	addi	r4 r0 4148
+	addi	r6 r0 3
+	add	r4 r4 r6
+	load	r4 r4 0
+	load	r6 r2 1
+	load	r7 r2 0
+	store	r7 r2 0
+	store	r6 r2 1
+	store	r5 r2 2
+	add	r5 r0 r6
+	add	r6 r0 r7
+	call	L_trace_diffuse_rays_2751
+L_endif_8552 : 
+	addi	r4 r0 4
+	load	r5 r2 2
+	bne	r5 r4 L_else_8548
+	addi	r2 r2 3
+	return
+L_else_8548 : 
+	addi	r4 r0 4148
+	addi	r5 r0 4
+	add	r4 r4 r5
+	load	r4 r4 0
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 3
+	jump	L_trace_diffuse_rays_2751
+L_calc_diffuse_using_1point_2759 : 
+	subi	r2 r2 6
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_p_received_ray_20percent_2508
+	load	r5 r2 1
+	store	r4 r2 2
+	store	r5 r2 1
+	add	r4 r0 r5
+	call	L_p_nvectors_2515
+	load	r5 r2 1
+	store	r4 r2 3
+	store	r5 r2 1
+	add	r4 r0 r5
+	call	L_p_intersection_points_2500
+	load	r5 r2 1
+	store	r4 r2 4
+	store	r5 r2 1
+	add	r4 r0 r5
+	call	L_p_energy_2506
+	addi	r5 r0 4124
+	load	r6 r2 0
+	load	r7 r2 2
+	add	r7 r7 r6
+	load	r7 r7 0
+	store	r4 r2 5
+	store	r6 r2 0
+	add	r4 r0 r5
+	add	r5 r0 r7
+	call	L_veccpy_2420
+	load	r4 r2 1
+	call	L_p_group_id_2510
+	load	r5 r2 0
+	load	r6 r2 3
+	add	r6 r6 r5
+	load	r6 r6 0
+	load	r7 r2 4
+	add	r7 r7 r5
+	load	r7 r7 0
+	store	r5 r2 0
+	add	r5 r0 r6
+	add	r6 r0 r7
+	call	L_trace_diffuse_ray_80percent_2755
+	addi	r4 r0 4127
+	load	r5 r2 0
+	load	r6 r2 5
+	add	r5 r6 r5
+	load	r5 r5 0
+	addi	r6 r0 4124
+	addi	r2 r2 6
+	jump	L_vecaccumv_2452
+L_calc_diffuse_using_5points_2762 : 
+	subi	r2 r2 9
+	add	r5 r5 r4
+	load	r5 r5 0
+	store	r8 r2 0
+	store	r7 r2 1
+	store	r6 r2 2
+	store	r4 r2 3
+	add	r4 r0 r5
+	call	L_p_received_ray_20percent_2508
+	addi	r5 r0 1
+	load	r6 r2 3
+	sub	r5 r6 r5
+	load	r7 r2 2
+	add	r5 r7 r5
+	load	r5 r5 0
+	store	r4 r2 4
+	store	r6 r2 3
+	store	r7 r2 2
+	add	r4 r0 r5
+	call	L_p_received_ray_20percent_2508
+	load	r5 r2 3
+	load	r6 r2 2
+	add	r7 r6 r5
+	load	r7 r7 0
+	store	r4 r2 5
+	store	r6 r2 2
+	store	r5 r2 3
+	add	r4 r0 r7
+	call	L_p_received_ray_20percent_2508
+	addi	r5 r0 1
+	load	r6 r2 3
+	add	r5 r6 r5
+	load	r7 r2 2
+	add	r5 r7 r5
+	load	r5 r5 0
+	store	r7 r2 2
+	store	r4 r2 6
+	store	r6 r2 3
+	add	r4 r0 r5
+	call	L_p_received_ray_20percent_2508
+	load	r5 r2 3
+	load	r6 r2 1
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 3
+	store	r4 r2 7
+	add	r4 r0 r6
+	call	L_p_received_ray_20percent_2508
+	addi	r5 r0 4124
+	load	r6 r2 0
+	load	r7 r2 4
+	add	r7 r7 r6
+	load	r7 r7 0
+	store	r4 r2 8
+	store	r6 r2 0
+	add	r4 r0 r5
+	add	r5 r0 r7
+	call	L_veccpy_2420
+	addi	r4 r0 4124
+	load	r5 r2 0
+	load	r6 r2 5
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_vecadd_2443
+	addi	r4 r0 4124
+	load	r5 r2 0
+	load	r6 r2 6
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_vecadd_2443
+	addi	r4 r0 4124
+	load	r5 r2 0
+	load	r6 r2 7
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_vecadd_2443
+	addi	r4 r0 4124
+	load	r5 r2 0
+	load	r6 r2 8
+	add	r6 r6 r5
+	load	r6 r6 0
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_vecadd_2443
+	load	r4 r2 3
+	load	r5 r2 2
+	add	r4 r5 r4
+	load	r4 r4 0
+	call	L_p_energy_2506
+	addi	r5 r0 4127
+	load	r6 r2 0
+	add	r4 r4 r6
+	load	r4 r4 0
+	addi	r6 r0 4124
+	add	r1 r0 r5
+	add	r5 r0 r4
+	add	r4 r0 r1
+	addi	r2 r2 9
+	jump	L_vecaccumv_2452
+L_do_without_neighbors_2768 : 
+	subi	r2 r2 2
+	addi	r6 r0 4
+	bgt	r5 r6 L_else_8570
+	store	r4 r2 0
+	store	r5 r2 1
+	call	L_p_surface_ids_2502
+	addi	r5 r0 0
+	load	r6 r2 1
+	add	r4 r4 r6
+	load	r4 r4 0
+	bgt	r5 r4 L_else_8573
+	load	r4 r2 0
+	store	r4 r2 0
+	store	r6 r2 1
+	call	L_p_calc_diffuse_2504
+	load	r5 r2 1
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 0
+	store	r5 r2 1
+	bne	r4 r6 L_else_8576
+	jump	L_endif_8577
+L_else_8576 : 
+	load	r4 r2 0
+	store	r4 r2 0
+	store	r5 r2 1
+	call	L_calc_diffuse_using_1point_2759
+L_endif_8577 : 
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r5 r5 r4
+	load	r4 r2 0
+	addi	r2 r2 2
+	jump	L_do_without_neighbors_2768
+L_else_8573 : 
+	addi	r2 r2 2
+	return
+L_else_8570 : 
+	addi	r2 r2 2
+	return
+L_neighbors_exist_2771 : 
+	addi	r6 r0 4130
+	addi	r7 r0 1
+	add	r6 r6 r7
+	load	r6 r6 0
+	addi	r7 r0 1
+	add	r7 r5 r7
+	bgt	r6 r7 L_else_8580
+	addi	r4 r0 0
+	return
+L_else_8580 : 
+	addi	r6 r0 0
+	bgt	r5 r6 L_else_8581
+	addi	r4 r0 0
+	return
+L_else_8581 : 
+	addi	r5 r0 4130
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	addi	r6 r0 1
+	add	r6 r4 r6
+	bgt	r5 r6 L_else_8582
+	addi	r4 r0 0
+	return
+L_else_8582 : 
+	addi	r5 r0 0
+	bgt	r4 r5 L_else_8583
+	addi	r4 r0 0
+	return
+L_else_8583 : 
+	addi	r4 r0 1
+	return
+L_get_surface_id_2775 : 
+	subi	r2 r2 1
+	store	r5 r2 0
+	call	L_p_surface_ids_2502
+	load	r5 r2 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r2 r2 1
+	return
+L_neighbors_are_available_2778 : 
+	subi	r2 r2 6
+	add	r9 r6 r4
+	load	r9 r9 0
+	store	r6 r2 0
+	store	r7 r2 1
+	store	r8 r2 2
+	store	r4 r2 3
+	store	r5 r2 4
+	add	r5 r0 r8
+	add	r4 r0 r9
+	call	L_get_surface_id_2775
+	load	r5 r2 3
+	load	r6 r2 4
+	add	r6 r6 r5
+	load	r6 r6 0
+	load	r7 r2 2
+	store	r7 r2 2
+	store	r5 r2 3
+	store	r4 r2 5
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_get_surface_id_2775
+	load	r5 r2 5
+	bne	r4 r5 L_else_8584
+	load	r4 r2 3
+	load	r6 r2 1
+	add	r6 r6 r4
+	load	r6 r6 0
+	load	r7 r2 2
+	store	r7 r2 2
+	store	r4 r2 3
+	store	r5 r2 5
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_get_surface_id_2775
+	load	r5 r2 5
+	bne	r4 r5 L_else_8585
+	addi	r4 r0 1
+	load	r6 r2 3
+	sub	r4 r6 r4
+	load	r7 r2 0
+	add	r4 r7 r4
+	load	r4 r4 0
+	load	r8 r2 2
+	store	r8 r2 2
+	store	r7 r2 0
+	store	r6 r2 3
+	store	r5 r2 5
+	add	r5 r0 r8
+	call	L_get_surface_id_2775
+	load	r5 r2 5
+	bne	r4 r5 L_else_8586
+	addi	r4 r0 1
+	load	r6 r2 3
+	add	r4 r6 r4
+	load	r6 r2 0
+	add	r4 r6 r4
+	load	r4 r4 0
+	load	r6 r2 2
+	store	r5 r2 5
+	add	r5 r0 r6
+	call	L_get_surface_id_2775
+	load	r5 r2 5
+	bne	r4 r5 L_else_8587
+	addi	r4 r0 1
+	addi	r2 r2 6
+	return
+L_else_8587 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_else_8586 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_else_8585 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_else_8584 : 
+	addi	r4 r0 0
+	addi	r2 r2 6
+	return
+L_try_exploit_neighbors_2784 : 
+	subi	r2 r2 8
+	add	r10 r7 r4
+	load	r10 r10 0
+	addi	r11 r0 4
+	bgt	r9 r11 L_else_8589
+	addi	r11 r0 0
+	store	r5 r2 0
+	store	r10 r2 1
+	store	r9 r2 2
+	store	r8 r2 3
+	store	r7 r2 4
+	store	r6 r2 5
+	store	r4 r2 6
+	store	r11 r2 7
+	add	r5 r0 r9
+	add	r4 r0 r10
+	call	L_get_surface_id_2775
+	load	r5 r2 7
+	bgt	r5 r4 L_else_8592
+	load	r4 r2 6
+	load	r5 r2 5
+	load	r6 r2 4
+	load	r7 r2 3
+	load	r8 r2 2
+	store	r7 r2 3
+	store	r5 r2 5
+	store	r8 r2 2
+	store	r4 r2 6
+	store	r6 r2 4
+	call	L_neighbors_are_available_2778
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8595
+	load	r4 r2 6
+	load	r5 r2 4
+	add	r4 r5 r4
+	load	r4 r4 0
+	load	r5 r2 2
+	addi	r2 r2 8
+	jump	L_do_without_neighbors_2768
+L_else_8595 : 
+	load	r4 r2 1
+	call	L_p_calc_diffuse_2504
+	load	r8 r2 2
+	add	r4 r4 r8
+	load	r4 r4 0
+	addi	r5 r0 0
+	store	r8 r2 2
+	bne	r4 r5 L_else_8597
+	jump	L_endif_8598
+L_else_8597 : 
+	load	r4 r2 6
+	load	r5 r2 5
+	load	r6 r2 4
+	load	r7 r2 3
+	store	r7 r2 3
+	store	r6 r2 4
+	store	r5 r2 5
+	store	r4 r2 6
+	store	r8 r2 2
+	call	L_calc_diffuse_using_5points_2762
+L_endif_8598 : 
+	addi	r4 r0 1
+	load	r5 r2 2
+	add	r9 r5 r4
+	load	r4 r2 6
+	load	r5 r2 0
+	load	r6 r2 5
+	load	r7 r2 4
+	load	r8 r2 3
+	addi	r2 r2 8
+	jump	L_try_exploit_neighbors_2784
+L_else_8592 : 
+	addi	r2 r2 8
+	return
+L_else_8589 : 
+	addi	r2 r2 8
+	return
+L_write_ppm_header_2791 : 
+	addi	r4 r0 4130
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	call	min_caml_print_int
+	addi	r4 r0 4130
+	addi	r5 r0 1
+	add	r4 r4 r5
+	load	r4 r4 0
+	call	min_caml_print_int
+	addi	r4 r0 255
+	jump	min_caml_print_int
+L_write_rgb_element_2793 : 
+	fload	f3 r0 13
+	fbgt	f2 f3 L_else_8604
+	fload	f3 r0 31
+	fbgt	f3 f2 L_else_8606
+	fadd	f2 f0 f2
+	jump	L_endif_8607
+L_else_8606 : 
+	fload	f2 r0 31
+L_endif_8607 : 
+	jump	L_endif_8605
+L_else_8604 : 
+	fload	f2 r0 13
+L_endif_8605 : 
+	floor	f2 f2
+	jump	min_caml_print_float
+L_write_rgb_2795 : 
+	addi	r4 r0 4127
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f2 r4 0
+	call	L_write_rgb_element_2793
+	addi	r4 r0 4127
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f2 r4 0
+	call	L_write_rgb_element_2793
+	addi	r4 r0 4127
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f2 r4 0
+	jump	L_write_rgb_element_2793
+L_pretrace_diffuse_rays_2797 : 
+	subi	r2 r2 4
+	addi	r6 r0 4
+	bgt	r5 r6 L_else_8610
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_get_surface_id_2775
+	addi	r5 r0 0
+	bgt	r5 r4 L_else_8613
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_p_calc_diffuse_2504
+	load	r5 r2 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 0
+	store	r5 r2 0
+	bne	r4 r6 L_else_8616
+	jump	L_endif_8617
+L_else_8616 : 
+	load	r4 r2 1
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_p_group_id_2510
+	addi	r5 r0 4124
+	store	r4 r2 2
+	add	r4 r0 r5
+	call	L_vecbzero_2418
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_p_nvectors_2515
+	load	r5 r2 1
+	store	r5 r2 1
+	store	r4 r2 3
+	add	r4 r0 r5
+	call	L_p_intersection_points_2500
+	addi	r5 r0 4148
+	load	r6 r2 2
+	add	r5 r5 r6
+	load	r5 r5 0
+	load	r6 r2 0
+	load	r7 r2 3
+	add	r7 r7 r6
+	load	r7 r7 0
+	add	r4 r4 r6
+	load	r4 r4 0
+	store	r6 r2 0
+	add	r6 r0 r4
+	add	r4 r0 r5
+	add	r5 r0 r7
+	call	L_trace_diffuse_rays_2751
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_p_received_ray_20percent_2508
+	load	r5 r2 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 4124
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_veccpy_2420
+L_endif_8617 : 
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r5 r5 r4
+	load	r4 r2 1
+	addi	r2 r2 4
+	jump	L_pretrace_diffuse_rays_2797
+L_else_8613 : 
+	addi	r2 r2 4
+	return
+L_else_8610 : 
+	addi	r2 r2 4
+	return
+L_pretrace_pixels_2800 : 
+	subi	r2 r2 7
+	addi	r7 r0 0
+	bgt	r7 r5 L_else_8621
+	addi	r7 r0 4134
+	addi	r8 r0 0
+	add	r7 r7 r8
+	fload	f5 r7 0
+	addi	r7 r0 4132
+	addi	r8 r0 0
+	add	r7 r7 r8
+	load	r7 r7 0
+	sub	r7 r5 r7
+	foi	f6 r7
+	fmul	f5 f5 f6
+	addi	r7 r0 4141
+	addi	r8 r0 0
+	addi	r9 r0 4102
+	addi	r10 r0 0
+	add	r9 r9 r10
+	fload	f6 r9 0
+	fmul	f6 f5 f6
+	fadd	f6 f6 f2
+	add	r7 r7 r8
+	fstore	f6 r7 0
+	addi	r7 r0 4141
+	addi	r8 r0 1
+	addi	r9 r0 4102
+	addi	r10 r0 1
+	add	r9 r9 r10
+	fload	f6 r9 0
+	fmul	f6 f5 f6
+	fadd	f6 f6 f3
+	add	r7 r7 r8
+	fstore	f6 r7 0
+	addi	r7 r0 4141
+	addi	r8 r0 2
+	addi	r9 r0 4102
+	addi	r10 r0 2
+	add	r9 r9 r10
+	fload	f6 r9 0
+	fmul	f5 f5 f6
+	fadd	f5 f5 f4
+	add	r7 r7 r8
+	fstore	f5 r7 0
+	addi	r7 r0 4141
+	addi	r8 r0 0
+	fstore	f4 r2 0
+	fstore	f3 r2 1
+	fstore	f2 r2 2
+	store	r6 r2 3
+	store	r5 r2 4
+	store	r4 r2 5
+	add	r5 r0 r8
+	add	r4 r0 r7
+	call	L_vecunit_sgn_2428
+	addi	r4 r0 4127
+	call	L_vecbzero_2418
+	addi	r4 r0 4135
+	addi	r5 r0 4108
+	call	L_veccpy_2420
+	addi	r4 r0 0
+	fload	f2 r0 29
+	addi	r5 r0 4141
+	load	r6 r2 4
+	load	r7 r2 5
+	add	r8 r7 r6
+	load	r8 r8 0
+	fload	f3 r0 31
+	store	r6 r2 4
+	store	r7 r2 5
+	add	r6 r0 r8
+	call	L_trace_ray_2737
+	load	r4 r2 4
+	load	r5 r2 5
+	add	r6 r5 r4
+	load	r6 r6 0
+	store	r4 r2 4
+	store	r5 r2 5
+	add	r4 r0 r6
+	call	L_p_rgb_2498
+	addi	r5 r0 4127
+	call	L_veccpy_2420
+	load	r4 r2 4
+	load	r5 r2 5
+	add	r6 r5 r4
+	load	r6 r6 0
+	load	r7 r2 3
+	store	r7 r2 3
+	store	r4 r2 4
+	store	r5 r2 5
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_p_set_group_id_2512
+	load	r4 r2 4
+	load	r5 r2 5
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 0
+	store	r5 r2 5
+	store	r4 r2 4
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_pretrace_diffuse_rays_2797
+	addi	r4 r0 1
+	load	r5 r2 4
+	sub	r4 r5 r4
+	addi	r5 r0 1
+	load	r6 r2 3
+	store	r4 r2 6
+	add	r4 r0 r6
+	call	L_add_mod5_2407
+	add	r6 r0 r4
+	fload	f2 r2 2
+	fload	f3 r2 1
+	fload	f4 r2 0
+	load	r4 r2 5
+	load	r5 r2 6
+	addi	r2 r2 7
+	jump	L_pretrace_pixels_2800
+L_else_8621 : 
+	addi	r2 r2 7
+	return
+L_pretrace_line_2807 : 
+	addi	r7 r0 4134
+	addi	r8 r0 0
+	add	r7 r7 r8
+	fload	f2 r7 0
+	addi	r7 r0 4132
+	addi	r8 r0 1
+	add	r7 r7 r8
+	load	r7 r7 0
+	sub	r5 r5 r7
+	foi	f3 r5
+	fmul	f2 f2 f3
+	addi	r5 r0 4105
+	addi	r7 r0 0
+	add	r5 r5 r7
+	fload	f3 r5 0
+	fmul	f3 f2 f3
+	addi	r5 r0 4099
+	addi	r7 r0 0
+	add	r5 r5 r7
+	fload	f4 r5 0
+	fadd	f3 f3 f4
+	addi	r5 r0 4105
+	addi	r7 r0 1
+	add	r5 r5 r7
+	fload	f4 r5 0
+	fmul	f4 f2 f4
+	addi	r5 r0 4099
+	addi	r7 r0 1
+	add	r5 r5 r7
+	fload	f5 r5 0
+	fadd	f4 f4 f5
+	addi	r5 r0 4105
+	addi	r7 r0 2
+	add	r5 r5 r7
+	fload	f5 r5 0
+	fmul	f2 f2 f5
+	addi	r5 r0 4099
+	addi	r7 r0 2
+	add	r5 r5 r7
+	fload	f5 r5 0
+	fadd	f2 f2 f5
+	addi	r5 r0 4130
+	addi	r7 r0 0
+	add	r5 r5 r7
+	load	r5 r5 0
+	addi	r7 r0 1
+	sub	r5 r5 r7
+	fadd	f1 f0 f4
+	fadd	f4 f0 f2
+	fadd	f2 f0 f3
+	fadd	f3 f0 f1
+	jump	L_pretrace_pixels_2800
+L_scan_pixel_2811 : 
+	subi	r2 r2 6
+	addi	r9 r0 4130
+	addi	r10 r0 0
+	add	r9 r9 r10
+	load	r9 r9 0
+	bgt	r9 r4 L_else_8626
+	addi	r2 r2 6
+	return
+L_else_8626 : 
+	addi	r9 r0 4127
+	add	r10 r7 r4
+	load	r10 r10 0
+	store	r6 r2 0
+	store	r7 r2 1
+	store	r8 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	store	r9 r2 5
+	add	r4 r0 r10
+	call	L_p_rgb_2498
+	add	r5 r0 r4
+	load	r4 r2 5
+	call	L_veccpy_2420
+	load	r4 r2 4
+	load	r5 r2 3
+	load	r6 r2 2
+	store	r6 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	call	L_neighbors_exist_2771
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8628
+	load	r4 r2 4
+	load	r5 r2 1
+	add	r6 r5 r4
+	load	r6 r6 0
+	addi	r7 r0 0
+	store	r5 r2 1
+	store	r4 r2 4
+	add	r5 r0 r7
+	add	r4 r0 r6
+	call	L_do_without_neighbors_2768
+	jump	L_endif_8629
+L_else_8628 : 
+	addi	r9 r0 0
+	load	r4 r2 4
+	load	r5 r2 3
+	load	r6 r2 0
+	load	r7 r2 1
+	load	r8 r2 2
+	store	r8 r2 2
+	store	r7 r2 1
+	store	r6 r2 0
+	store	r5 r2 3
+	store	r4 r2 4
+	call	L_try_exploit_neighbors_2784
+L_endif_8629 : 
+	call	L_write_rgb_2795
+	addi	r4 r0 1
+	load	r5 r2 4
+	add	r4 r5 r4
+	load	r5 r2 3
+	load	r6 r2 0
+	load	r7 r2 1
+	load	r8 r2 2
+	addi	r2 r2 6
+	jump	L_scan_pixel_2811
+L_scan_line_2817 : 
+	subi	r2 r2 6
+	addi	r9 r0 4130
+	addi	r10 r0 1
+	add	r9 r9 r10
+	load	r9 r9 0
+	bgt	r9 r4 L_else_8634
+	addi	r2 r2 6
+	return
+L_else_8634 : 
+	addi	r9 r0 4130
+	addi	r10 r0 1
+	add	r9 r9 r10
+	load	r9 r9 0
+	addi	r10 r0 1
+	sub	r9 r9 r10
+	store	r8 r2 0
+	store	r7 r2 1
+	store	r6 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	bgt	r9 r4 L_else_8636
+	jump	L_endif_8637
+L_else_8636 : 
+	addi	r9 r0 1
+	add	r9 r4 r9
+	store	r8 r2 0
+	store	r7 r2 1
+	store	r6 r2 2
+	store	r5 r2 3
+	store	r4 r2 4
+	add	r6 r0 r8
+	add	r5 r0 r9
+	add	r4 r0 r7
+	call	L_pretrace_line_2807
+L_endif_8637 : 
+	addi	r4 r0 0
+	load	r5 r2 4
+	load	r6 r2 3
+	load	r7 r2 2
+	load	r8 r2 1
+	store	r6 r2 3
+	store	r8 r2 1
+	store	r7 r2 2
+	store	r5 r2 4
+	call	L_scan_pixel_2811
+	addi	r4 r0 1
+	load	r5 r2 4
+	add	r4 r5 r4
+	addi	r5 r0 2
+	load	r6 r2 0
+	store	r4 r2 5
+	add	r4 r0 r6
+	call	L_add_mod5_2407
+	add	r8 r0 r4
+	load	r4 r2 5
+	load	r5 r2 2
+	load	r6 r2 1
+	load	r7 r2 3
+	addi	r2 r2 6
+	jump	L_scan_line_2817
+L_create_float5x3array_2823 : 
+	subi	r2 r2 5
+	addi	r4 r0 3
+	fload	f2 r0 31
+	call	min_caml_create_float_array
+	add	r5 r0 r4
+	addi	r4 r0 5
+	call	min_caml_create_array
+	addi	r5 r0 1
+	addi	r6 r0 3
+	fload	f2 r0 31
 	store	r5 r2 0
 	store	r4 r2 1
 	add	r4 r0 r6
 	call	min_caml_create_float_array
 	load	r5 r2 0
 	load	r6 r2 1
+	add	r5 r6 r5
+	store	r4 r5 0
+	addi	r4 r0 2
+	addi	r5 r0 3
+	fload	f2 r0 31
+	store	r4 r2 2
+	store	r6 r2 1
+	add	r4 r0 r5
+	call	min_caml_create_float_array
+	load	r5 r2 2
+	load	r6 r2 1
+	add	r5 r6 r5
+	store	r4 r5 0
+	addi	r4 r0 3
+	addi	r5 r0 3
+	fload	f2 r0 31
+	store	r4 r2 3
+	store	r6 r2 1
+	add	r4 r0 r5
+	call	min_caml_create_float_array
+	load	r5 r2 3
+	load	r6 r2 1
+	add	r5 r6 r5
+	store	r4 r5 0
+	addi	r4 r0 4
+	addi	r5 r0 3
+	fload	f2 r0 31
+	store	r4 r2 4
+	store	r6 r2 1
+	add	r4 r0 r5
+	call	min_caml_create_float_array
+	load	r5 r2 4
+	load	r6 r2 1
+	add	r5 r6 r5
+	store	r4 r5 0
+	add	r4 r0 r6
+	addi	r2 r2 5
+	return
+L_create_pixel_2825 : 
+	subi	r2 r2 7
+	addi	r4 r0 3
+	fload	f2 r0 31
+	call	min_caml_create_float_array
+	store	r4 r2 0
+	call	L_create_float5x3array_2823
+	addi	r5 r0 5
+	addi	r6 r0 0
+	store	r4 r2 1
+	add	r4 r0 r5
+	add	r5 r0 r6
+	call	min_caml_create_array
+	addi	r5 r0 5
+	addi	r6 r0 0
+	store	r4 r2 2
+	add	r4 r0 r5
+	add	r5 r0 r6
+	call	min_caml_create_array
+	store	r4 r2 3
+	call	L_create_float5x3array_2823
+	store	r4 r2 4
+	call	L_create_float5x3array_2823
+	addi	r5 r0 1
+	addi	r6 r0 0
+	store	r4 r2 5
+	add	r4 r0 r5
+	add	r5 r0 r6
+	call	min_caml_create_array
+	store	r4 r2 6
+	call	L_create_float5x3array_2823
+	add	r5 r0 r3
+	addi	r3 r3 8
+	store	r4 r5 7
+	load	r4 r2 6
+	store	r4 r5 6
+	load	r4 r2 5
+	store	r4 r5 5
+	load	r4 r2 4
+	store	r4 r5 4
+	load	r4 r2 3
+	store	r4 r5 3
+	load	r4 r2 2
+	store	r4 r5 2
+	load	r4 r2 1
+	store	r4 r5 1
+	load	r4 r2 0
+	store	r4 r5 0
+	add	r4 r0 r5
+	addi	r2 r2 7
+	return
+L_init_line_elements_2827 : 
+	subi	r2 r2 2
+	addi	r6 r0 0
+	bgt	r6 r5 L_else_8641
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_create_pixel_2825
+	load	r5 r2 0
+	load	r6 r2 1
 	add	r7 r6 r5
 	store	r4 r7 0
 	addi	r4 r0 1
-	add	r5 r5 r4
+	sub	r5 r5 r4
 	add	r4 r0 r6
 	addi	r2 r2 2
-	jump	L_subinit_97
-L_init_100 : 
+	jump	L_init_line_elements_2827
+L_else_8641 : 
+	add	r4 r0 r4
+	addi	r2 r2 2
+	return
+L_create_pixelline_2830 : 
+	subi	r2 r2 1
+	addi	r4 r0 4130
 	addi	r5 r0 0
-	jump	L_subinit_97
-L_sssmatmul_102 : 
-	addi	r10 r0 10
-	bne	r8 r10 L_else_358
+	add	r4 r4 r5
+	load	r4 r4 0
+	store	r4 r2 0
+	call	L_create_pixel_2825
+	add	r5 r0 r4
+	load	r4 r2 0
+	call	min_caml_create_array
+	addi	r5 r0 4130
+	addi	r6 r0 0
+	add	r5 r5 r6
+	load	r5 r5 0
+	addi	r6 r0 2
+	sub	r5 r5 r6
+	addi	r2 r2 1
+	jump	L_init_line_elements_2827
+L_tan_2832 : 
+	subi	r2 r2 2
+	fstore	f2 r2 0
+	call	min_caml_sin
+	fload	f3 r2 0
+	fstore	f2 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_cos
+	fload	f3 r2 1
+	fdiv	f2 f3 f2
+	addi	r2 r2 2
 	return
-L_else_358 : 
-	add	r10 r6 r7
-	load	r10 r10 0
-	add	r11 r6 r7
-	load	r11 r11 0
-	add	r11 r11 r9
-	fload	f2 r11 0
-	add	r11 r4 r7
-	load	r11 r11 0
-	add	r11 r11 r8
-	fload	f3 r11 0
-	add	r11 r5 r8
-	load	r11 r11 0
-	add	r11 r11 r9
-	fload	f4 r11 0
-	fmul	f3 f3 f4
+L_adjust_position_2834 : 
+	subi	r2 r2 2
+	fmul	f2 f2 f2
+	fload	f4 r0 5
+	fadd	f2 f2 f4
+	fstore	f3 r2 0
+	call	min_caml_sqrt
+	fload	f3 r0 29
+	fdiv	f3 f3 f2
+	fstore	f2 r2 1
+	fadd	f2 f0 f3
+	call	min_caml_atan
+	fload	f3 r2 0
+	fmul	f2 f2 f3
+	call	L_tan_2832
+	fload	f3 r2 1
+	fmul	f2 f2 f3
+	addi	r2 r2 2
+	return
+L_calc_dirvec_2837 : 
+	subi	r2 r2 23
+	addi	r7 r0 5
+	bgt	r7 r4 L_else_8643
+	store	r6 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 2
+	fstore	f3 r2 3
+	call	L_fsqr_2393
+	fload	f3 r2 3
+	fstore	f3 r2 3
+	fstore	f2 r2 4
+	fadd	f2 f0 f3
+	call	L_fsqr_2393
+	fload	f3 r2 4
+	fadd	f2 f3 f2
+	fload	f3 r0 29
 	fadd	f2 f2 f3
-	add	r10 r10 r9
-	fstore	f2 r10 0
-	addi	r10 r0 1
-	add	r8 r8 r10
-	jump	L_sssmatmul_102
-L_ssmatmul_109 : 
-	subi	r2 r2 5
-	addi	r9 r0 10
-	bne	r8 r9 L_else_362
-	addi	r2 r2 5
-	return
-L_else_362 : 
-	addi	r9 r0 0
-	store	r7 r2 0
-	store	r6 r2 1
-	store	r5 r2 2
-	store	r4 r2 3
-	store	r8 r2 4
-	add	r1 r0 r9
-	add	r9 r0 r8
-	add	r8 r0 r1
-	call	L_sssmatmul_102
+	call	min_caml_sqrt
+	fload	f3 r2 2
+	fdiv	f3 f3 f2
+	fload	f4 r2 3
+	fdiv	f4 f4 f2
+	fload	f5 r0 29
+	fdiv	f2 f5 f2
+	addi	r4 r0 4148
+	load	r5 r2 1
+	add	r4 r4 r5
+	load	r4 r4 0
+	load	r5 r2 0
+	add	r6 r4 r5
+	load	r6 r6 0
+	store	r4 r2 5
+	store	r5 r2 0
+	fstore	f2 r2 6
+	fstore	f4 r2 7
+	fstore	f3 r2 8
+	add	r4 r0 r6
+	call	L_d_vec_2517
+	fload	f2 r2 8
+	fload	f3 r2 7
+	fload	f4 r2 6
+	fstore	f4 r2 6
+	fstore	f2 r2 8
+	fstore	f3 r2 7
+	call	L_vecset_2410
+	addi	r4 r0 40
+	load	r5 r2 0
+	add	r4 r5 r4
+	load	r6 r2 5
+	add	r4 r6 r4
+	load	r4 r4 0
+	store	r6 r2 5
+	store	r5 r2 0
+	call	L_d_vec_2517
+	fload	f2 r2 7
+	fstore	f2 r2 7
+	store	r4 r2 9
+	call	L_fneg_2391
+	add	f4 r0 f2
+	fload	f2 r2 8
+	fload	f3 r2 6
+	load	r4 r2 9
+	fstore	f3 r2 6
+	fstore	f2 r2 8
+	call	L_vecset_2410
+	addi	r4 r0 80
+	load	r5 r2 0
+	add	r4 r5 r4
+	load	r6 r2 5
+	add	r4 r6 r4
+	load	r4 r4 0
+	store	r6 r2 5
+	store	r5 r2 0
+	call	L_d_vec_2517
+	fload	f2 r2 8
+	fstore	f2 r2 8
+	store	r4 r2 10
+	call	L_fneg_2391
+	fload	f3 r2 7
+	fstore	f3 r2 7
+	fstore	f2 r2 11
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	add	f4 r0 f2
+	fload	f2 r2 6
+	fload	f3 r2 11
+	load	r4 r2 10
+	fstore	f2 r2 6
+	call	L_vecset_2410
 	addi	r4 r0 1
-	load	r5 r2 4
-	add	r8 r5 r4
+	load	r5 r2 0
+	add	r4 r5 r4
+	load	r6 r2 5
+	add	r4 r6 r4
+	load	r4 r4 0
+	store	r6 r2 5
+	store	r5 r2 0
+	call	L_d_vec_2517
+	fload	f2 r2 8
+	fstore	f2 r2 8
+	store	r4 r2 12
+	call	L_fneg_2391
+	fload	f3 r2 7
+	fstore	f3 r2 7
+	fstore	f2 r2 13
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	fload	f3 r2 6
+	fstore	f3 r2 6
+	fstore	f2 r2 14
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	add	f4 r0 f2
+	fload	f2 r2 13
+	fload	f3 r2 14
+	load	r4 r2 12
+	call	L_vecset_2410
+	addi	r4 r0 41
+	load	r5 r2 0
+	add	r4 r5 r4
+	load	r6 r2 5
+	add	r4 r6 r4
+	load	r4 r4 0
+	store	r6 r2 5
+	store	r5 r2 0
+	call	L_d_vec_2517
+	fload	f2 r2 8
+	fstore	f2 r2 8
+	store	r4 r2 15
+	call	L_fneg_2391
+	fload	f3 r2 6
+	fstore	f3 r2 6
+	fstore	f2 r2 16
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	add	f3 r0 f2
+	fload	f2 r2 16
+	fload	f4 r2 7
+	load	r4 r2 15
+	fstore	f4 r2 7
+	call	L_vecset_2410
+	addi	r4 r0 81
+	load	r5 r2 0
+	add	r4 r5 r4
+	load	r5 r2 5
+	add	r4 r5 r4
+	load	r4 r4 0
+	call	L_d_vec_2517
+	fload	f2 r2 6
+	store	r4 r2 17
+	call	L_fneg_2391
+	fload	f3 r2 8
+	fload	f4 r2 7
+	load	r4 r2 17
+	addi	r2 r2 23
+	jump	L_vecset_2410
+L_else_8643 : 
+	fstore	f4 r2 18
+	store	r6 r2 0
+	store	r5 r2 1
+	fstore	f5 r2 19
+	store	r4 r2 20
+	fadd	f2 f0 f3
+	fadd	f3 f0 f4
+	call	L_adjust_position_2834
+	addi	r4 r0 1
+	load	r5 r2 20
+	add	r4 r5 r4
+	fload	f3 r2 19
+	fstore	f3 r2 19
+	fstore	f2 r2 21
+	store	r4 r2 22
+	call	L_adjust_position_2834
+	add	f3 r0 f2
+	fload	f2 r2 21
+	fload	f4 r2 18
+	fload	f5 r2 19
+	load	r4 r2 22
+	load	r5 r2 1
+	load	r6 r2 0
+	addi	r2 r2 23
+	jump	L_calc_dirvec_2837
+L_calc_dirvecs_2845 : 
+	subi	r2 r2 5
+	addi	r7 r0 0
+	bgt	r7 r4 L_else_8647
+	foi	f3 r4
+	fload	f4 r0 2
+	fmul	f3 f3 f4
+	fload	f4 r0 1
+	fsub	f4 f3 f4
+	addi	r7 r0 0
+	fload	f3 r0 31
+	fload	f5 r0 31
+	fstore	f2 r2 0
+	store	r5 r2 1
+	store	r6 r2 2
+	store	r4 r2 3
+	add	r4 r0 r7
+	fadd	f1 f0 f5
+	fadd	f5 f0 f2
+	fadd	f2 f0 f3
+	fadd	f3 f0 f1
+	call	L_calc_dirvec_2837
 	load	r4 r2 3
-	load	r5 r2 2
+	foi	f2 r4
+	fload	f3 r0 2
+	fmul	f2 f2 f3
+	fload	f3 r0 5
+	fadd	f4 f2 f3
+	addi	r5 r0 0
+	fload	f2 r0 31
+	fload	f3 r0 31
+	addi	r6 r0 2
+	load	r7 r2 2
+	add	r6 r7 r6
+	fload	f5 r2 0
+	load	r8 r2 1
+	fstore	f5 r2 0
+	store	r7 r2 2
+	store	r8 r2 1
+	store	r4 r2 3
+	add	r4 r0 r5
+	add	r5 r0 r8
+	call	L_calc_dirvec_2837
+	addi	r4 r0 1
+	load	r5 r2 3
+	sub	r4 r5 r4
+	addi	r5 r0 1
 	load	r6 r2 1
-	load	r7 r2 0
+	store	r4 r2 4
+	add	r4 r0 r6
+	call	L_add_mod5_2407
+	add	r5 r0 r4
+	fload	f2 r2 0
+	load	r4 r2 4
+	load	r6 r2 2
 	addi	r2 r2 5
-	jump	L_ssmatmul_109
-L_smatmul_115 : 
-	subi	r2 r2 4
-	addi	r8 r0 10
-	bne	r7 r8 L_else_366
-	addi	r2 r2 4
+	jump	L_calc_dirvecs_2845
+L_else_8647 : 
+	addi	r2 r2 5
 	return
-L_else_366 : 
-	addi	r8 r0 0
+L_calc_dirvec_rows_2850 : 
+	subi	r2 r2 4
+	addi	r7 r0 0
+	bgt	r7 r4 L_else_8651
+	foi	f2 r4
+	fload	f3 r0 2
+	fmul	f2 f2 f3
+	fload	f3 r0 1
+	fsub	f2 f2 f3
+	addi	r7 r0 4
 	store	r6 r2 0
 	store	r5 r2 1
 	store	r4 r2 2
-	store	r7 r2 3
-	call	L_ssmatmul_109
+	add	r4 r0 r7
+	call	L_calc_dirvecs_2845
 	addi	r4 r0 1
-	load	r5 r2 3
-	add	r7 r5 r4
-	load	r4 r2 2
-	load	r5 r2 1
+	load	r5 r2 2
+	sub	r4 r5 r4
+	addi	r5 r0 2
+	load	r6 r2 1
+	store	r4 r2 3
+	add	r4 r0 r6
+	call	L_add_mod5_2407
+	add	r5 r0 r4
+	addi	r4 r0 4
 	load	r6 r2 0
+	add	r6 r6 r4
+	load	r4 r2 3
 	addi	r2 r2 4
-	jump	L_smatmul_115
-L_matmul_120 : 
+	jump	L_calc_dirvec_rows_2850
+L_else_8651 : 
+	addi	r2 r2 4
+	return
+L_create_dirvec_2854 : 
+	subi	r2 r2 1
+	addi	r4 r0 3
+	fload	f2 r0 31
+	call	min_caml_create_float_array
+	add	r5 r0 r4
+	addi	r4 r0 4144
+	addi	r6 r0 0
+	add	r4 r4 r6
+	load	r4 r4 0
+	store	r5 r2 0
+	call	min_caml_create_array
+	add	r5 r0 r3
+	addi	r3 r3 2
+	store	r4 r5 1
+	load	r4 r2 0
+	store	r4 r5 0
+	add	r4 r0 r5
+	addi	r2 r2 1
+	return
+L_create_dirvec_elements_2856 : 
+	subi	r2 r2 2
+	addi	r6 r0 0
+	bgt	r6 r5 L_else_8655
+	store	r5 r2 0
+	store	r4 r2 1
+	call	L_create_dirvec_2854
+	load	r5 r2 0
+	load	r6 r2 1
+	add	r7 r6 r5
+	store	r4 r7 0
+	addi	r4 r0 1
+	sub	r5 r5 r4
+	add	r4 r0 r6
+	addi	r2 r2 2
+	jump	L_create_dirvec_elements_2856
+L_else_8655 : 
+	addi	r2 r2 2
+	return
+L_create_dirvecs_2859 : 
+	subi	r2 r2 3
+	addi	r5 r0 0
+	bgt	r5 r4 L_else_8659
+	addi	r5 r0 4148
+	addi	r6 r0 120
+	store	r4 r2 0
+	store	r5 r2 1
+	store	r6 r2 2
+	call	L_create_dirvec_2854
+	add	r5 r0 r4
+	load	r4 r2 2
+	call	min_caml_create_array
+	load	r5 r2 0
+	load	r6 r2 1
+	add	r6 r6 r5
+	store	r4 r6 0
+	addi	r4 r0 4148
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r6 r0 118
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_create_dirvec_elements_2856
+	addi	r4 r0 1
+	load	r5 r2 0
+	sub	r4 r5 r4
+	addi	r2 r2 3
+	jump	L_create_dirvecs_2859
+L_else_8659 : 
+	addi	r2 r2 3
+	return
+L_init_dirvec_constants_2861 : 
+	subi	r2 r2 2
+	addi	r6 r0 0
+	bgt	r6 r5 L_else_8663
+	add	r6 r4 r5
+	load	r6 r6 0
+	store	r4 r2 0
+	store	r5 r2 1
+	add	r4 r0 r6
+	call	L_setup_dirvec_constants_2646
+	addi	r4 r0 1
+	load	r5 r2 1
+	sub	r5 r5 r4
+	load	r4 r2 0
+	addi	r2 r2 2
+	jump	L_init_dirvec_constants_2861
+L_else_8663 : 
+	addi	r2 r2 2
+	return
+L_init_vecset_constants_2864 : 
+	subi	r2 r2 1
+	addi	r5 r0 0
+	bgt	r5 r4 L_else_8667
+	addi	r5 r0 4148
+	add	r5 r5 r4
+	load	r5 r5 0
+	addi	r6 r0 119
+	store	r4 r2 0
+	add	r4 r0 r5
+	add	r5 r0 r6
+	call	L_init_dirvec_constants_2861
+	addi	r4 r0 1
+	load	r5 r2 0
+	sub	r4 r5 r4
+	addi	r2 r2 1
+	jump	L_init_vecset_constants_2864
+L_else_8667 : 
+	addi	r2 r2 1
+	return
+L_init_dirvecs_2866 : 
+	addi	r4 r0 4
+	call	L_create_dirvecs_2859
+	addi	r4 r0 9
+	addi	r5 r0 0
+	addi	r6 r0 0
+	call	L_calc_dirvec_rows_2850
+	addi	r4 r0 4
+	jump	L_init_vecset_constants_2864
+L_add_reflection_2868 : 
+	subi	r2 r2 7
+	store	r4 r2 0
+	store	r5 r2 1
+	fstore	f2 r2 2
+	fstore	f5 r2 3
+	fstore	f4 r2 4
+	fstore	f3 r2 5
+	call	L_create_dirvec_2854
+	store	r4 r2 6
+	call	L_d_vec_2517
+	fload	f2 r2 5
+	fload	f3 r2 4
+	fload	f4 r2 3
+	call	L_vecset_2410
+	load	r4 r2 6
+	store	r4 r2 6
+	call	L_setup_dirvec_constants_2646
+	addi	r4 r0 4257
+	add	r5 r0 r3
+	addi	r3 r3 3
+	fload	f2 r2 2
+	fstore	f2 r5 2
+	load	r6 r2 6
+	store	r6 r5 1
+	load	r6 r2 1
+	store	r6 r5 0
+	add	r5 r0 r5
+	load	r6 r2 0
+	add	r4 r4 r6
+	store	r5 r4 0
+	addi	r2 r2 7
+	return
+L_setup_rect_reflection_2875 : 
+	subi	r2 r2 7
+	addi	r6 r0 4
+	mul	r4 r4 r6
+	addi	r6 r0 4147
 	addi	r7 r0 0
-	jump	L_smatmul_115
-L_end_344 : 
+	add	r6 r6 r7
+	load	r6 r6 0
+	fload	f2 r0 29
+	store	r6 r2 0
+	store	r4 r2 1
+	fstore	f2 r2 2
+	add	r4 r0 r5
+	call	L_o_diffuse_2480
+	fload	f3 r2 2
+	fsub	f2 f3 f2
+	addi	r4 r0 4111
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fstore	f2 r2 3
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	addi	r4 r0 4111
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fstore	f2 r2 4
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	addi	r4 r0 4111
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fstore	f2 r2 5
+	fadd	f2 f0 f3
+	call	L_fneg_2391
+	add	f5 r0 f2
+	addi	r4 r0 1
+	load	r5 r2 1
+	add	r4 r5 r4
+	addi	r6 r0 4111
+	addi	r7 r0 0
+	add	r6 r6 r7
+	fload	f3 r6 0
+	fload	f2 r2 3
+	fload	f4 r2 5
+	load	r6 r2 0
+	fstore	f4 r2 5
+	fstore	f5 r2 6
+	fstore	f2 r2 3
+	store	r5 r2 1
+	store	r6 r2 0
+	add	r5 r0 r4
+	add	r4 r0 r6
+	call	L_add_reflection_2868
+	addi	r4 r0 1
+	load	r5 r2 0
+	add	r4 r5 r4
+	addi	r6 r0 2
+	load	r7 r2 1
+	add	r6 r7 r6
+	addi	r8 r0 4111
+	addi	r9 r0 1
+	add	r8 r8 r9
+	fload	f4 r8 0
+	fload	f2 r2 3
+	fload	f3 r2 4
+	fload	f5 r2 6
+	fstore	f3 r2 4
+	fstore	f2 r2 3
+	store	r7 r2 1
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_add_reflection_2868
+	addi	r4 r0 2
+	load	r5 r2 0
+	add	r4 r5 r4
+	addi	r6 r0 3
+	load	r7 r2 1
+	add	r6 r7 r6
+	addi	r7 r0 4111
+	addi	r8 r0 2
+	add	r7 r7 r8
+	fload	f5 r7 0
+	fload	f2 r2 3
+	fload	f3 r2 4
+	fload	f4 r2 5
+	store	r5 r2 0
+	add	r5 r0 r6
+	call	L_add_reflection_2868
+	addi	r4 r0 4147
+	addi	r5 r0 0
+	addi	r6 r0 3
+	load	r7 r2 0
+	add	r6 r7 r6
+	add	r4 r4 r5
+	store	r6 r4 0
+	addi	r2 r2 7
+	return
+L_setup_surface_reflection_2878 : 
+	subi	r2 r2 12
+	addi	r6 r0 4
+	mul	r4 r4 r6
+	addi	r6 r0 1
+	add	r4 r4 r6
+	addi	r6 r0 4147
+	addi	r7 r0 0
+	add	r6 r6 r7
+	load	r6 r6 0
+	fload	f2 r0 29
+	store	r4 r2 0
+	store	r6 r2 1
+	store	r5 r2 2
+	fstore	f2 r2 3
+	add	r4 r0 r5
+	call	L_o_diffuse_2480
+	fload	f3 r2 3
+	fsub	f2 f3 f2
+	addi	r4 r0 4111
+	load	r5 r2 2
+	fstore	f2 r2 4
+	store	r5 r2 2
+	store	r4 r2 5
+	add	r4 r0 r5
+	call	L_o_param_abc_2472
+	add	r5 r0 r4
+	load	r4 r2 5
+	call	L_veciprod_2431
+	fload	f3 r0 30
+	load	r4 r2 2
+	store	r4 r2 2
+	fstore	f2 r2 6
+	fstore	f3 r2 7
+	call	L_o_param_a_2466
+	fload	f3 r2 7
+	fmul	f2 f3 f2
+	fload	f3 r2 6
+	fmul	f2 f2 f3
+	addi	r4 r0 4111
+	addi	r5 r0 0
+	add	r4 r4 r5
+	fload	f4 r4 0
+	fsub	f2 f2 f4
+	fload	f4 r0 30
+	load	r4 r2 2
+	fstore	f2 r2 8
+	store	r4 r2 2
+	fstore	f3 r2 6
+	fstore	f4 r2 9
+	call	L_o_param_b_2468
+	fload	f3 r2 9
+	fmul	f2 f3 f2
+	fload	f3 r2 6
+	fmul	f2 f2 f3
+	addi	r4 r0 4111
+	addi	r5 r0 1
+	add	r4 r4 r5
+	fload	f4 r4 0
+	fsub	f2 f2 f4
+	fload	f4 r0 30
+	load	r4 r2 2
+	fstore	f2 r2 10
+	fstore	f3 r2 6
+	fstore	f4 r2 11
+	call	L_o_param_c_2470
+	fload	f3 r2 11
+	fmul	f2 f3 f2
+	fload	f3 r2 6
+	fmul	f2 f2 f3
+	addi	r4 r0 4111
+	addi	r5 r0 2
+	add	r4 r4 r5
+	fload	f3 r4 0
+	fsub	f5 f2 f3
+	fload	f2 r2 4
+	fload	f3 r2 8
+	fload	f4 r2 10
+	load	r4 r2 1
+	load	r5 r2 0
+	store	r4 r2 1
+	call	L_add_reflection_2868
+	addi	r4 r0 4147
+	addi	r5 r0 0
+	addi	r6 r0 1
+	load	r7 r2 1
+	add	r6 r7 r6
+	add	r4 r4 r5
+	store	r6 r4 0
+	addi	r2 r2 12
+	return
+L_setup_reflections_2881 : 
+	subi	r2 r2 2
+	addi	r5 r0 0
+	bgt	r5 r4 L_else_8675
+	addi	r5 r0 5042
+	add	r5 r5 r4
+	load	r5 r5 0
+	store	r4 r2 0
+	store	r5 r2 1
+	add	r4 r0 r5
+	call	L_o_reflectiontype_2460
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8678
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_o_diffuse_2480
+	fload	f3 r0 29
+	call	L_fless_2386
+	addi	r5 r0 0
+	bne	r4 r5 L_else_8681
+	addi	r2 r2 2
+	return
+L_else_8681 : 
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_o_form_2458
+	addi	r5 r0 1
+	bne	r4 r5 L_else_8683
+	load	r4 r2 0
+	load	r5 r2 1
+	addi	r2 r2 2
+	jump	L_setup_rect_reflection_2875
+L_else_8683 : 
+	addi	r5 r0 2
+	bne	r4 r5 L_else_8685
+	load	r4 r2 0
+	load	r5 r2 1
+	addi	r2 r2 2
+	jump	L_setup_surface_reflection_2878
+L_else_8685 : 
+	addi	r2 r2 2
+	return
+L_else_8678 : 
+	addi	r2 r2 2
+	return
+L_else_8675 : 
+	addi	r2 r2 2
+	return
+L_rt_2883 : 
+	subi	r2 r2 3
+	addi	r6 r0 4130
+	addi	r7 r0 0
+	add	r6 r6 r7
+	store	r4 r6 0
+	addi	r6 r0 4130
+	addi	r7 r0 1
+	add	r6 r6 r7
+	store	r5 r6 0
+	addi	r5 r0 4132
+	addi	r6 r0 0
+	addi	r7 r0 64
+	add	r5 r5 r6
+	store	r7 r5 0
+	addi	r5 r0 4132
+	addi	r6 r0 1
+	addi	r7 r0 64
+	add	r5 r5 r6
+	store	r7 r5 0
+	addi	r5 r0 4134
+	addi	r6 r0 0
+	fload	f2 r0 0
+	foi	f3 r4
+	fdiv	f2 f2 f3
+	add	r4 r5 r6
+	fstore	f2 r4 0
+	call	L_create_pixelline_2830
+	store	r4 r2 0
+	call	L_create_pixelline_2830
+	store	r4 r2 1
+	call	L_create_pixelline_2830
+	store	r4 r2 2
+	call	L_read_parameter_2548
+	call	L_write_ppm_header_2791
+	call	L_init_dirvecs_2866
+	addi	r4 r0 4977
+	call	L_d_vec_2517
+	addi	r5 r0 4111
+	call	L_veccpy_2420
+	addi	r4 r0 4977
+	call	L_setup_dirvec_constants_2646
+	addi	r4 r0 4144
+	addi	r5 r0 0
+	add	r4 r4 r5
+	load	r4 r4 0
+	addi	r5 r0 1
+	sub	r4 r4 r5
+	call	L_setup_reflections_2881
+	addi	r5 r0 0
+	addi	r6 r0 0
+	load	r4 r2 1
+	store	r4 r2 1
+	call	L_pretrace_line_2807
+	addi	r4 r0 0
+	addi	r8 r0 2
+	load	r5 r2 0
+	load	r6 r2 1
+	load	r7 r2 2
+	addi	r2 r2 3
+	jump	L_scan_line_2817
+L_end_8123 : 
 	store	r4 r0 4095

@@ -98,16 +98,16 @@ let rec g dest cont regenv = function (* 命令列のレジスタ割り当て (caml2html: re
       let cont' = concat e dest cont in
       let (e1', regenv1) = g'_and_restore xt cont' regenv exp in
       (match alloc dest cont' regenv1 x t with
-      | Spill(y) ->
-	  let r = M.find y regenv1 in
-	  let (e2', regenv2) = g dest cont (add x r (M.remove y regenv1)) e in
-	  let save =
-	    try Save(M.find y regenv, y)
-	    with Not_found -> Nop in	    
-	  (seq(save, concat e1' (r, t) e2'), regenv2)
-      | Alloc(r) ->
-	  let (e2', regenv2) = g dest cont (add x r regenv1) e in
-	  (concat e1' (r, t) e2', regenv2))
+	 | Spill(y) ->
+	     let r = M.find y regenv1 in
+	     let (e2', regenv2) = g dest cont (add x r (M.remove y regenv1)) e in
+	     let save =
+	       try Save(M.find y regenv, y)
+	       with Not_found -> Nop in	    
+	       (seq(save, concat e1' (r, t) e2'), regenv2)
+	 | Alloc(r) ->
+	     let (e2', regenv2) = g dest cont (add x r regenv1) e in
+	       (concat e1' (r, t) e2', regenv2))
 and g'_and_restore dest cont regenv exp = (* 使用される変数をスタックからレジスタへRestore (caml2html: regalloc_unspill) *)
   try g' dest cont regenv exp
   with NoReg(x, t) ->
@@ -187,10 +187,10 @@ and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (caml2html
       (fun regenv' x ->
         try
 	  if is_reg x then regenv' else
-          let r1 = M.find x regenv1 in
-          let r2 = M.find x regenv2 in
-          if r1 <> r2 then regenv' else
-	  M.add x r1 regenv'
+            let r1 = M.find x regenv1 in
+            let r2 = M.find x regenv2 in
+              if r1 <> r2 then regenv' else
+		M.add x r1 regenv'
         with Not_found -> regenv')
       M.empty
       (fv cont) in
@@ -204,8 +204,8 @@ and g'_if dest cont regenv exp constr e1 e2 = (* ifのレジスタ割り当て (caml2html
 and g'_call dest cont regenv exp constr ys zs = (* 関数呼び出しのレジスタ割り当て (caml2html: regalloc_call) *)
   (List.fold_left
      (fun e x ->
-       if x = fst dest || not (M.mem x regenv) then e else
-       seq(Save(M.find x regenv, x), e))
+	if x = fst dest || not (M.mem x regenv) then e else
+	  seq(Save(M.find x regenv, x), e))
      (Ans(constr
 	    (List.map (fun y -> find y Type.Int regenv) ys)
 	    (List.map (fun z -> find z Type.Float regenv) zs)))
@@ -236,11 +236,11 @@ let h { name = Id.L(x); args = ys; fargs = zs; body = e; ret = t } = (* 関数のレ
       zs in
   let a =
     match t with
-    | Type.Unit -> Id.gentmp Type.Unit
-    | Type.Float -> fregs.(0)
-    | _ -> regs.(0) in
+      | Type.Unit -> Id.gentmp Type.Unit
+      | Type.Float -> fregs.(0)
+      | _ -> regs.(0) in
   let (e', regenv') = g (a, t) (Ans(Add(zreg, a))) regenv e in
-  { name = Id.L(x); args = arg_regs; fargs = farg_regs; body = e'; ret = t }
+    { name = Id.L(x); args = arg_regs; fargs = farg_regs; body = e'; ret = t }
 
 let f (Prog(data, fundefs, e)) = (* プログラム全体のレジスタ割り当て (caml2html: regalloc_f) *)
   Format.eprintf "register allocation: may take some time (up to a few minutes, depending on the size of functions)@.";

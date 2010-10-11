@@ -1,6 +1,6 @@
-let rec a b = a b in  
-let p = 3 + 4 in
-  print_int (a (4, 5))
+let rec fib n =
+  if n = 0 then 0 else if n = 1 then 1 else fib (n - 1) + fib (n - 2) in
+  print_int (fib 5)
 
 
 

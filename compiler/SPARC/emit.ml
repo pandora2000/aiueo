@@ -77,80 +77,94 @@ let call_args ys zs =
 
 let lstring_of_vinst x = String.lowercase (string_of_vinst x)
   
-let rec h c tl tli e ret =
+let rec h c tl tli e ret rett =
   let nontail_seq_of_if s x y z w =
     let el = Id.genid "else" in
     let en = Id.genid "endif" in
       (*実際はtlはfalseだが*)
       [finst3 s x y el] @
-	(g c tl tli z) @
+	(g c tl tli rett z) @
 	[finst1 "jump" en] @
 	[flabel el] @
-	(g c tl tli w) @
+	(g c tl tli rett w) @
 	[flabel en] in
   let tail_seq_of_if s x y z w =
     let el = Id.genid "else" in
       [finst3 s x y el] @
-	(g c tl tli z) @
+	(g c tl tli rett z) @
 	[flabel el] @
-	(g c tl tli w) in
+	(g c tl tli rett w) in
   let stp y =
     let ((a, _), b) = List.find (fun ((_, x), _) -> x = y) c in (a, b) in
   let n = lstring_of_vinst e in
+  let reti = [finst0 "return"] in
     (
       match e with
-	| Nop -> if tl then tli else []
+	| Nop -> if tl then tli @ reti else []
 	    (*zreg最適化*)
 	| Floor(x) | Float_of_int(x) ->
 	    [finst2 n ret x]
-	    @ (if tl then tli else [])
+	    @ (if tl then tli @ reti else [])
 	| Add(x, y) | Sub(x, y) | Mul(x, y)
 	| Or(x, y) | Xor(x, y) | Nor(x, y) | And(x, y)
 	| Fadd(x, y) | Fsub(x, y) | Fmul(x, y)
 	| Fdiv(x, y) | Finv(x, y) | Fsqrt(x, y) ->
 	    [finst3 n ret x y]
-	    @ (if tl then tli else [])
+	    @ (if tl then tli @ reti else [])
 	| Addi(x, y) | Subi(x, y) | Muli(x, y)
 	| Ori(x, y) | Xori(x, y) | Nori(x, y) | Andi(x, y) 
 	| Load(x, y) | Fload(x, y) ->
 	    [finst3 n ret x (string_of_int y)]
-	    @ (if tl then tli else [])
+	    @ (if tl then tli @ reti else [])
 	| Store(x, y, z) | Fstore(x, y, z) ->
 	    [finst3 n x y (string_of_int z)]
-	    @ (if tl then tli else [])
+	    @ (if tl then tli @ reti else [])
 	| Save(x, y) ->
 	    let (a, _) = stp y in
 	      [finst3 (if List.mem x allregs then "store" else "fstore")
 		 x spreg (string_of_int a)]
-	      @ (if tl then tli else [])
+	      @ (if tl then tli @ reti else [])
 	| Restore x ->
 	    let (a, b) = stp x in
 	      [finst3 (if b.[0] = '%' && b.[1] = 'r' then "load" else "fload")
 		 ret spreg (string_of_int a)]
-	      @ (if tl then tli else [])
+	      @ (if tl then tli @ reti else [])
 		(*ifはもっと最適化できる今はifだと分岐しない方は結局jump最後にして後続命令にもどる。*)
 		(*WATCH:TODO:それをifごとに倍にしていけばいい(メモリ的にやばいかな？)*)
 	| IfEq(x, y, z, w) ->
 	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
 	| IfGE(x, y, z, w) -> 
-	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
+	    (if tl then tail_seq_of_if else nontail_seq_of_if) "blt" x y z w 
 	| IfLE(x, y, z, w) -> 
-	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
+	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bgt" x y z w 
 	| IfFEq(x, y, z, w) -> 
-	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
+	    (if tl then tail_seq_of_if else nontail_seq_of_if) "fbne" x y z w 
 	| IfFLE(x, y, z, w) ->
-	    (if tl then tail_seq_of_if else nontail_seq_of_if) "bne" x y z w 
+	    (if tl then tail_seq_of_if else nontail_seq_of_if) "fbgt" x y z w 
 	| CallCls _ -> raise Exit
 	| CallDir(Id.L x, y, z) ->
-	    (call_args y z) @
-	      [if tl then finst1 "jump" x else finst1 "call" x]
+	    let (p, q) =
+	      match rett with
+		| Type.Unit -> (true, "")
+		| Type.Float -> if ret = fregs.(0) then (true, "") else (false, fregs.(0))
+		| _ -> if ret = regs.(0) then (true, "") else (false, regs.(0)) in
+	    if p then 
+	      (call_args y z) @ (if tl then tli @ [finst1 "jump" x] else [finst1 "call" x])
+	    else
+	      (call_args y z) @ (if tl then tli @ [finst1 "jump" x]
+				 else [finst1 "call" x; finst3 "add" ret zreg q])
     )
-and g c tl tli =
+and g c tl tli rett =
   function
     | Ans(x) ->
-	h c tl tli x regs.(0)
+	let ret = 
+	  match rett with
+	     | Type.Unit -> Id.gentmp Type.Unit
+	     | Type.Float -> fregs.(0)
+	     | _ -> regs.(0) in
+	h c tl tli x ret rett
     | Let((x, t), exp, e) ->
-	(h c false tli exp x) @ (g c tl tli e)
+	(h c false tli exp x t) @ (g c tl tli rett e)
 
 (*Saveを数える*)
 let get_saves ret e =
@@ -199,64 +213,79 @@ let f memext memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 	 (Array.mapi
 	    (fun i (x, y) ->
 	       let i = i + memext in
-		 if x = 0 then [finst3 "addi" regs.(0) zreg (string_of_int y);
-				finst3 "store" regs.(0) zreg (string_of_int i)]
+		 if x = 0 then
+		   if y = 0 then [finst3 "store" zreg zreg (string_of_int i)]
+		   else 
+		     [finst3 "addi" regs.(0) zreg (string_of_int y);
+		      finst3 "store" regs.(0) zreg (string_of_int i)]
 		 else if x = 1 then [finst3 "fload" fregs.(0) fid255 "0";
 				     finst3 "fstore" fregs.(0) zreg (string_of_int i)]
 		 else if x = 2 then [finst3 "fload" fregs.(0) fid10_0 "0";
 				     finst3 "fstore" fregs.(0) zreg (string_of_int i)]
 		 else raise Exit) ear))
-      in
-let ret =
-  List.flatten
-    [[finst0 "nop"; finst0 "nop"];
-     [flabel (Id.genid "main");
-      (*スタックポインタ初期化*)
-      finst3 "addi" spreg zreg (string_of_int n);
-      (*ヒープポインタ初期化*)
-      (*memhpは大きいのでとりあえずTODO:*)
-      finst3 "addi" hpreg zreg (string_of_int (memhp / 10));
-      finst3 "muli" hpreg hpreg (string_of_int 10);
-      (*出力データポインタ初期化*)
-      finst3 "addi" regs.(0) zreg (string_of_int (memout + 1));
-      finst3 "store" regs.(0) zreg (string_of_int memout);
-     ];
-     (*外部変数領域初期化*)
-     ear;
-     g p false [] e;
-     [finst1 "jump" en];
-     (List.flatten (List.map (fun x ->
-				let p = get_saves x.ret x.body in
-				let ni = List.length p in
-				let n = string_of_int ni in
-				  List.flatten
-				    [
-				      [flabel (ltostr x.name)];
-				      (if ni = 0 then [] else [finst3 "subi" spreg spreg n]);
-				      g p true
-					(List.flatten [(if ni = 0 then []
-							else [finst3 "addi" spreg spreg n]);
-						       [finst0 "return"]])
-					x.body
-				    ])
-		      fundefs));
-     [flabel en; finst3 "add" "%r3" zreg "%r3"; finst1 "jump" en]] in
-  (*浮動小数点の割り当て*)
-let ret =
-  List.map (fun x ->
-	      if x.nm = "fload" && not (is_reg x.a2) then
-		try
-		  for i = 0 to Array.length fli - 1 do
-		    if (match fli.(i) with (Id.L y, _) -> y) = x.a2 then
-		      (x.a2 <- zreg; x.a3 <- string_of_int (i + floffset); raise Exit)
-		  done; x
-		with Exit -> x
-	      else x) ret in
-  (ret, List.map (fun (_, x) -> x) fl)
+  in
+  let ret =
+    List.flatten
+      [[finst0 "nop"; finst0 "nop"];
+       [flabel (Id.genid "main");
+	(*スタックポインタ初期化*)
+	finst3 "addi" spreg zreg (string_of_int n);
+	(*ヒープポインタ初期化*)
+	(*memhpは大きいのでとりあえずTODO:*)
+	finst3 "addi" hpreg zreg (string_of_int (memhp / 10));
+	finst3 "muli" hpreg hpreg (string_of_int 10);
+	(*出力データポインタ初期化*)
+	finst3 "addi" regs.(0) zreg (string_of_int (memout + 1));
+	finst3 "store" regs.(0) zreg (string_of_int memout);
+       ];
+       (*外部変数領域初期化*)
+       ear;
+       g p false [] Type.Unit e;
+       [finst1 "jump" en];
+       (List.flatten (List.map (fun x ->
+				  let p = get_saves x.ret x.body in
+				  let ni = List.length p in
+				  let n = string_of_int ni in
+				    List.flatten
+				      [
+					[flabel (ltostr x.name)];
+					(if ni = 0 then [] else [finst3 "subi" spreg spreg n]);
+					g p true
+					  (if ni = 0 then [] else [finst3 "addi" spreg spreg n])
+					  x.ret x.body
+				      ])
+			fundefs));
+       (*jikki*)
+       (*
+	 [
+	 flabel en;
+	 finst3 "add" regs.(0) zreg regs.(0);
+	 finst1 "jump" en
+	 ]
+       *)
+       (*simulator*)
+       [
+	 flabel en;
+	 finst3 "store" regs.(0) zreg (string_of_int memsp);
+       ]
+      ]
+  in
+    (*浮動小数点の割り当て*)
+  let ret =
+    List.map (fun x ->
+		if x.nm = "fload" && not (is_reg x.a2) then
+		  try
+		    for i = 0 to Array.length fli - 1 do
+		      if (match fli.(i) with (Id.L y, _) -> y) = x.a2 then
+			(x.a2 <- zreg; x.a3 <- string_of_int (i + floffset); raise Exit)
+		    done; x
+		  with Exit -> x
+		else x) ret in
+    (ret, List.map (fun (_, x) -> x) fl)
 
 let string_of_a x =
   if x.ac = - 1 then
-    sprintf "%s :" x.nm
+    sprintf "%s : " x.nm
   else if x.ac = 0 then
     sprintf "\t%s" x.nm
   else if x.ac = 1 then
@@ -340,7 +369,7 @@ let string_of_binary (x, _) =
 	 ["00000000\n"; "00000000\n"; "00000000\n"; "00000000\n"; "FFFFFFFF\n"])
 
 let string_of_flist (_, x) =
-  print_endline (string_of_int (List.length x));
+(*  print_endline (string_of_int (List.length x));*)
   sprintf "%s\n"
     (String.concat "\n"
        (List.map (fun y -> Int32.format "%08X" (Int32.bits_of_float y)) x))

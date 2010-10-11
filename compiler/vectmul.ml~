@@ -1,0 +1,9 @@
+let rec vm n i x y p =
+  if n = 0 then p
+  else
+    vm (n - 1) (i + 1) x y (p + x.(i) * y.(i)) in
+let a = create_array 10 1 in
+let b = create_array 10 0 in
+  b.(4) <- 5;
+  b.(9) <- 10;
+  print_int (vm 10 0 a b 0)

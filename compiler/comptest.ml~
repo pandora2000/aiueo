@@ -1,0 +1,8 @@
+let x = 1.0 in
+let y = 2.0 in
+  if x < y then print_int 777 else print_int 222;
+  if x <= y then print_int 777 else print_int 222;
+  if x > y then print_int 777 else print_int 222;
+  if x >= y then print_int 777 else print_int 222;
+  if x <> y then print_int 777 else print_int 222;
+  if x = y then print_int 777 else print_int 222

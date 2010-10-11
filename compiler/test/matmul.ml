@@ -12,12 +12,12 @@ let rec mul l m n a b c =
     loop2 (n - 1);
     loop1 (i - 1) in
   loop1 (l - 1) in
-let dummy = Array.create 0 0. in
+let dummy = create_array 0 0.0 in
 let rec make m n =
-  let mat = Array.create m dummy in
+  let mat = create_array m dummy in
   let rec init i =
     if i < 0 then () else
-    (mat.(i) <- Array.create n 0.;
+    (mat.(i) <- create_array n 0.;
      init (i - 1)) in
   init (m - 1);
   mat in
@@ -30,11 +30,11 @@ b.(0).(0) <- 7.; b.(0).(1) <- 8.;
 b.(1).(0) <- 9.; b.(1).(1) <- 10.;
 b.(2).(0) <- 11.; b.(2).(1) <- 12.;
 mul 2 3 2 a b c;
-print_int (truncate (c.(0).(0)));
+print_int (c.(0).(0));
 print_newline ();
-print_int (truncate (c.(0).(1)));
+print_int (c.(0).(1));
 print_newline ();
-print_int (truncate (c.(1).(0)));
+print_int (c.(1).(0));
 print_newline ();
-print_int (truncate (c.(1).(1)));
+print_int (c.(1).(1));
 print_newline ()

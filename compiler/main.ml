@@ -59,7 +59,7 @@ let extlist =
     "objects", 946;
   ]
 
-let lexbuf outchan a = (* バッファをコンパイルしてチャンネルへ出力する (caml2html: main_lexbuf) *)
+let lexbuf outchan foutchan a = (* バッファをコンパイルしてチャンネルへ出力する (caml2html: main_lexbuf) *)
   (*  Id.counter := 0;
       Typing.extenv := M.empty;
       let p = Emit.f
@@ -91,16 +91,19 @@ let lexbuf outchan a = (* バッファをコンパイルしてチャンネルへ出力する (caml2htm
   let i = Emit.f memext memout memsp memhp floffset h in
   let j = Emit.string_of_binary i in
     (*
-      Closure.print_prog stdout f
+      Closure.print_prog stdout f;
       KNormal.print_prog stdout e;
       Asm.print_prog stdout g;
+      Asm.print_prog stdout h;
     *)
     
-      output_string stdout (prep (Emit.string_of_alist i));
-      print_newline ();
+    output_string outchan (prep (Emit.string_of_alist i));
+
+    output_string foutchan (Emit.string_of_flist i);
     
-    
+(*    
       output_string stdout j;
+*)
       (*
       print_newline ();
 	output_string stdout (sprintf "%d\n"
@@ -136,5 +139,9 @@ let () = (* ここからコンパイラの実行が開始される (caml2html: main_entry) *)
     let q = List.fold_right (fun b a ->
 			       if a = Syntax.Unit then b
 			       else Syntax.addexp b a) p Syntax.Unit in
-      lexbuf stdout q
+    let ofile = open_out "a.s" in
+    let fofile = open_out "fp.s" in
+      lexbuf ofile fofile q;
+      close_out ofile;
+      close_out fofile
       

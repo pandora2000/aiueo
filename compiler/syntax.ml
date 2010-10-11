@@ -56,7 +56,8 @@ let rec sop level e =
   let tostr = function
     | Info _ -> "Info"
     | Unit -> "Unit" | Int _ -> "Int" | Float _ -> "Float" | Bool _ -> "Bool"
-    | Mul _ -> "Mul"
+    | Mul _ -> "Mul" | Float_of_int _ -> "Float_of_int" | Floor _ -> "Floor"
+    | Div _ -> "Div"
     | Neg _ -> "Neg" | Add _ -> "Add" | Sub _ -> "Sub" | FNeg _ -> "FNeg"
     | FAdd _ -> "FAdd" | FSub _ -> "FSub" | FMul _ -> "FMul" | FDiv _ -> "FDiv"
     | Array _ -> "Array" | If _ -> "If" | Let _ -> "Let" | Var _ -> "Var"
@@ -72,9 +73,10 @@ let rec sop level e =
       | Int x -> sol (sprintf "%s(%d)\n" str x)
       | Float x -> sol (sprintf "%s(%f)\n" str x)
       | Var x -> sol (sprintf "%s(%s)\n" str x)
-      | Neg x | FNeg x | Not x ->
+      | Neg x | FNeg x | Not x | Floor x | Float_of_int x ->
 	  sol (sprintf "%s\n%s" str (nsop x))
       | Add (x, y) | Sub (x, y) | FAdd (x, y) | FSub (x, y) | LE (x, y) | Eq (x, y)
+      | Div (x, y)
       | FMul (x, y) | FDiv (x, y) | Get (x, y) | Array (x, y) | Mul (x, y) ->
 	  sol (sprintf "%s\n%s%s" str (nsop x) (nsop y))
       | Put (x, y, z) -> sol (sprintf "%s\n%s%s%s" str (nsop x) (nsop y) (nsop z))
@@ -123,6 +125,9 @@ let rec addexp b a =
   | FSub _
   | FMul _
   | FDiv _
+  | Floor _
+  | Float_of_int _
+  | Div _
   | Eq _
   | LE _
   | If _

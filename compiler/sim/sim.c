@@ -3,12 +3,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define name_size 20
+#define name_size 50
 
 #define fp_table_max_size 100
 
 typedef struct{
-  char name[name_size][6];
+  char name[name_size][30];
 }instruction;
 
 typedef struct{
@@ -17,7 +17,7 @@ typedef struct{
 }label;
 
 typedef struct{
-  instruction* instructions[10000];
+  instruction instructions[20000];
   label* labels[1000];
   int label_size;
   int instruction_size;
@@ -25,7 +25,7 @@ typedef struct{
 
 
 /*スタックの実装*/
-#define stack_max 1000
+#define stack_max 10000
 
 typedef struct tstack{
   int stack_size;
@@ -43,60 +43,65 @@ void push(stack* stack,int number){
   return;
 }
 
-int pop(stack* stack){
-  if(stack->stack_size == 0){
-    perror("stack is null");
-    exit(1);
-  }
+int pop(stack* stack)
+{
+  if(stack->stack_size == 0)
+    {
+      perror("stack is null");
+      exit(1);
+    }
   (stack->stack_size)--;
   return stack->stack[stack->stack_size];
 }
 
 
 /*1line_instructionのparse (入力は\nで終わっていることを前提とする。）*/
-instruction *parse_one_line_instruction(char *str){
+instruction *parse_one_line_instruction(char *str, instruction *inst){
   int len = strlen(str);
   int i=0;
   int name_number=0;
   int name_now=0;
-  instruction* answer = malloc(sizeof(instruction));
   int flag = 0;
 
 
   while(str[i] != '\n'){
     /*まずフラグが立っていない場合。最初のスペースは無視する*/
-    while(flag == 0 && (str[i] == ' ' || str[i] == '\r' || str[i] == '\t')){
-      i++;
-    }
+    while(flag == 0 && (str[i] == ' ' || str[i] == '\r' || str[i] == '\t'))
+      {
+	i++;
+      }
 
-    if(str[i] == ' ' || str[i] == '\r' || str[i] == '\t'){
-      answer->name[name_number][name_now] == '\0';
-      name_number++;
-      name_now = 0;
-      flag = 0;
-      i++;
-    }
-    else{
-      answer->name[name_number][name_now] = str[i];
-      name_now++;
-      flag = 1;
-      i++;
-    }
+    if(str[i] == ' ' || str[i] == '\r' || str[i] == '\t')
+      {
+	inst->name[name_number][name_now] = '\0';
+	name_number++;
+	name_now = 0;
+	flag = 0;
+	i++;
+      }
+    else
+      {
+	inst->name[name_number][name_now] = str[i];
+	name_now++;
+	flag = 1;
+	i++;
+      }
   }
-  answer->name[name_number][name_now] = '\0';
+  inst->name[name_number][name_now] = '\0';
   name_number++;
 
-  for(i=name_number;i<name_size;i++){
-    answer->name[i][0] = '\0';
-  }
+  for(i=name_number;i<name_size;i++)
+    {
+      inst->name[i][0] = '\0';
+    }
 
-  return answer;
+  return inst;
 }
 
 
 
-void print_instruction(instruction* inst){
-  printf("%s %s %s %s\n",inst->name[0],inst->name[1],inst->name[2],inst->name[3]);
+void print_instruction(instruction inst){
+  printf("%s %s %s %s\n",inst.name[0],inst.name[1],inst.name[2],inst.name[3]);
   return;
 }
 
@@ -148,7 +153,7 @@ instruction_set* parse_all(char buf[][100],int buf_size){
       answer->label_size = answer->label_size + 1;
     }else{
       /*instructionのparse*/
-      answer->instructions[pc] = parse_one_line_instruction(buf[i]);
+      parse_one_line_instruction(buf[i], &(answer->instructions[pc]));
       answer -> instruction_size =   answer -> instruction_size + 1;;
       pc++;
     }
@@ -218,6 +223,7 @@ int int_of_register(char *regist){
 
 
 int label_trans(char *label,instruction_set * instruction_set){
+  
   int i;
   /*number*/
   if(label[0] == '-' ||label[0] == '0' || label[0] == '1' || label[0] == '2' || label[0] == '3' || label[0] == '4' || label[0] == '5' || label[0] == '6' || label[0] == '7' || label[0] == '8' || label[0] == '9'){
@@ -229,6 +235,7 @@ int label_trans(char *label,instruction_set * instruction_set){
       return instruction_set->labels[i]->program_number;
     }   
   }
+  fprintf(stderr, "%s\n", label);
   perror("label not found");
   return -1;
 }
@@ -257,6 +264,8 @@ int do_assemble(instruction_set * instruction_set){
   int pc=0;
   int nextpc=0;
   int stop = 0;
+  int count_print = 0;
+  long long count = 0;
   while(1){
     pc = nextpc;
     /*途中で操作を止める際のコード 
@@ -266,219 +275,445 @@ int do_assemble(instruction_set * instruction_set){
     */
     
     /*ALU命令*/
-    if(strcmp(instruction_set->instructions[pc]->name[0],"nop") == 0){}
+    if(strcmp(instruction_set->instructions[pc].name[0],"nop") == 0){}
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"add") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] + regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"add") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] + regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"sub") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] - regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"sub") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] - regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"mul") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] * regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"mul") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] * regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"and") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] & regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"and") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] & regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"or") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] | regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"or") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] | regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"nor") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc]->name[2])] | regist[int_of_register(instruction_set->instructions[pc]->name[3])]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"nor") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc].name[2])] | regist[int_of_register(instruction_set->instructions[pc].name[3])]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"xor") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] ^ regist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"xor") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] ^ regist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"addi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] + atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"addi") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3]);
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"subi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] - atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"subi") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] - atoi(instruction_set->instructions[pc].name[3]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"muli") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] * atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"muli") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] * atoi(instruction_set->instructions[pc].name[3]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"andi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] & atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"andi") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] & atoi(instruction_set->instructions[pc].name[3]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"ori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] | atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"ori") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] | atoi(instruction_set->instructions[pc].name[3]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"nori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc]->name[2])] | atoi(instruction_set->instructions[pc]->name[3]));
+    if(strcmp(instruction_set->instructions[pc].name[0],"nori") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc].name[2])] | atoi(instruction_set->instructions[pc].name[3]));
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"xori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = regist[int_of_register(instruction_set->instructions[pc]->name[2])] ^ atoi(instruction_set->instructions[pc]->name[3]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"xori") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] ^ atoi(instruction_set->instructions[pc].name[3]);
     }
 
 
     /*FPU命令*/
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fadd") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = dregist[int_of_register(instruction_set->instructions[pc]->name[2])] + dregist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"fadd") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] + dregist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fsub") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = dregist[int_of_register(instruction_set->instructions[pc]->name[2])] - dregist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"fsub") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] - dregist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fmul") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = dregist[int_of_register(instruction_set->instructions[pc]->name[2])] * dregist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"fmul") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] * dregist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fdiv") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = dregist[int_of_register(instruction_set->instructions[pc]->name[2])] / dregist[int_of_register(instruction_set->instructions[pc]->name[3])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"fdiv") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] / dregist[int_of_register(instruction_set->instructions[pc].name[3])];
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"finv") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = 1 / dregist[int_of_register(instruction_set->instructions[pc]->name[2])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"finv") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = 1 / dregist[int_of_register(instruction_set->instructions[pc].name[2])];
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fsqrt") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = sqrt(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"fsqrt") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = sqrt(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"floor") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = floor(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"floor") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = floor(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"foi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = (int)(dregist[int_of_register(instruction_set->instructions[pc]->name[2])]);
+    if(strcmp(instruction_set->instructions[pc].name[0],"foi") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = (int)(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
     }
     
 
 
 
     /*MEM ACSESS命令*/
-    if(strcmp(instruction_set->instructions[pc]->name[0],"load") == 0){
-      regist[int_of_register(instruction_set->instructions[pc]->name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc]->name[2])] + atoi(instruction_set->instructions[pc]->name[3])].i;
+    if(strcmp(instruction_set->instructions[pc].name[0],"load") == 0){
+      regist[int_of_register(instruction_set->instructions[pc].name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].i;
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"store") == 0){
-      memory[regist[int_of_register(instruction_set->instructions[pc]->name[2])] + atoi(instruction_set->instructions[pc]->name[3])].i = regist[int_of_register(instruction_set->instructions[pc]->name[1])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"store") == 0){
+      memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].i = regist[int_of_register(instruction_set->instructions[pc].name[1])];
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fload") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc]->name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc]->name[2])] + atoi(instruction_set->instructions[pc]->name[3])].d;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fload") == 0){
+      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].d;
     }
     
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fstore") == 0){
-      memory[regist[int_of_register(instruction_set->instructions[pc]->name[2])] + atoi(instruction_set->instructions[pc]->name[3])].d = dregist[int_of_register(instruction_set->instructions[pc]->name[1])];
+    if(strcmp(instruction_set->instructions[pc].name[0],"fstore") == 0){
+      memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].d = dregist[int_of_register(instruction_set->instructions[pc].name[1])];
     }
     
 
     /*BRANCH命令*/
-    if(strcmp(instruction_set->instructions[pc]->name[0],"beq") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] == regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"beq") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] == regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"bne") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] != regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"bne") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] != regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"bgt") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] > regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"bgt") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] > regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"blt") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] < regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"blt") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] < regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"bge") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] >= regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"bge") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] >= regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"ble") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc]->name[1])] <= regist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"ble") == 0){
+      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] <= regist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fbeq") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] == dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
-      }
-    }
-
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fbne") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] != dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fbeq") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] == dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fbgt") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] > dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fbne") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] != dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fblt") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] < dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fbgt") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] > dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fbge") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] >= dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fblt") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] < dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"fble") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc]->name[1])] <= dregist[int_of_register(instruction_set->instructions[pc]->name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc]->name[3],instruction_set,pc) -1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"fbge") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] >= dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+      }
+    }
+
+    if(strcmp(instruction_set->instructions[pc].name[0],"fble") == 0){
+      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] <= dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
+        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
       }
     }
 
 
     /*JUMP命令*/
-    if(strcmp(instruction_set->instructions[pc]->name[0],"jump") == 0){
-      nextpc = label_trans(instruction_set->instructions[pc]->name[1],instruction_set) - 1;
+    if(strcmp(instruction_set->instructions[pc].name[0],"jump") == 0){
+      nextpc = label_trans(instruction_set->instructions[pc].name[1],instruction_set) - 1;
     }
 
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"call") == 0){
+    if(strcmp(instruction_set->instructions[pc].name[0],"call") == 0){
       push(&call_stack,(pc+1));
-      nextpc = label_trans(instruction_set->instructions[pc]->name[1],instruction_set) - 1;
+      nextpc = label_trans(instruction_set->instructions[pc].name[1],instruction_set) - 1;
+      if(strcmp(instruction_set->instructions[pc].name[1],"min_caml_print_int") == 0)
+	{
+	  ++print_count;
+	  printf("print_count : %d\n", print_count);
+	}
     }
     
 
-    if(strcmp(instruction_set->instructions[pc]->name[0],"return") == 0){
+    if(strcmp(instruction_set->instructions[pc].name[0],"return") == 0){
       nextpc = pop(&call_stack) - 1;    
     }
 
 
     nextpc++;
-    
-    printf("%d\n", nextpc);
+
+  ++count;
+    if((count % 1000000) == 0)
+  {
+    //      printf("%lld\n", count);
+      }    
+    //printf("%d\n", nextpc);
     /*命令がラストの行まで行けば処理を終了する*/
-    if(nextpc >= instruction_set->instruction_size){
-      break;
-    }
+    if(nextpc >= instruction_set->instruction_size)
+      {
+	break;
+      }
 
   }
 
+
+  /*
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+    1535
+    1536
+    1537
+    1538
+    1539
+    3042
+    3043
+    3050
+    3051
+    3052
+    3053
+    3054
+    3055
+    3056
+    3039
+    3040
+    3041
+  */
 
   return 0;
 }

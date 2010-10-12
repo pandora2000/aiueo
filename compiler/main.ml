@@ -88,7 +88,7 @@ let lexbuf outchan foutchan a = (* バッファをコンパイルしてチャンネルへ出力する 
   let f = Closure.f e in
   let g = Virtual.f memin memout memext al f in
   let h = RegAlloc.f g in
-  let i = Emit.f memext memout memsp memhp floffset h in
+  let i = Emit.f memext memin memout memsp memhp floffset h in
   let j = Emit.string_of_binary i in
     (*
       Closure.print_prog stdout f;

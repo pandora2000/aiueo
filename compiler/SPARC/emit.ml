@@ -75,6 +75,8 @@ let call_args ys zs =
 	 (fun (z, fr) -> finst3 "fadd" fr fzreg z)
 	 (shuffle fswreg zfrs))
 
+exception Exit7
+
 let lstring_of_vinst x = String.lowercase (string_of_vinst x)
   
 let rec h c tl tli e ret rett =
@@ -148,21 +150,20 @@ let rec h c tl tli e ret rett =
 		| Type.Unit -> (true, "")
 		| Type.Float -> if ret = fregs.(0) then (true, "") else (false, fregs.(0))
 		| _ -> if ret = regs.(0) then (true, "") else (false, regs.(0)) in
-	    if p then 
-	      (call_args y z) @ (if tl then tli @ [finst1 "jump" x] else [finst1 "call" x])
-	    else
-	      (call_args y z) @ (if tl then tli @ [finst1 "jump" x]
-				 else [finst1 "call" x; finst3 "add" ret zreg q])
+	      if p then 
+		(call_args y z) @ (if tl then tli @ [finst1 "jump" x] else [finst1 "call" x])
+	      else
+		(call_args y z) @ (if tl then tli @ [finst1 "jump" x]
+				   else [finst1 "call" x; finst3 "add" ret zreg q])
     )
 and g c tl tli rett =
   function
     | Ans(x) ->
 	let ret = 
 	  match rett with
-	     | Type.Unit -> Id.gentmp Type.Unit
-	     | Type.Float -> fregs.(0)
-	     | _ -> regs.(0) in
-	h c tl tli x ret rett
+	    | Type.Float -> fregs.(0)
+	    | _ -> regs.(0) in
+	  h c tl tli x ret rett
     | Let((x, t), exp, e) ->
 	(h c false tli exp x t) @ (g c tl tli rett e)
 
@@ -182,13 +183,31 @@ let get_saves ret e =
 
 exception Exit2
 
-let f memext memout memsp memhp floffset (Prog (fl, fundefs, e)) =
+let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
   let n = memsp - (List.length p) in
   let fid255 = Id.genid "fid255" in
   let fid10_0 = Id.genid "fid10_0" in
-  let fli = Array.of_list (fl @ [(Id.L fid255, 255.0); (Id.L fid10_0, 1000000000.0)]) in
+  let fid02 = Id.genid "fid02" in
+  let fli = Array.of_list (fl @ [(Id.L fid255, 255.0);
+				 (Id.L fid10_0, 1000000000.0);
+				 (*入力データ用*)
+				 (Id.L fid02, 0.2)]) in
+    (*入力データ用*)
+  let mil =
+    [|
+      0; 0; 0; 0; 30; 1; 0; 0; 255; 0; 1; 2; 0; 40; 10; 40; 0; -40; 0; 1; 0; 64;
+      255; 255; 0; 4; 3; 1; 0; 30; 30; 30; 0; 0; 0; 1; 1; 255; 255; 255; 255;
+      -1; 0; -1; 1; -1; -1; 99; 0; 1; -1; -1
+    |] in
+  let mil =
+    List.flatten
+      (Array.to_list
+	 (Array.mapi
+	    (fun i x ->
+	       [finst3 "addi" regs.(0) zreg (string_of_int x);
+		finst3 "store" regs.(0) zreg (string_of_int (i + memin + 1))]) mil)) in
   let ear = Array.make 1006 0 in
   let ear = 
     Array.mapi
@@ -238,8 +257,20 @@ let f memext memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 	finst3 "addi" regs.(0) zreg (string_of_int (memout + 1));
 	finst3 "store" regs.(0) zreg (string_of_int memout);
        ];
+       (*入力データポインタ初期化*)
+       [
+	 finst3 "addi" regs.(0) zreg (string_of_int (memin + 1));
+	 finst3 "store" regs.(0) zreg (string_of_int memin)
+       ];
+       (*入力データは実際は埋め込まれてる*)
+       (*
+       (*入力データ埋め込み*)
+       mil;
+       [finst3 "fload" fregs.(0) fid02 "0";
+	finst3 "fstore" fregs.(0) zreg (string_of_int (memin + 20))];
        (*外部変数領域初期化*)
-       ear;
+	 ear;
+       *)
        g p false [] Type.Unit e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->
@@ -307,6 +338,7 @@ let get_label_index y name =
 
 exception ImValueOverflow
 exception Exit5
+exception Exit6
 
 let string_of_bi_a x l =
   (*  print_endline (string_of_int (get_label_index l "L_fib_11"));
@@ -323,8 +355,7 @@ let string_of_bi_a x l =
 	  sprintf "%02X%06X\n" ((y lsl 2) lor (z lsr 24)) (z land 0xffffff)
       with Not_found ->
 	match x.a1 with
-	  | "min_caml_print_int" -> ""
-	  | _ -> ""
+	  | _ -> raise Exit6
     else if x.ac = 2 then
       let y = opcode_of x.nm in
       let z = int_of_reg x.a1 in
@@ -369,7 +400,7 @@ let string_of_binary (x, _) =
 	 ["00000000\n"; "00000000\n"; "00000000\n"; "00000000\n"; "FFFFFFFF\n"])
 
 let string_of_flist (_, x) =
-(*  print_endline (string_of_int (List.length x));*)
+  (*  print_endline (string_of_int (List.length x));*)
   sprintf "%s\n"
     (String.concat "\n"
        (List.map (fun y -> Int32.format "%08X" (Int32.bits_of_float y)) x))

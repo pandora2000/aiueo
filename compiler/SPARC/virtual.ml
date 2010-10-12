@@ -206,19 +206,6 @@ let h al { Closure.name = (Id.L(x), t); Closure.args = yts;
   type fundef = { name : Id.l; args : Id.t list; fargs : Id.t list; body : t; ret : Type.t }
 *)
 (*TODO:もっと早い段階で埋め込んだ方が早いと思うがとりあえず*)
-	  
-let cafi =
-  let ar = Id.genid "ar" and num = Id.genid "num" and init = Id.genid "init" in
-  let nnum = Id.genid "num" and nar = Id.genid "ar" in
-    { name = Id.L "min_caml_init_float_array"; args = [ar; num]; fargs = [init];
-      body =
-	Let((Id.gentmp Type.Unit, Type.Unit), Fstore(init, ar, 0),
-	    Let((nnum, Type.Int), Subi(num, 1),
-		Ans(IfEq(nnum, zreg, Ans(Nop),
-			 Let((nar, Type.Array(Type.Float)), Addi(ar, 1),
-			     Ans(CallDir(Id.L "min_caml_init_float_array", [nar; nnum], [init]
-					)))))));
-      ret = Type.Unit }
       
 let caf =
   let ar = Id.genid "ar" and num = Id.genid "num" and init = Id.genid "init" in
@@ -233,16 +220,29 @@ let caf =
 		     Ans(Add(zreg, ar))))));
       ret = Type.Array(Type.Float) }
       
-let cai =
+let cafi =
   let ar = Id.genid "ar" and num = Id.genid "num" and init = Id.genid "init" in
   let nnum = Id.genid "num" and nar = Id.genid "ar" in
     { name = Id.L "min_caml_init_array"; args = [ar; num; init]; fargs = [];
       body =
-	Let((Id.gentmp Type.Unit, Type.Unit), Store(init, ar, 0),
-	    Let((nnum, Type.Int), Subi(num, 1),
-		Ans(IfEq(nnum, zreg, Ans(Nop),
+	Ans(IfEq(num, zreg, Ans(Nop),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Store(init, ar, 0),
+		     Let((nnum, Type.Int), Subi(num, 1),
 			 Let((nar, Type.Array(Type.Int)), Addi(ar, 1),
 			     Ans(CallDir(Id.L "min_caml_init_array", [nar; nnum; init], []
+					)))))));
+      ret = Type.Unit }
+      
+let cai =
+  let ar = Id.genid "ar" and num = Id.genid "num" and init = Id.genid "init" in
+  let nnum = Id.genid "num" and nar = Id.genid "ar" in
+    { name = Id.L "min_caml_init_float_array"; args = [ar; num]; fargs = [init];
+      body =
+	Ans(IfEq(num, zreg, Ans(Nop),
+		 Let((Id.gentmp Type.Unit, Type.Unit), Fstore(init, ar, 0),
+		     Let((nnum, Type.Int), Subi(num, 1),
+			 Let((nar, Type.Array(Type.Int)), Addi(ar, 1),
+			     Ans(CallDir(Id.L "min_caml_init_float_array", [nar; nnum], [init]
 					)))))));
       ret = Type.Unit }
       
@@ -257,7 +257,7 @@ let ca =
 		     Ans(Add(zreg, ar))))));
       ret = Type.Array(Type.Int) }
 
-      (*TODO:動作確認*)
+(*TODO:動作確認*)
 let ri memin =
   let rl = Id.genid "ri" and rl2 = Id.genid "ri" in
     { name = Id.L "min_caml_read_int"; args = []; fargs = [];
@@ -268,7 +268,7 @@ let ri memin =
 		     Ans(Load(rl, 0))))));
       ret = Type.Int }
 
-      (*TODO:動作確認*)
+(*TODO:動作確認*)
 let rf memin =
   let rl = Id.genid "rf" and rl2 = Id.genid "rf" in
     { name = Id.L "min_caml_read_float"; args = []; fargs = [];
@@ -279,7 +279,7 @@ let rf memin =
 		     Ans(Fload(rl, 0))))));
       ret = Type.Float }
 
-      (*TODO:動作確認*)
+(*TODO:動作確認*)
 let pi memout =
   let pl = Id.genid "pi" and pl2 = Id.genid "pi" and num = Id.genid "num" in
     { name = Id.L "min_caml_print_int"; args = [num]; fargs = [];
@@ -290,7 +290,7 @@ let pi memout =
 		     Ans(Store(num, pl, 0))))));
       ret = Type.Unit }
 
-      (*TODO:動作確認*)
+(*TODO:動作確認*)
 let pf memout =
   let pl = Id.genid "pf" and pl2 = Id.genid "pf" and num = Id.genid "num" in
     { name = Id.L "min_caml_print_float"; args = []; fargs = [num];
@@ -309,7 +309,7 @@ let f memin memout memext al (Closure.Prog(fundefs, e)) =
     List.map (fun (x, y) -> (x, y + memext)) al in
   let fundefs =
     (pf memout) :: (pi memout) :: (ri memin) :: (rf memin)
-     :: cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
+    :: cai :: ca :: cafi :: caf :: (List.map (h al) fundefs) in
   let e = g al M.empty e in
     Prog(!data, fundefs, e)
       

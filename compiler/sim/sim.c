@@ -2,76 +2,93 @@
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
-#define name_size 50
+#define NAME_MAX_COUNT 4
+#define NAME_SIZE 40
 
-#define fp_table_max_size 100
+#define INST_MAX_COUNT 20000
 
-typedef struct{
-  char name[name_size][30];
-}instruction;
+#define LABEL_MAX_COUNT 10000
 
-typedef struct{
-  char name[100];
-  int program_number;
-}label;
+#define FPT_MAX_COUNT 100
 
-typedef struct{
-  instruction instructions[20000];
-  label* labels[1000];
-  int label_size;
-  int instruction_size;
-}instruction_set;
+typedef struct
+{
+  char name[NAME_MAX_COUNT][NAME_SIZE];
+} instruction;
+
+typedef struct
+{
+  char name[NAME_SIZE];
+  int index;
+} label;
+
+typedef struct
+{
+  instruction insts[INST_MAX_COUNT];
+  label* labels[LABEL_MAX_COUNT];
+  int label_count;
+  int inst_count;
+} program;
 
 
 /*スタックの実装*/
-#define stack_max 10000
+#define STACK_MAX_COUNT 10000
 
 typedef struct tstack{
-  int stack_size;
-  int stack[stack_max];
-}stack;
+  int stack_count;
+  int stack[STACK_MAX_COUNT];
+} stack;
 
 
-void push(stack* stack,int number){
-  if(stack->stack_size >= stack_max){
-    perror("stack is full\n");
-    exit(1);
-  }
-  stack->stack[stack->stack_size] = number;
-  (stack->stack_size)++;
+void push(stack* stack, int number)
+{
+  if(stack->stack_count >= STACK_MAX_COUNT)
+    {
+      perror("stack is full\n");
+      exit(1);
+    }
+  stack->stack[stack->stack_count] = number;
+  (stack->stack_count)++;
   return;
 }
 
 int pop(stack* stack)
 {
-  if(stack->stack_size == 0)
+  if(stack->stack_count == 0)
     {
       perror("stack is null");
       exit(1);
     }
-  (stack->stack_size)--;
-  return stack->stack[stack->stack_size];
+  (stack->stack_count)--;
+  return stack->stack[stack->stack_count];
+}
+
+bool is_seperator(char c)
+{
+  return c == ' ' || c == '\r' || c == '\t';
 }
 
 
 /*1line_instructionのparse (入力は\nで終わっていることを前提とする。）*/
-instruction *parse_one_line_instruction(char *str, instruction *inst){
+instruction *parse_one_line_instruction(char *str, instruction *inst)
+{
   int len = strlen(str);
-  int i=0;
-  int name_number=0;
-  int name_now=0;
+  int i = 0;
+  int name_number = 0;
+  int name_now = 0;
   int flag = 0;
 
 
   while(str[i] != '\n'){
     /*まずフラグが立っていない場合。最初のスペースは無視する*/
-    while(flag == 0 && (str[i] == ' ' || str[i] == '\r' || str[i] == '\t'))
+    while(flag == 0 && is_seperator(str[i]))
       {
-	i++;
+        i++;
       }
-
-    if(str[i] == ' ' || str[i] == '\r' || str[i] == '\t')
+    
+    if(is_seperator(str[i]))
       {
 	inst->name[name_number][name_now] = '\0';
 	name_number++;
@@ -81,16 +98,21 @@ instruction *parse_one_line_instruction(char *str, instruction *inst){
       }
     else
       {
-	inst->name[name_number][name_now] = str[i];
-	name_now++;
-	flag = 1;
-	i++;
+        if(name_number == NAME_MAX_COUNT){
+          printf("Error:operant is too many!: %s\n",str);
+          exit(1);
+        }
+        inst->name[name_number][name_now] = str[i];
+        name_now++;
+        flag = 1;
+        i++;
       }
   }
   inst->name[name_number][name_now] = '\0';
   name_number++;
-
-  for(i=name_number;i<name_size;i++)
+  
+  //オペラント数が少ない場合残りのオペラントをnullで埋めておく。
+  for(i = name_number; i < NAME_MAX_COUNT; ++i)
     {
       inst->name[i][0] = '\0';
     }
@@ -100,111 +122,134 @@ instruction *parse_one_line_instruction(char *str, instruction *inst){
 
 
 
-void print_instruction(instruction inst){
-  printf("%s %s %s %s\n",inst.name[0],inst.name[1],inst.name[2],inst.name[3]);
+void print_instruction(instruction inst)
+{
+  printf("%s | %s | %s | %s\n", inst.name[0], inst.name[1], inst.name[2], inst.name[3]);
   return;
 }
 
-void print_label(label* label){
-  printf("%s => %d\n",label->name,label->program_number);
+void print_label(label* label)
+{
+  printf("%s => %d\n", label->name, label->index);
   return;
 }
 
-
-void print_instruction_set(instruction_set* instruction_set){
-  int i;
-  for(i=0;i<instruction_set-> instruction_size;i++){
-    printf("%d ",i);
-    print_instruction(instruction_set->instructions[i]);
-  }
-
-  printf("\n=== label ===\n");
-  for(i=0;i< instruction_set-> label_size;i++){
-    print_label(instruction_set -> labels[i]);
-  }
-  return;
-}
-
-
-
-instruction_set* parse_all(char buf[][100],int buf_size){
-  int i,now=0;
-  int pc=0;
+void print_program(program* program)
+{
+  int label_i = 0;
+  int i, j;
   
-  instruction_set * answer;
-
-  answer = (instruction_set *)malloc(sizeof(instruction_set));
-  answer -> label_size = 0;
-  answer -> instruction_size = 0;
-
-  
-  for(i=0;i<buf_size;i++){
-    /*colonが入っていればlabelそうでなければ、instruction*/
-    if(strstr(buf[i],":") != NULL){
-      /*labelのparse*/
-      answer->labels[answer->label_size] = malloc(sizeof(label));
-      now = 0;
-      while(buf[i][now] != ' '){
-        answer->labels[answer->label_size]->name[now] = buf[i][now];
-        now ++;
-      }
-      answer->labels[answer->label_size]->name[now+1] = '\0';
-      answer->labels[answer->label_size]->program_number = pc;
-      answer->label_size = answer->label_size + 1;
-    }else{
-      /*instructionのparse*/
-      parse_one_line_instruction(buf[i], &(answer->instructions[pc]));
-      answer -> instruction_size =   answer -> instruction_size + 1;;
-      pc++;
+  for(i = 0; i < program->inst_count; ++i)
+    {
+      for(j = 0; j < program->label_count; ++j)
+	{
+	  if(program->labels[j]->index == i)
+	    {
+	      printf("%s:\n", program->labels[j]->name);
+	    }
+	}
+      printf("%d ", i);
+      print_instruction(program->insts[i]);
     }
-  }
+  return;
+}
+
+
+
+
+program* parse_all(char buf[][100],int buf_size){
+  int i, now = 0;
+  int pc = 0;
+  
+  program *answer;
+
+  answer = (program *)malloc(sizeof(program));
+  answer->label_count = 0;
+  answer->inst_count = 0;
+
+  
+  for(i = 0; i < buf_size; ++i)
+    {
+      /*colonが入っていればlabelそうでなければ、instruction*/
+      if(strstr(buf[i],":") != NULL)
+	{
+	  /*labelのparse*/
+	  answer->labels[answer->label_count] = malloc(sizeof(label));
+	  now = 0;
+	  while(buf[i][now] != ' ')
+	    {
+	      answer->labels[answer->label_count]->name[now] = buf[i][now];
+	      now ++;
+	    }
+	  answer->labels[answer->label_count]->name[now+1] = '\0';
+	  answer->labels[answer->label_count]->index = pc;
+	  answer->label_count = answer->label_count + 1;
+	}
+      else
+	{
+	  /*instructionのparse*/
+	  parse_one_line_instruction(buf[i], &(answer->insts[pc]));
+	  answer -> inst_count =   answer -> inst_count + 1;;
+	  pc++;
+	}
+    }
   return answer;
 }
 
+#define REG_COUNT 32
+#define FREG_COUNT 32
+
 
 /*CPU の設定*/
-int regist[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-float dregist[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int regist[REG_COUNT] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+float freg[FREG_COUNT] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 stack call_stack = {0};/*call_stackのサイズを0で初期化*/
 
 #define memory_size 1000000
 
-union umemory{
+union umemory
+{
   int i;
   float d;
 };
+
 union umemory memory[memory_size];
 
 
 
 /*print系*/
-print_memory(){
+print_memory()
+{
   int i;
+  
   printf("===memory===\n");
-  for(i=0;i<memory_size;i++){
-    if(memory[i].i != 0)
-      {
-	printf("%d\t%d\t%f\n",i,memory[i].i,memory[i].d);
-      }
-  }
+  for(i=0;i<memory_size;i++)
+    {
+      if(memory[i].i != 0)
+	{
+	  printf("%d\t%d\t%20f\n", i, memory[i].i, memory[i].d);
+	}
+    }
   return;
 }
 
 
-void print_register(){
+void print_register()
+{
   int i;
+  
   printf("===register===\n");
-  for(i=0;i<16;i++){
+  for(i = 0; i < REG_COUNT; ++i){
     if(regist[i] != 0)
       {
 	printf("%d\t%d\n",i,regist[i]);
       }
   }
   printf("===fpregister===\n");
-  for(i=0;i<16;i++){
-    if(dregist[i] != 0.0)
+  for(i = 0; i < FREG_COUNT; ++i){
+    if(freg[i] != 0.0)
       {
-	printf("%d\t%f\n",i,dregist[i]);
+	printf("%d\t%f\n",i,freg[i]);
       }
   }
   return;
@@ -214,58 +259,69 @@ void print_register(){
 
 
 /*レジスターの番号をcharからintに変換する*/
-int int_of_register(char *regist){
-  if(regist[0] == 'r' || regist[0] == 'f'){
-    return atoi(regist+1);
-  } 
+int int_of_register(char *regist)
+{
+  if(regist[0] == 'r' || regist[0] == 'f')
+    {
+      return atoi(regist+1);
+    } 
+  //r f以外の場合
+  printf("Error:register name is not iligal!\n");
+  exit(1);
   return -1;
 }
 
 
-int label_trans(char *label,instruction_set * instruction_set){
-  
+int label_trans(char *label,program * program){
   int i;
   /*number*/
   if(label[0] == '-' ||label[0] == '0' || label[0] == '1' || label[0] == '2' || label[0] == '3' || label[0] == '4' || label[0] == '5' || label[0] == '6' || label[0] == '7' || label[0] == '8' || label[0] == '9'){
     return atoi(label);
   }
   /*label*/
-  for(i=0;i<instruction_set->label_size;i++){
-    if(strcmp(label,instruction_set->labels[i]->name) == 0){
-      return instruction_set->labels[i]->program_number;
+  for(i=0;i<program->label_count;i++){
+    if(strcmp(label,program->labels[i]->name) == 0){
+      return program->labels[i]->index;
     }   
   }
   fprintf(stderr, "%s\n", label);
-  perror("label not found");
+  printf("label not found");
+  exit(1);
   return -1;
 }
 
 
 /*ラベルを相対アドレスに書き換える*/
-int label_trans_soutai(char *label,instruction_set * instruction_set,int nowpc){
+int label_trans_soutai(char *label,program * program,int nowpc){
   int i;
   /*number*/
   if(label[0] == '-' || label[0] == '0' || label[0] == '1' || label[0] == '2' || label[0] == '3' || label[0] == '4' || label[0] == '5' || label[0] == '6' || label[0] == '7' || label[0] == '8' || label[0] == '9'){
     return atoi(label);
   }
   /*label*/
-  for(i=0;i<instruction_set->label_size;i++){
-    if(strcmp(label,instruction_set->labels[i]->name) == 0){
-      return instruction_set->labels[i]->program_number - nowpc;
+  for(i=0;i<program->label_count;i++){
+    if(strcmp(label,program->labels[i]->name) == 0){
+      return program->labels[i]->index - nowpc;
     }   
   }
-  perror("label not found");
+  printf("label not found");
+  exit(1);
   return -1;
 }
 
 
 
-int do_assemble(instruction_set * instruction_set){
+int do_assemble(program * program){
   int pc=0;
   int nextpc=0;
-  int stop = 0;
-  int count_print = 0;
-  long long count = 0;
+  int stop = 0, j;
+  char *iname;
+  instruction ist;
+  char *arg1, *arg2, *arg3;
+  int count = 0;
+  int r3;
+  union umemory tmp;
+  int a;
   while(1){
     pc = nextpc;
     /*途中で操作を止める際のコード 
@@ -273,447 +329,370 @@ int do_assemble(instruction_set * instruction_set){
       printf("pc = %d\n",pc);
       if(stop>=100){exit(1);}else{stop++;}
     */
+    r3 = regist[3];
+    ++count;
+    ist = program->insts[pc];
+    iname = ist.name[0];
+    arg1 = ist.name[1];
+    arg2 = ist.name[2];
+    arg3 = ist.name[3];
     
     /*ALU命令*/
-    if(strcmp(instruction_set->instructions[pc].name[0],"nop") == 0){}
+    if(strcmp(iname,"nop") == 0){}
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"add") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] + regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"add") == 0){
+      regist[int_of_register(ist.name[1])] =
+	regist[int_of_register(ist.name[2])] + regist[int_of_register(ist.name[3])];
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"sub") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] - regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"sub") == 0){
+      regist[int_of_register(ist.name[1])] =
+	regist[int_of_register(ist.name[2])] - regist[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"mul") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] * regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"mul") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] * regist[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"and") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] & regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"and") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] & regist[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"or") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] | regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"or") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] | regist[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"nor") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc].name[2])] | regist[int_of_register(instruction_set->instructions[pc].name[3])]);
+    else if(strcmp(iname,"nor") == 0){
+      regist[int_of_register(ist.name[1])] = ~(regist[int_of_register(ist.name[2])] | regist[int_of_register(ist.name[3])]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"xor") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] ^ regist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"xor") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] ^ regist[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"addi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"addi") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] + atoi(ist.name[3]);
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"subi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] - atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"subi") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] - atoi(ist.name[3]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"muli") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] * atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"muli") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] * atoi(ist.name[3]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"andi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] & atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"andi") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] & atoi(ist.name[3]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"ori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] | atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"ori") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] | atoi(ist.name[3]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"nori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = ~(regist[int_of_register(instruction_set->instructions[pc].name[2])] | atoi(instruction_set->instructions[pc].name[3]));
+    else if(strcmp(iname,"nori") == 0){
+      regist[int_of_register(ist.name[1])] = ~(regist[int_of_register(ist.name[2])] | atoi(ist.name[3]));
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"xori") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = regist[int_of_register(instruction_set->instructions[pc].name[2])] ^ atoi(instruction_set->instructions[pc].name[3]);
+    else if(strcmp(iname,"xori") == 0){
+      regist[int_of_register(ist.name[1])] = regist[int_of_register(ist.name[2])] ^ atoi(ist.name[3]);
+      
     }
 
 
     /*FPU命令*/
-    if(strcmp(instruction_set->instructions[pc].name[0],"fadd") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] + dregist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"fadd") == 0){
+      freg[int_of_register(ist.name[1])] = freg[int_of_register(ist.name[2])] + freg[int_of_register(ist.name[3])];
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"fsub") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] - dregist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"fsub") == 0){
+      freg[int_of_register(ist.name[1])] = freg[int_of_register(ist.name[2])] - freg[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fmul") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] * dregist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"fmul") == 0){
+      freg[int_of_register(ist.name[1])] = freg[int_of_register(ist.name[2])] * freg[int_of_register(ist.name[3])];
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fdiv") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = dregist[int_of_register(instruction_set->instructions[pc].name[2])] / dregist[int_of_register(instruction_set->instructions[pc].name[3])];
+    else if(strcmp(iname,"fdiv") == 0){
+      freg[int_of_register(ist.name[1])] = freg[int_of_register(ist.name[2])] / freg[int_of_register(ist.name[3])];
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"finv") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = 1 / dregist[int_of_register(instruction_set->instructions[pc].name[2])];
+    else if(strcmp(iname,"finv") == 0){
+      freg[int_of_register(ist.name[1])] = 1 / freg[int_of_register(ist.name[2])];
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"fsqrt") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = sqrt(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
+    else if(strcmp(iname,"fsqrt") == 0){
+      freg[int_of_register(ist.name[1])] = sqrt(freg[int_of_register(ist.name[2])]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"floor") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = floor(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
+    else if(strcmp(iname,"floor") == 0){
+      freg[int_of_register(ist.name[1])] = floor(freg[int_of_register(ist.name[2])]);
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"foi") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = (int)(dregist[int_of_register(instruction_set->instructions[pc].name[2])]);
+    else if(strcmp(iname,"foi") == 0){
+      freg[int_of_register(ist.name[1])] = (float)(regist[int_of_register(ist.name[2])]);
+      
     }
     
 
 
 
     /*MEM ACSESS命令*/
-    if(strcmp(instruction_set->instructions[pc].name[0],"load") == 0){
-      regist[int_of_register(instruction_set->instructions[pc].name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].i;
+    else if(strcmp(iname,"load") == 0){
+      //      fprintf(stderr, "%d\n", regist[4]);
+      regist[int_of_register(ist.name[1])] =
+	memory[regist[int_of_register(ist.name[2])]
+	       + atoi(ist.name[3])].i;
+      
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"store") == 0){
-      memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].i = regist[int_of_register(instruction_set->instructions[pc].name[1])];
+    else if(strcmp(iname,"store") == 0)
+      {
+	memory[regist[int_of_register(ist.name[2])] + atoi(ist.name[3])].i = regist[int_of_register(ist.name[1])];
+      
+
+	if((regist[int_of_register(ist.name[2])]
+	    + atoi(ist.name[3])) == 6144)
+	  {
+	    //printf("store %d\n", regist[int_of_register(ist.name[1])]);
+	    //printf("at %d\n", pc);
+	  }
+      }
+    
+    else if(strcmp(iname,"fload") == 0){
+      //    fprintf(stdout, "aa\n");
+      //            fprintf(stdout, "%d\n", tmp.i = regist[int_of_register(ist.name[2])] + atoi(ist.name[3]));
+      //    fprintf(stdout, "%f\n", tmp.d);
+      freg[int_of_register(ist.name[1])] = memory[regist[int_of_register(ist.name[2])] + atoi(ist.name[3])].d;
+      //      fprintf(stdout, "bb\n");
+      
     }
     
-    if(strcmp(instruction_set->instructions[pc].name[0],"fload") == 0){
-      dregist[int_of_register(instruction_set->instructions[pc].name[1])] = memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].d;
-    }
-    
-    if(strcmp(instruction_set->instructions[pc].name[0],"fstore") == 0){
-      memory[regist[int_of_register(instruction_set->instructions[pc].name[2])] + atoi(instruction_set->instructions[pc].name[3])].d = dregist[int_of_register(instruction_set->instructions[pc].name[1])];
-    }
+    else if(strcmp(iname,"fstore") == 0)
+      {
+	memory[regist[int_of_register(ist.name[2])] + atoi(ist.name[3])].d
+	  = freg[int_of_register(ist.name[1])];
+      
+      }
     
 
     /*BRANCH命令*/
-    if(strcmp(instruction_set->instructions[pc].name[0],"beq") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] == regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"beq") == 0){
+      if(regist[int_of_register(ist.name[1])] == regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"bne") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] != regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"bne") == 0){
+      if(regist[int_of_register(ist.name[1])] != regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"bgt") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] > regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"bgt") == 0){
+      if(regist[int_of_register(ist.name[1])] > regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"blt") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] < regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"blt") == 0){
+      if(regist[int_of_register(ist.name[1])] < regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"bge") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] >= regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"bge") == 0){
+      if(regist[int_of_register(ist.name[1])] >= regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"ble") == 0){
-      if(regist[int_of_register(instruction_set->instructions[pc].name[1])] <= regist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"ble") == 0){
+      if(regist[int_of_register(ist.name[1])] <= regist[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
-    if(strcmp(instruction_set->instructions[pc].name[0],"fbeq") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] == dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"fbeq") == 0){
+      if(freg[int_of_register(ist.name[1])] == freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
-    }
-
-    if(strcmp(instruction_set->instructions[pc].name[0],"fbne") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] != dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
-      }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fbgt") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] > dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"fbne") == 0){
+      if(freg[int_of_register(ist.name[1])] != freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fblt") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] < dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"fbgt") == 0){
+      if(freg[int_of_register(ist.name[1])] > freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fbge") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] >= dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"fblt") == 0){
+      if(freg[int_of_register(ist.name[1])] < freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
     }
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"fble") == 0){
-      if(dregist[int_of_register(instruction_set->instructions[pc].name[1])] <= dregist[int_of_register(instruction_set->instructions[pc].name[2])]){
-        nextpc = pc + label_trans_soutai(instruction_set->instructions[pc].name[3],instruction_set,pc) -1;
+    else if(strcmp(iname,"fbge") == 0){
+      if(freg[int_of_register(ist.name[1])] >= freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
       }
+      
+    }
+
+    else if(strcmp(iname,"fble") == 0){
+      if(freg[int_of_register(ist.name[1])] <= freg[int_of_register(ist.name[2])]){
+        nextpc = pc + label_trans_soutai(ist.name[3],program,pc) -1;
+      }
+      
     }
 
 
     /*JUMP命令*/
-    if(strcmp(instruction_set->instructions[pc].name[0],"jump") == 0){
-      nextpc = label_trans(instruction_set->instructions[pc].name[1],instruction_set) - 1;
+    else if(strcmp(iname,"jump") == 0){
+      nextpc = label_trans(ist.name[1],program) - 1;
+      
     }
 
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"call") == 0){
-      push(&call_stack,(pc+1));
-      nextpc = label_trans(instruction_set->instructions[pc].name[1],instruction_set) - 1;
-      if(strcmp(instruction_set->instructions[pc].name[1],"min_caml_print_int") == 0)
+    else if(strcmp(iname,"call") == 0){
+      nextpc = label_trans(ist.name[1],program) - 1;
+      
+      if(nextpc == 1486)
 	{
-	  ++print_count;
-	  printf("print_count : %d\n", print_count);
+	  printf("%s\n", ist.name[1]);
+	}
+      if(strcmp(ist.name[1], "min_caml_read_int") == 0)
+	{
+	  a = memory[6144].i;
+	  printf("read_int1 %d\n", a);
+	  a = memory[a].i;
+	  printf("read_int2 %d\n", a);
+	}
+      if(strcmp(ist.name[1], "min_caml_print_int") == 0)
+	{
+	  //printf("print_int %d\n", regist[4]);
+	}
+      if(strcmp(ist.name[1], "min_caml_print_float") == 0)
+	{
+	}
+      if(strcmp(ist.name[1], "L_write_rgb_element_2854") == 0)
+	{
+	  //printf("%f\n", freg[2]);
+	}
+      if(strncmp(ist.name[1], "L_sin", 5) == 0)
+	{
+	  //	  printf("%f\n", freg[2]);
+	  freg[2] = sin(freg[2]);
+	  nextpc = pc;
+	}
+      else if(strncmp(ist.name[1], "L_cos", 5) == 0)
+	{
+	  //	  printf("%f\n", freg[2]);
+	  freg[2] = cos(freg[2]);
+	  nextpc = pc;
+	}
+      else if(strncmp(ist.name[1], "L_atan", 6) == 0)
+	{
+	  //	  printf("%f\n", freg[2]);
+	  freg[2] = atan(freg[2]);
+	  nextpc = pc;
+	}
+      else if(strncmp(ist.name[1], "L_sqrt", 6) == 0)
+	{
+	  //	  printf("%f\n", freg[2]);
+	  freg[2] = sqrt(freg[2]);
+	  nextpc = pc;
+	}
+      else
+	{
+	  push(&call_stack,(pc+1));
 	}
     }
     
 
-    if(strcmp(instruction_set->instructions[pc].name[0],"return") == 0){
+    else if(strcmp(iname,"return") == 0){
       nextpc = pop(&call_stack) - 1;    
+       
     }
 
+    //命令が存在しなかった場合error
+    else
+      {
+	printf("Error:this is not iligal instruction!:%s\n",program-> insts[pc].name[0]);
+	exit(1);
+      }
+
+    //printf("%d\n", regist[3]);
 
     nextpc++;
-
-  ++count;
-    if((count % 1000000) == 0)
-  {
-    //      printf("%lld\n", count);
-      }    
-    //printf("%d\n", nextpc);
-    /*命令がラストの行まで行けば処理を終了する*/
-    if(nextpc >= instruction_set->instruction_size)
+    /*
+      if(count > 817757)
       {
-	break;
+      for(j = 0; j < program->label_count; ++j)
+      {
+      if(program->labels[j]->index == pc)
+      {
+      printf("%s:\n", program->labels[j]->name);
+      }
+      }
+	       
+      printf("%d", pc);
+      print_instruction(ist);
+      //	printf("%d\n", count);
+      printf("%d\n", memory[4062].i);
+      print_register();
+      }*/
+
+    if(r3 > regist[3])
+      {
+        printf("%d ", pc);
+        print_instruction(ist);
+	printf("hp: %d\n", regist[3]);
+      }
+    /*命令がラストの行まで行けば処理を終了する*/
+    if(nextpc >= program->inst_count)
+      {
+        break;
       }
 
   }
 
 
-  /*
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-    1535
-    1536
-    1537
-    1538
-    1539
-    3042
-    3043
-    3050
-    3051
-    3052
-    3053
-    3054
-    3055
-    3056
-    3039
-    3040
-    3041
-  */
 
   return 0;
 }
@@ -723,11 +702,12 @@ int main(int argc,char * argv[])
 {
   FILE *fp, *fp2;
   char buf[100000][100];  /*命令 読み込み用バッファ */
-  char fpt[fp_table_max_size][20] = { 0 };
+  char fpt[FPT_MAX_COUNT][20] = { 0 };
   int i = 0, j;
   //メモリ上の浮動小数点テーブルの位置
   int fpmemoffset = 0;
-  instruction_set* answer;
+  program* answer;
+  int ll = 0;
 
 
   
@@ -753,7 +733,7 @@ int main(int argc,char * argv[])
 	  printf( "%sが開けません\n",argv[2] );
 	  return 1;
 	}
-      for(i = 0; i < fp_table_max_size; ++i)
+      for(i = 0; i < FPT_MAX_COUNT; ++i)
 	{
 	  if( fgets( fpt[i], 20, fp2 ) == NULL )   /* １行読み込み */
 	    {
@@ -764,13 +744,13 @@ int main(int argc,char * argv[])
       for(j = 0; j < i; ++j)
 	{
 	  //エラーが起こっても関係ない
-	  printf("%s\n", fpt[j]);
-	  memory[j + fpmemoffset].i = strtol(fpt[j], NULL, 16);
+	  //printf("%s\n", fpt[j]);
+	  memory[j + fpmemoffset].i = (int)strtoll(fpt[j], NULL, 16);
 	}
       print_memory();
     }
 
-
+  i = 0;
   while( 1 )
     {
       if( fgets( buf[i], 81, fp ) == NULL )   /* １行読み込み */
@@ -783,8 +763,7 @@ int main(int argc,char * argv[])
 
   answer = parse_all(buf,i);
 
-  print_instruction_set(answer);
-
+  print_program(answer);
 
 
   //fprintf(stderr, "aa\n");

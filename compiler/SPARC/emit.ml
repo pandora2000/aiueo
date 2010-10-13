@@ -154,7 +154,11 @@ let rec h c tl tli e ret rett =
 		(call_args y z) @ (if tl then tli @ [finst1 "jump" x] else [finst1 "call" x])
 	      else
 		(call_args y z) @ (if tl then tli @ [finst1 "jump" x]
-				   else [finst1 "call" x; finst3 "add" ret zreg q])
+				   else [finst1 "call" x;
+					 match rett with
+					   | Type.Float -> finst3 "fadd" ret fzreg q
+					   | _ -> finst3 "add" ret zreg q
+					])
     )
 and g c tl tli rett =
   function
@@ -183,31 +187,60 @@ let get_saves ret e =
 
 exception Exit2
 
+type t = Int of int | Float of float
+
 let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
   let n = memsp - (List.length p) in
   let fid255 = Id.genid "fid255" in
   let fid10_0 = Id.genid "fid10_0" in
-  let fid02 = Id.genid "fid02" in
-  let fli = Array.of_list (fl @ [(Id.L fid255, 255.0);
-				 (Id.L fid10_0, 1000000000.0);
-				 (*入力データ用*)
-				 (Id.L fid02, 0.2)]) in
     (*入力データ用*)
   let mil =
-    [|
-      0; 0; 0; 0; 30; 1; 0; 0; 255; 0; 1; 2; 0; 40; 10; 40; 0; -40; 0; 1; 0; 64;
-      255; 255; 0; 4; 3; 1; 0; 30; 30; 30; 0; 0; 0; 1; 1; 255; 255; 255; 255;
-      -1; 0; -1; 1; -1; -1; 99; 0; 1; -1; -1
-    |] in
+    [
+      Float 0.0; Float 0.0; Float 0.0;
+      Float 0.0; Float 30.0; Float 1.0;
+      Float 0.0; Float 0.0; Float 255.0;
+      Int 0; Int 1; Int 2; Int 0;
+      Float 40.0; Float 10.0; Float 40.0; Float 0.0; Float (-.40.0); Float 0.0;
+      Float 1.0; Float 0.2; Float 64.0;
+      Float 255.0; Float 255.0; Float 0.0;
+      Int 4; Int 3; Int 1; Int 0;
+      Float 30.0; Float 30.0; Float 30.0; Float 0.0;
+      Float 0.0; Float 0.0; Float 1.0; Float 1.0;
+      Float 255.0; Float 255.0; Float 255.0; Float 255.0;
+      Int (-1); Int 0; Int (-1); Int 1;
+      Int (-1); Int (-1); Int 99; Int 0;
+      Int 1; Int (-1); Int (-1)
+    ] in
+    (*入力データにそれぞれラベルをつける*)
+  let mill = List.map (fun x -> (Id.L (Id.genid "in"), x)) mil in
+  let milf =
+    List.fold_right (fun b a ->
+		       match b with
+			 | (_, Int _) -> a
+			 | (x, Float y) -> (x, y) :: a
+		    ) mill [] in
+  let fli = Array.of_list (fl @ [(Id.L fid255, 255.0);
+				 (Id.L fid10_0, 1000000000.0)]
+			     (*入力データ用*)
+			   @ milf) in
+  let mill = Array.of_list mill in
   let mil =
     List.flatten
       (Array.to_list
 	 (Array.mapi
 	    (fun i x ->
-	       [finst3 "addi" regs.(0) zreg (string_of_int x);
-		finst3 "store" regs.(0) zreg (string_of_int (i + memin + 1))]) mil)) in
+	       let mi = i + memin + 1 in
+	       match x with
+		 | Int y -> 
+		     [finst3 "addi" regs.(0) zreg (string_of_int y);
+		      finst3 "store" regs.(0) zreg (string_of_int mi)]
+		 | Float _ ->
+		     match fst mill.(i) with Id.L z ->
+		       [finst3 "fload" fregs.(0) z "0";
+			finst3 "fstore" fregs.(0) zreg (string_of_int mi)]
+	    ) (Array.of_list mil))) in
   let ear = Array.make 1006 0 in
   let ear = 
     Array.mapi
@@ -262,15 +295,11 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 	 finst3 "addi" regs.(0) zreg (string_of_int (memin + 1));
 	 finst3 "store" regs.(0) zreg (string_of_int memin)
        ];
-       (*入力データは実際は埋め込まれてる*)
-       (*
+       (*入力データは実際は埋め込まれてる*)       
        (*入力データ埋め込み*)
        mil;
-       [finst3 "fload" fregs.(0) fid02 "0";
-	finst3 "fstore" fregs.(0) zreg (string_of_int (memin + 20))];
        (*外部変数領域初期化*)
-	 ear;
-       *)
+       ear;
        g p false [] Type.Unit e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->

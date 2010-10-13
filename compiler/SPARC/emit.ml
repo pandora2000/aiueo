@@ -199,7 +199,7 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
   let mil =
     [
       Float 0.0; Float 0.0; Float 0.0;
-      Float 0.0; Float 30.0; Float 1.0;
+      Float 0.0; Float 30.0; Int 1;
       Float 0.0; Float 0.0; Float 255.0;
       Int 0; Int 1; Int 2; Int 0;
       Float 40.0; Float 10.0; Float 40.0; Float 0.0; Float (-.40.0); Float 0.0;
@@ -221,10 +221,11 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 			 | (_, Int _) -> a
 			 | (x, Float y) -> (x, y) :: a
 		    ) mill [] in
-  let fli = Array.of_list (fl @ [(Id.L fid255, 255.0);
-				 (Id.L fid10_0, 1000000000.0)]
-			     (*入力データ用*)
-			   @ milf) in
+  let fl = fl @ [(Id.L fid255, 255.0);
+		 (Id.L fid10_0, 1000000000.0)]
+    (*入力データ用*)
+    @ milf in
+  let fli = Array.of_list fl in
   let mill = Array.of_list mill in
   let mil =
     List.flatten
@@ -232,14 +233,14 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 	 (Array.mapi
 	    (fun i x ->
 	       let mi = i + memin + 1 in
-	       match x with
-		 | Int y -> 
-		     [finst3 "addi" regs.(0) zreg (string_of_int y);
-		      finst3 "store" regs.(0) zreg (string_of_int mi)]
-		 | Float _ ->
-		     match fst mill.(i) with Id.L z ->
-		       [finst3 "fload" fregs.(0) z "0";
-			finst3 "fstore" fregs.(0) zreg (string_of_int mi)]
+		 match x with
+		   | Int y -> 
+		       [finst3 "addi" regs.(0) zreg (string_of_int y);
+			finst3 "store" regs.(0) zreg (string_of_int mi)]
+		   | Float _ ->
+		       match fst mill.(i) with Id.L z ->
+			 [finst3 "fload" fregs.(0) z "0";
+			  finst3 "fstore" fregs.(0) zreg (string_of_int mi)]
 	    ) (Array.of_list mil))) in
   let ear = Array.make 1006 0 in
   let ear = 

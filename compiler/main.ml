@@ -33,7 +33,7 @@ let extlist =
     "viewpoint", 12;(*3*)
     "light", 15;(*3*)
     "intersection_point", 18;(*3*)
-    "intersected_object_id", 19;(*1*)
+    "intersected_object_id", 21;(*1*)
     "nvector", 22;(*3*)
     "texture_color", 25;(*3*)
     "diffuse_ray", 28;(*3*)

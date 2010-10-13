@@ -322,6 +322,7 @@ int do_assemble(program * program){
   int r3;
   union umemory tmp;
   int a;
+  float b;
   while(1){
     pc = nextpc;
     /*途中で操作を止める際のコード 
@@ -435,7 +436,7 @@ int do_assemble(program * program){
     }
     
     else if(strcmp(iname,"finv") == 0){
-      freg[int_of_register(ist.name[1])] = 1 / freg[int_of_register(ist.name[2])];
+      freg[int_of_register(ist.name[1])] = 1.0 / freg[int_of_register(ist.name[2])];
       
     }
     
@@ -603,26 +604,35 @@ int do_assemble(program * program){
 	  a = memory[a].i;
 	  printf("read_int2 %d\n", a);
 	}
-      if(strcmp(ist.name[1], "min_caml_print_int") == 0)
+      else if(strcmp(ist.name[1], "min_caml_read_float") == 0)
+	{
+	  a = memory[6144].i;
+	  printf("read_float1 %d\n", a);
+	  b = memory[a].d;
+	  printf("read_float2 %f\n", b);
+	}
+      else if(strcmp(ist.name[1], "min_caml_print_int") == 0)
 	{
 	  //printf("print_int %d\n", regist[4]);
 	}
-      if(strcmp(ist.name[1], "min_caml_print_float") == 0)
+      else if(strcmp(ist.name[1], "min_caml_print_float") == 0)
 	{
 	}
-      if(strcmp(ist.name[1], "L_write_rgb_element_2854") == 0)
+      else if(strcmp(ist.name[1], "L_write_rgb_element_2854") == 0)
 	{
 	  //printf("%f\n", freg[2]);
 	}
+
+      
       if(strncmp(ist.name[1], "L_sin", 5) == 0)
 	{
-	  //	  printf("%f\n", freg[2]);
+	  //printf("%f\n", freg[2]);
 	  freg[2] = sin(freg[2]);
 	  nextpc = pc;
 	}
       else if(strncmp(ist.name[1], "L_cos", 5) == 0)
 	{
-	  //	  printf("%f\n", freg[2]);
+	  //printf("%f\n", freg[2]);
 	  freg[2] = cos(freg[2]);
 	  nextpc = pc;
 	}
@@ -684,6 +694,8 @@ int do_assemble(program * program){
         print_instruction(ist);
 	printf("hp: %d\n", regist[3]);
       }
+
+    
     /*命令がラストの行まで行けば処理を終了する*/
     if(nextpc >= program->inst_count)
       {
@@ -765,13 +777,23 @@ int main(int argc,char * argv[])
 
   print_program(answer);
 
-
   //fprintf(stderr, "aa\n");
   do_assemble(answer);
   //fprintf(stderr, "aad\n");
   print_register();
   //fprintf(stderr, "aas\n");
   print_memory();
+
+  fclose (fp);
+  fclose(fp2);
+  
+  fp = fopen( "res", "w" );
+  fprintf(fp, "P3\n");
+  fprintf(fp, "%d %d %d\n", memory[8193].i, memory[8194].i, memory[8195].i);
+  for(i = 8196; i < 57348; i = i + 3)
+    {
+      fprintf(fp, "%d %d %d\n", (int)memory[i].d, (int)memory[i + 1].d, (int)memory[i + 2].d);
+    }
 
   fclose( fp );
   return 0;

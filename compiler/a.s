@@ -173,9 +173,9 @@ L_main_8629 :
 	fstore	f2 r0 4153
 	fload	f2 r0 56
 	fstore	f2 r0 4154
-	addi	r4 r0 60
+	addi	r4 r0 109
 	store	r4 r0 4155
-	addi	r4 r0 -1
+	addi	r4 r0 110
 	store	r4 r0 4156
 	addi	r4 r0 111
 	store	r4 r0 4157
@@ -273,9 +273,9 @@ L_main_8629 :
 	store	r4 r0 4203
 	addi	r4 r0 158
 	store	r4 r0 4204
-	addi	r4 r0 159
+	addi	r4 r0 -1
 	store	r4 r0 4205
-	addi	r4 r0 160
+	addi	r4 r0 -1
 	store	r4 r0 4206
 	addi	r4 r0 -1
 	store	r4 r0 4207
@@ -373,9 +373,9 @@ L_main_8629 :
 	store	r4 r0 4253
 	addi	r4 r0 -1
 	store	r4 r0 4254
-	addi	r4 r0 -1
+	addi	r4 r0 160
 	store	r4 r0 4255
-	addi	r4 r0 -1
+	addi	r4 r0 158
 	store	r4 r0 4256
 	addi	r4 r0 341
 	store	r4 r0 4257
@@ -3184,7 +3184,7 @@ L_read_and_network_2607 :
 	addi	r2 r2 1
 	return
 L_else_8378 : 
-	addi	r5 r0 4157
+	addi	r5 r0 4155
 	load	r6 r2 0
 	add	r5 r5 r6
 	store	r4 r5 0
@@ -3199,7 +3199,7 @@ L_read_parameter_2609 :
 	call	L_read_all_object_2601
 	addi	r4 r0 0
 	call	L_read_and_network_2607
-	addi	r4 r0 4155
+	addi	r4 r0 4255
 	addi	r5 r0 0
 	addi	r6 r0 0
 	store	r5 r2 0
@@ -5543,7 +5543,7 @@ L_shadow_check_one_or_group_2743 :
 	addi	r2 r2 2
 	return
 L_else_8477 : 
-	addi	r7 r0 4157
+	addi	r7 r0 4155
 	add	r6 r7 r6
 	load	r6 r6 0
 	addi	r7 r0 0
@@ -5796,7 +5796,7 @@ L_solve_one_or_network_2753 :
 	addi	r2 r2 3
 	return
 L_else_8499 : 
-	addi	r8 r0 4157
+	addi	r8 r0 4155
 	add	r7 r8 r7
 	load	r7 r7 0
 	addi	r8 r0 0
@@ -5888,7 +5888,7 @@ L_judge_intersection_2761 :
 	add	r5 r5 r6
 	fstore	f2 r5 0
 	addi	r5 r0 0
-	addi	r6 r0 4155
+	addi	r6 r0 4255
 	addi	r7 r0 0
 	add	r6 r6 r7
 	load	r6 r6 0
@@ -6067,7 +6067,7 @@ L_solve_one_or_network_fast_2767 :
 	addi	r2 r2 3
 	return
 L_else_8517 : 
-	addi	r8 r0 4157
+	addi	r8 r0 4155
 	add	r7 r8 r7
 	load	r7 r7 0
 	addi	r8 r0 0
@@ -6157,7 +6157,7 @@ L_judge_intersection_fast_2775 :
 	add	r5 r5 r6
 	fstore	f2 r5 0
 	addi	r5 r0 0
-	addi	r6 r0 4155
+	addi	r6 r0 4255
 	addi	r7 r0 0
 	add	r6 r6 r7
 	load	r6 r6 0
@@ -6887,7 +6887,7 @@ L_else_8550 :
 	load	r5 r2 6
 	bne	r5 r4 L_else_8552
 	addi	r4 r0 0
-	addi	r5 r0 4155
+	addi	r5 r0 4255
 	addi	r6 r0 0
 	add	r5 r5 r6
 	load	r5 r5 0
@@ -7157,7 +7157,7 @@ L_endif_8565 :
 	fload	f3 r2 2
 	fmul	f2 f3 f2
 	addi	r4 r0 0
-	addi	r5 r0 4155
+	addi	r5 r0 4255
 	addi	r6 r0 0
 	add	r5 r5 r6
 	load	r5 r5 0
@@ -7282,7 +7282,7 @@ L_else_8568 :
 	store	r4 r2 2
 	call	L_utexture_2786
 	addi	r4 r0 0
-	addi	r5 r0 4155
+	addi	r5 r0 4255
 	addi	r6 r0 0
 	add	r5 r5 r6
 	load	r5 r5 0

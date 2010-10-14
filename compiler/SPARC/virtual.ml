@@ -171,7 +171,6 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
 	  try
 	    let p = List.assoc y al in
 	      Ans(Addi(zreg, p))
-		(*一時的にNOPに*)
 	  with Not_found -> raise (NoExtArray y)
 	)
 	  (*タプル最適化の時大丈夫かな*)
@@ -181,7 +180,6 @@ let rec g al env = function (* 式の仮想マシンコード生成 (caml2html: virtual_g) *
 	  try
 	    let p = List.assoc y al in
 	      Ans(Addi(zreg, p))
-		(*一時的にNOPに*)
 	  with Not_found -> raise (NoExtTuple y)
 	)
 	  

@@ -85,7 +85,7 @@ let rec soe level e =
       | Ori (x, y) | Nori (x, y) | Xori (x, y) | Load (x, y)
       | Fload (x, y) ->
 	  sprintf "%s%s(%s, %d)\n" i (son e) x y
-      | Store (x, y, z) | Fstore (x, y, z) -> 
+      | Store (x, y, z) | Fstore (x, y, z) ->
 	  sprintf "%s%s(%s, %s, %d)\n" i (son e) x y z
       | IfEq (x, y, z, w) | IfLE (x, y, z, w) | IfGE (x, y, z, w) ->
 	  sprintf "%s%s(%s, %s)\n%s%sElse\n%s" i (son e) x y (sop nl z) i (sop nl w)

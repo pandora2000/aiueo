@@ -28,16 +28,16 @@ exception UnknownInstruction
 (*TODO:いろいろ追加*)
 let opcode_of x =
   match x with
-    | "foi" -> 0b010110 | "floor" -> 0b111111(*仮*)
+    | "foi" -> 0b010101 | "floor" -> 0b010110(*仮*)
     | "nop" -> 0b000000 | "add" -> 0b000001 | "sub" -> 0b000010
     | "mul" -> 0b000011 | "and" -> 0b000100 | "or" -> 0b000101
     | "nor" -> 0b000110 | "xor" -> 0b000111| "addi" -> 0b001001
     | "subi" -> 0b001010 | "muli" -> 0b001011 | "andi" -> 0b001100
     | "ori" -> 0b001101 | "nori" -> 0b001110 | "xori" -> 0b001111
     | "fadd" -> 0b010000 | "fsub" -> 0b010001| "fmul" -> 0b010010
-    | "finv" -> 0b010011 | "fsqrt" -> 0b010100 | "fdiv" -> 0b010101
-    | "load" -> 0b011000 | "store" -> 0b011001 | "fload" -> 0b011010
-    | "fstore" -> 0b011011 | "beq" -> 0b100000 | "bne" -> 0b100001
+    | "finv" -> 0b010011 | "fsqrt" -> 0b010100 | "fdiv" -> 0b010011
+    | "load" -> 0b011001 | "store" -> 0b011011 | "fload" -> 0b011101
+    | "fstore" -> 0b011111 | "beq" -> 0b100000 | "bne" -> 0b100001
     | "bgt" -> 0b100010 | "blt" -> 0b100011 | "fbeq" -> 0b100100
     | "fbne" -> 0b100101 | "fbgt" -> 0b100110 | "fblt" -> 0b100111
     | "jump" -> 0b110000 | "call" -> 0b110100 | "return" -> 0b111000
@@ -114,7 +114,7 @@ let rec h c tl tli e ret rett =
 	    [finst3 n ret x y]
 	    @ (if tl then tli @ reti else [])
 	| Addi(x, y) | Subi(x, y) | Muli(x, y)
-	| Ori(x, y) | Xori(x, y) | Nori(x, y) | Andi(x, y) 
+	| Ori(x, y) | Xori(x, y) | Nori(x, y) | Andi(x, y)
 	| Load(x, y) | Fload(x, y) ->
 	    [finst3 n ret x (string_of_int y)]
 	    @ (if tl then tli @ reti else [])
@@ -142,7 +142,7 @@ let rec h c tl tli e ret rett =
 	| IfFEq(x, y, z, w) -> 
 	    (if tl then tail_seq_of_if else nontail_seq_of_if) "fbne" x y z w 
 	| IfFLE(x, y, z, w) ->
-	    (if tl then tail_seq_of_if else nontail_seq_of_if) "fbgt" x y z w 
+	    (if tl then tail_seq_of_if else nontail_seq_of_if) "fbgt" x y z w
 	| CallCls _ -> raise Exit
 	| CallDir(Id.L x, y, z) ->
 	    let (p, q) =
@@ -176,7 +176,7 @@ let get_saves ret e =
   let rec scs ret y = function
     | Save(k, x) when not (List.exists (fun ((_, z), _) -> x = z) y) ->
 	((List.length y, x), k) :: y
-    | IfEq(x, u, z, w) | IfGE(x, u, z, w) | IfLE(x, u, z, w) 
+    | IfEq(x, u, z, w) | IfGE(x, u, z, w) | IfLE(x, u, z, w)
     | IfFLE(x, u, z, w) | IfFEq(x, u, z, w) ->
 	sub ret (sub ret y z) w
     | _ -> y
@@ -189,7 +189,7 @@ exception Exit2
 
 type t = Int of int | Float of float
 
-let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
+let f istest memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
   let en = Id.genid "end" in
   let p = get_saves Type.Unit e in
   let n = memsp - (List.length p) in
@@ -249,10 +249,10 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
 	 if i <= 56 then (0, 0)
 	 else if i = 57 then (1, 0)
 	 else if i = 58 then (2, 0)
-	 else if i = 59 then (0, 60)
-	 else if i = 60 then (0, -1)
-	 else if i <= 110 then (0, i + 50)
-	 else if i <= 160 then (0, -1)
+	 else if i <= 108 then (0, i + 50)
+	 else if i <= 158 then (0, -1)
+	 else if i = 159 then (0, i + 1)
+	 else if i = 160 then (0, 158)
 	 else if i <= 340 then (0, (i - 161) * 3 + 341)
 	 else if i <= 880 then (0, 0)
 	 else if i = 881 then (0, 883)
@@ -280,41 +280,63 @@ let f memext memin memout memsp memhp floffset (Prog (fl, fundefs, e)) =
   let ret =
     List.flatten
       [[finst0 "nop"; finst0 "nop"];
-       [flabel (Id.genid "main");
-	(*スタックポインタ初期化*)
-	finst3 "addi" spreg zreg (string_of_int n);
-	(*ヒープポインタ初期化*)
-	(*memhpは大きいのでとりあえずTODO:*)
-	finst3 "addi" hpreg zreg (string_of_int (memhp / 10));
-	finst3 "muli" hpreg hpreg (string_of_int 10);
-	(*出力データポインタ初期化*)
-	finst3 "addi" regs.(0) zreg (string_of_int (memout + 1));
-	finst3 "store" regs.(0) zreg (string_of_int memout);
-       ];
-       (*入力データポインタ初期化*)
        [
-	 finst3 "addi" regs.(0) zreg (string_of_int (memin + 1));
-	 finst3 "store" regs.(0) zreg (string_of_int memin)
+	 flabel (Id.genid "main");
+	 (*スタックポインタ初期化*)
+	 finst3 "addi" spreg zreg (string_of_int n);
+	 (*ヒープポインタ初期化*)
+	 (*memhpは大きいのでとりあえずTODO:*)
+	 finst3 "addi" hpreg zreg (string_of_int (memhp / 10));
+	 finst3 "muli" hpreg hpreg (string_of_int 10);
        ];
-       (*入力データは実際は埋め込まれてる*)       
-       (*入力データ埋め込み*)
-       mil;
-       (*外部変数領域初期化*)
-       ear;
+       if istest then [] else
+	 (List.flatten
+	    [
+	      (*出力データポインタ初期化*)
+	      [
+		finst3 "addi" regs.(0) zreg (string_of_int (memout + 1));
+		finst3 "store" regs.(0) zreg (string_of_int memout);
+	      ];
+	      (*入力データポインタ初期化*)
+	      [
+		finst3 "addi" regs.(0) zreg (string_of_int (memin + 1));
+		finst3 "store" regs.(0) zreg (string_of_int memin)
+	      ];
+	      (*入力データは実際は埋め込まれてる*)       
+	      (*入力データ埋め込み*)
+	      mil;
+	      (*外部変数領域初期化*)
+	      ear;
+	    ]);
        g p false [] Type.Unit e;
        [finst1 "jump" en];
        (List.flatten (List.map (fun x ->
-				  let p = get_saves x.ret x.body in
-				  let ni = List.length p in
-				  let n = string_of_int ni in
-				    List.flatten
-				      [
-					[flabel (ltostr x.name)];
-					(if ni = 0 then [] else [finst3 "subi" spreg spreg n]);
-					g p true
-					  (if ni = 0 then [] else [finst3 "addi" spreg spreg n])
-					  x.ret x.body
-				      ])
+				  if istest &&
+				    (
+				      let p = match x.name with Id.L k -> k in
+					p = "min_caml_read_int" ||
+					  p = "min_caml_read_float" ||
+					  p = "min_caml_print_int" ||
+					  p = "min_caml_print_float" ||
+					  p = "min_caml_create_array" ||
+					  p = "min_caml_create_float_array" ||
+					  p = "min_caml_init_array" ||
+					  p = "min_caml_init_float_array"
+				    ) then []
+				  else 
+				    let p = get_saves x.ret x.body in
+				    let ni = List.length p in
+				    let n = string_of_int ni in
+				      List.flatten
+					[
+					  [flabel (ltostr x.name)];
+					  (if ni = 0 then [] else [finst3 "subi" spreg spreg n]);
+					  g p true
+					    (if ni = 0 then [] else
+					       [finst3 "addi" spreg spreg n])
+					    x.ret x.body
+					]
+			       )
 			fundefs));
        (*jikki*)
        (*
@@ -405,6 +427,7 @@ let string_of_bi_a x l =
 	  x.a3.[0] = '8' || x.a3.[0] = '9' then
 	    int_of_string x.a3
 	else (get_label_index l x.a3) - x.index in
+	(*値が幅に収まっているか確かめる*)
 	if u < (- 32768) || u > 32767 then raise ImValueOverflow
 	else
 	  sprintf "%04X%04X\n" ((y lsl 10) lor (z lsl 5) lor w) (u land 0xffff)

@@ -1,0 +1,8 @@
+let n = 10 in
+let dummy = create_array n 0 in
+let a = create_array n dummy in
+let b = create_array n dummy in
+let rec subinit x p =
+  if p = n then x else (x.(p) <- create_array n 0; subinit x (p + 1))
+let rec init x = subinit x 0
+  

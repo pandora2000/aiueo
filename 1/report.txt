@@ -1,0 +1,157 @@
+101029 森谷哲理
+
+課題1レポート
+
+問題1
+mincamlプログラム
+tetsuri@ut:~/w/cp/1$ cat fib.ml
+let rec fib n =
+  if n = 0 then 0 else if n = 1 then 1 else fib (n - 1) + fib (n - 2) in
+  print_int (fib 4)
+tetsuri@ut:~/w/cp/1$ 
+
+実行例
+(make native-code)
+tetsuri@ut:~/w/cp/1$ ./min-caml.opt fib
+free variable print_int assumed as external
+//ここからSyntax.t
+LetRec(fib : Var None, (n : Var None))
+ If
+  Eq
+   Var(n)
+   Int(0)
+ Then
+  Int(0)
+ Else
+  If
+   Eq
+    Var(n)
+    Int(1)
+  Then
+   Int(1)
+  Else
+   Add
+    App
+     Var(fib)
+    By
+     Sub
+      Var(n)
+      Int(1)
+    App
+     Var(fib)
+    By
+     Sub
+      Var(n)
+      Int(2)
+In
+ App
+  Var(print_int)
+ By
+  App
+   Var(fib)
+  By
+   Int(4)
+
+//ここからKNormal.t
+LetRec(fib : Fun (Int -> Int), (n : Int))
+ Let(Ti3 : Int)
+  Int(0)
+ In
+  IfEq(n, Ti3)
+   Int(0)
+  Else
+   Let(Ti4 : Int)
+    Int(1)
+   In
+    IfEq(n, Ti4)
+     Int(1)
+    Else
+     Let(Ti7 : Int)
+      Let(Ti6 : Int)
+       Let(Ti5 : Int)
+        Int(1)
+       In
+        Sub(n, Ti5)
+      In
+       App(fib, (Ti6))
+     In
+      Let(Ti10 : Int)
+       Let(Ti9 : Int)
+        Let(Ti8 : Int)
+         Int(2)
+        In
+         Sub(n, Ti8)
+       In
+        App(fib, (Ti9))
+      In
+       Add(Ti7, Ti10)
+In
+ Let(Ti2 : Int)
+  Let(Ti1 : Int)
+   Int(4)
+  In
+   App(fib, (Ti1))
+ In
+  ExtFunApp(print_int, (Ti2))
+tetsuri@ut:~/w/cp/1$ 
+
+説明
+Syntax.tはsyntax.ml、KNormal.tはkNormal.mlを改造して
+それぞれ構文木をトラバースしながら、インデントを引数として渡していき実装した
+
+
+問題2
+実行例
+//型エラー（うまくいきませんが狙ったところの情報が表示されるようにはなっています）
+tetsuri@ut:~/w/cp/1$ cat fibn.ml
+let rec fib n =
+  
+  if
+    n
+    =
+    true
+  then 0 else if n = 1 then 1 else fib (n - 1) + fib (n - 2) in
+  print_int (fib 4)
+tetsuri@ut:~/w/cp/1$ 
+tetsuri@ut:~/w/cp/1$ ./min-caml.opt fibn
+Info
+ LetRec(fib : Var None, (n : Var None))
+(略)
+     By
+      Int(4)
+Fatal error: exception Typing.Type_check_error("lines 30000")
+tetsuri@ut:~/w/cp/1$ 
+パースエラー（行数と文字数（その行の先頭からの）が表示されます）
+tetsuri@ut:~/w/cp/1$ cat fibm.ml
+let rec fib n =
+  if n = 0 then
+    0 else
+      if
+	n
+	= 1
+      else
+	1
+      else
+	fib
+	  (n - 1) + fib (n - 2) in
+  print_int (fib 4)
+tetsuri@ut:~/w/cp/1$ ./min-caml.opt fibm
+Fatal error: exception Failure("parse error near lines 7, characters 7")
+tetsuri@ut:~/w/cp/1$ 
+
+説明
+バースエラーの方は字句解析の方で行数や文字数を数えておいてerrorのアクションで表示させることで出来た
+型エラーの場合は字句解析の方で数えた行数を使うことができない（lexerでいくつかトークンが読まれてから
+parserが動くから）のでParser.rhs_start_posなどを使ってみたがうまく動作しなかった。
+ただ、もし行数、文字数の情報がparserの段階でえられたなら、それを型エラー時にうまく表示する手法は
+分かったので、それを説明する。
+まず、Syntax.tにバリアントを一つ追加し(Info of lpos * t)、それに位置情報(lpos)をparserのアクション
+で付与する。この時位置情報を付与すべきSyntax.tの型はそれ自身が型エラーを起こしうる型のみでよい。
+例えば、Int,Bool,Unitは必要ないし、LetやTupleも内包物が型エラーとはなったとしても、それ自身は型エラー
+にはならないため除外する。LetRecは循環するので型エラーになりうるから除外できない。
+この位置情報を型チェックのときにTyping.gの引数にしておいて、Info(pos, exp)があったらgにposを渡して
+expをチェックする。もし、expのチェック中にunifyが失敗すれば原因はその構文なのでposを表示する。
+expのチェック中にgを再帰的に呼び出す場合にgに渡す位置情報は別に何でも良い（どうせ内側にはInfo
+があるか、型エラーが起こりえないものがあるかだから）のだがここではdummyとしてある。
+実行例は、=の型エラーのところだけ位置情報を30000に変更したら、きちんとそこのエラーで30000が表示された
+ことを示している。

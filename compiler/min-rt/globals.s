@@ -1,1 +1,0 @@
-SPARC/globals.s

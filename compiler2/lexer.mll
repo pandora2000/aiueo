@@ -2,13 +2,10 @@
 (* lexerが利用する変数、関数、型などの定義 *)
 open Parser
 open Type
-open Syntax
-
 }
 
 (* 正規表現の略記 *)
-let space = [' ' '\t' '\r']
-let nl = '\n'
+let space = [' ' '\t' '\n' '\r']
 let digit = ['0'-'9']
 let lower = ['a'-'z']
 let upper = ['A'-'Z']
@@ -16,8 +13,6 @@ let upper = ['A'-'Z']
 rule token = parse
 | space+
     { token lexbuf }
-| nl
-	{ incr line_num; char_num := (Lexing.lexeme_end lexbuf) + 1; token lexbuf }
 | "(*"
     { comment lexbuf; (* ネストしたコメントのためのトリック *)
       token lexbuf }
@@ -39,16 +34,14 @@ rule token = parse
     { MINUS }
 | '+' (* +.より後回しにしなくても良い? 最長一致? *)
     { PLUS }
+| "*"
+	    { AST }
 | "-."
     { MINUS_DOT }
 | "+."
-	{ PLUS_DOT }
-| "*"
-	    { AST }
+    { PLUS_DOT }
 | "*."
     { AST_DOT }
-| "/"
-    { SLASH }
 | "/."
     { SLASH_DOT }
 | '='
@@ -80,7 +73,7 @@ rule token = parse
 | '_'
     { IDENT(Id.gentmp Type.Unit) }
 | "create_array" (* [XX] ad hoc *)
-	{ ARRAY_CREATE }
+    { ARRAY_CREATE }
 | "float_of_int" (* [XX] ad hoc *)
 	    { FLOAT_OF_INT }
 | "floor" (* [XX] ad hoc *)
@@ -92,16 +85,15 @@ rule token = parse
 | ';'
     { SEMICOLON }
 | eof
-    { EOF}
+    { EOF }
 | lower (digit|lower|upper|'_')* (* 他の「予約語」より後でないといけない *)
-	{ IDENT(Lexing.lexeme lexbuf) }
+    { IDENT(Lexing.lexeme lexbuf) }
 | _
     { failwith
-	(Printf.sprintf "unknown token %s near lines %d, characters %d"
+	(Printf.sprintf "unknown token %s near characters %d-%d"
 	   (Lexing.lexeme lexbuf)
-	   !line_num
-	   ((Lexing.lexeme_start lexbuf) - !char_num + 2)
-	) }
+	   (Lexing.lexeme_start lexbuf)
+	   (Lexing.lexeme_end lexbuf)) }
 and comment = parse
 | "*)"
     { () }

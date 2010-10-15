@@ -1,0 +1,365 @@
+1760add | r5 | r4 | r5
+1761fstore | f2 | r5 | 0
+1762addi | r5 | r0 | 1
+1763add | r5 | r4 | r5
+1764fstore | f3 | r5 | 0
+1765addi | r5 | r0 | 2
+1766add | r4 | r4 | r5
+1767fstore | f4 | r4 | 0
+1768return |  |  | 
+8128addi | r4 | r0 | 1
+8129load | r5 | r2 | 0
+8130add | r4 | r5 | r4
+8131load | r6 | r2 | 5
+8132add | r4 | r6 | r4
+8133load | r4 | r4 | 0
+8134store | r6 | r2 | 5
+8135store | r5 | r2 | 0
+8136call | L_d_vec_2578 |  | 
+L_d_vec_2578:
+2159load | r4 | r4 | 0
+2160add | r4 | r0 | r4
+2161return |  |  | 
+8137fload | f2 | r2 | 8
+8138fstore | f2 | r2 | 8
+8139store | r4 | r2 | 12
+8140call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8141fload | f3 | r2 | 7
+8142fstore | f3 | r2 | 7
+8143fstore | f2 | r2 | 13
+8144fadd | f2 | f0 | f3
+8145call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8146fload | f3 | r2 | 6
+8147fstore | f3 | r2 | 6
+8148fstore | f2 | r2 | 14
+8149fadd | f2 | f0 | f3
+8150call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8151add | f4 | r0 | f2
+8152fload | f2 | r2 | 13
+8153fload | f3 | r2 | 14
+8154load | r4 | r2 | 12
+8155call | L_vecset_2471 |  | 
+L_vecset_2471:
+1759addi | r5 | r0 | 0
+1760add | r5 | r4 | r5
+1761fstore | f2 | r5 | 0
+1762addi | r5 | r0 | 1
+1763add | r5 | r4 | r5
+1764fstore | f3 | r5 | 0
+1765addi | r5 | r0 | 2
+1766add | r4 | r4 | r5
+1767fstore | f4 | r4 | 0
+1768return |  |  | 
+8156addi | r4 | r0 | 41
+8157load | r5 | r2 | 0
+8158add | r4 | r5 | r4
+8159load | r6 | r2 | 5
+8160add | r4 | r6 | r4
+8161load | r4 | r4 | 0
+8162store | r6 | r2 | 5
+8163store | r5 | r2 | 0
+8164call | L_d_vec_2578 |  | 
+L_d_vec_2578:
+2159load | r4 | r4 | 0
+2160add | r4 | r0 | r4
+2161return |  |  | 
+8165fload | f2 | r2 | 8
+8166fstore | f2 | r2 | 8
+8167store | r4 | r2 | 15
+8168call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8169fload | f3 | r2 | 6
+8170fstore | f3 | r2 | 6
+8171fstore | f2 | r2 | 16
+8172fadd | f2 | f0 | f3
+8173call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8174add | f3 | r0 | f2
+8175fload | f2 | r2 | 16
+8176fload | f4 | r2 | 7
+8177load | r4 | r2 | 15
+8178fstore | f4 | r2 | 7
+8179call | L_vecset_2471 |  | 
+L_vecset_2471:
+1759addi | r5 | r0 | 0
+1760add | r5 | r4 | r5
+1761fstore | f2 | r5 | 0
+1762addi | r5 | r0 | 1
+1763add | r5 | r4 | r5
+1764fstore | f3 | r5 | 0
+1765addi | r5 | r0 | 2
+1766add | r4 | r4 | r5
+1767fstore | f4 | r4 | 0
+1768return |  |  | 
+8180addi | r4 | r0 | 81
+8181load | r5 | r2 | 0
+8182add | r4 | r5 | r4
+8183load | r5 | r2 | 5
+8184add | r4 | r5 | r4
+8185load | r4 | r4 | 0
+8186call | L_d_vec_2578 |  | 
+L_d_vec_2578:
+2159load | r4 | r4 | 0
+2160add | r4 | r0 | r4
+2161return |  |  | 
+8187fload | f2 | r2 | 6
+8188store | r4 | r2 | 17
+8189call | L_fneg_2440 |  | 
+L_fneg_2440:
+1559fsub | f2 | f0 | f2
+1560return |  |  | 
+8190fload | f3 | r2 | 8
+8191fload | f4 | r2 | 7
+8192load | r4 | r2 | 17
+8193addi | r2 | r2 | 23
+8194jump | L_vecset_2471 |  | 
+L_vecset_2471:
+1759addi | r5 | r0 | 0
+1760add | r5 | r4 | r5
+1761fstore | f2 | r5 | 0
+1762addi | r5 | r0 | 1
+1763add | r5 | r4 | r5
+1764fstore | f3 | r5 | 0
+1765addi | r5 | r0 | 2
+1766add | r4 | r4 | r5
+1767fstore | f4 | r4 | 0
+1768return |  |  | 
+8262addi | r4 | r0 | 1
+8263load | r5 | r2 | 3
+8264sub | r4 | r5 | r4
+8265addi | r5 | r0 | 1
+8266load | r6 | r2 | 1
+8267store | r4 | r2 | 4
+8268add | r4 | r0 | r6
+8269call | L_add_mod5_2468 |  | 
+L_add_mod5_2468:
+1751add | r4 | r4 | r5
+1752addi | r5 | r0 | 5
+1753bgt | r5 | r4 | L_else_8351
+L_else_8351:
+1757add | r4 | r0 | r4
+1758return |  |  | 
+8270add | r5 | r0 | r4
+8271fload | f2 | r2 | 0
+8272load | r4 | r2 | 4
+8273load | r6 | r2 | 2
+8274addi | r2 | r2 | 5
+8275jump | L_calc_dirvecs_2906 |  | 
+L_calc_dirvecs_2906:
+8220subi | r2 | r2 | 5
+8221addi | r7 | r0 | 0
+8222bgt | r7 | r4 | L_else_8619
+L_else_8619:
+8276addi | r2 | r2 | 5
+8277return |  |  | 
+8292addi | r4 | r0 | 1
+8293load | r5 | r2 | 2
+8294sub | r4 | r5 | r4
+8295addi | r5 | r0 | 2
+8296load | r6 | r2 | 1
+8297store | r4 | r2 | 3
+8298add | r4 | r0 | r6
+8299call | L_add_mod5_2468 |  | 
+L_add_mod5_2468:
+1751add | r4 | r4 | r5
+1752addi | r5 | r0 | 5
+1753bgt | r5 | r4 | L_else_8351
+1754addi | r5 | r0 | 5
+1755sub | r4 | r4 | r5
+1756return |  |  | 
+8300add | r5 | r0 | r4
+8301addi | r4 | r0 | 4
+8302load | r6 | r2 | 0
+8303add | r6 | r6 | r4
+8304load | r4 | r2 | 3
+8305addi | r2 | r2 | 4
+8306jump | L_calc_dirvec_rows_2911 |  | 
+L_calc_dirvec_rows_2911:
+8278subi | r2 | r2 | 4
+8279addi | r7 | r0 | 0
+8280bgt | r7 | r4 | L_else_8620
+L_else_8620:
+8307addi | r2 | r2 | 4
+8308return |  |  | 
+8416addi | r4 | r0 | 4
+8417jump | L_init_vecset_constants_2925 |  | 
+L_init_vecset_constants_2925:
+8392subi | r2 | r2 | 1
+8393addi | r5 | r0 | 0
+8394bgt | r5 | r4 | L_else_8624
+8395addi | r5 | r0 | 4148
+8396add | r5 | r5 | r4
+8397load | r5 | r5 | 0
+8398addi | r6 | r0 | 119
+8399store | r4 | r2 | 0
+8400add | r4 | r0 | r5
+8401add | r5 | r0 | r6
+8402call | L_init_dirvec_constants_2922 |  | 
+L_init_dirvec_constants_2922:
+8375subi | r2 | r2 | 2
+8376addi | r6 | r0 | 0
+8377bgt | r6 | r5 | L_else_8623
+8378add | r6 | r4 | r5
+8379load | r6 | r6 | 0
+8380store | r4 | r2 | 0
+8381store | r5 | r2 | 1
+8382add | r4 | r0 | r6
+8383call | L_setup_dirvec_constants_2707 |  | 
+L_setup_dirvec_constants_2707:
+4826addi | r5 | r0 | 4144
+4827addi | r6 | r0 | 0
+4828add | r5 | r5 | r6
+4829load | r5 | r5 | 0
+4830addi | r6 | r0 | 1
+4831sub | r5 | r5 | r6
+4832jump | L_iter_setup_dirvec_constants_2704 |  | 
+L_iter_setup_dirvec_constants_2704:
+4772subi | r2 | r2 | 5
+4773addi | r6 | r0 | 0
+4774bgt | r6 | r5 | L_else_8446
+4775addi | r6 | r0 | 5042//ここでobjectsを参照
+4776add | r6 | r6 | r5
+4777load | r6 | r6 | 0
+4778store | r5 | r2 | 0
+4779store | r6 | r2 | 1//
+4780store | r4 | r2 | 2
+4781call | L_d_const_2580 |  | 
+L_d_const_2580:
+2162load | r4 | r4 | 1
+2163add | r4 | r0 | r4
+2164return |  |  | 
+4782load | r5 | r2 | 2
+4783store | r5 | r2 | 2
+4784store | r4 | r2 | 3
+4785add | r4 | r0 | r5
+4786call | L_d_vec_2578 |  | 
+L_d_vec_2578:
+2159load | r4 | r4 | 0
+2160add | r4 | r0 | r4
+2161return |  |  | 
+4787load | r5 | r2 | 1//
+4788store | r5 | r2 | 1//
+4789store | r4 | r2 | 4
+4790add | r4 | r0 | r5
+4791call | L_o_form_2519 |  | 
+L_o_form_2519:
+2040load | r4 | r4 | 1
+2041add | r4 | r0 | r4
+2042return |  |  | 
+4792addi | r5 | r0 | 1
+4793bne | r4 | r5 | L_else_8447
+L_else_8447:
+4802addi | r5 | r0 | 2
+4803bne | r4 | r5 | L_else_8449
+L_else_8449:
+4812load | r4 | r2 | 4
+4813load | r5 | r2 | 1//
+4814call | L_setup_second_table_2701 |  | 
+L_setup_second_table_2701:
+4560subi | r2 | r2 | 22
+4561addi | r6 | r0 | 5
+4562fload | f2 | r0 | 54
+4563store | r5 | r2 | 0//
+4564store | r4 | r2 | 1
+4565add | r4 | r0 | r6
+4566call | min_caml_create_float_array |  | 
+min_caml_create_float_array:
+1515subi | r2 | r2 | 1
+1516add | r5 | r0 | r3
+1517add | r3 | r3 | r4
+1518store | r5 | r2 | 0
+1519add | r1 | r0 | r5
+1520add | r5 | r0 | r4
+1521add | r4 | r0 | r1
+1522call | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+L_else_8328:
+1492fstore | f2 | r4 | 0
+1493subi | r5 | r5 | 1
+1494addi | r4 | r4 | 1
+1495jump | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+L_else_8328:
+1492fstore | f2 | r4 | 0
+1493subi | r5 | r5 | 1
+1494addi | r4 | r4 | 1
+1495jump | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+L_else_8328:
+1492fstore | f2 | r4 | 0
+1493subi | r5 | r5 | 1
+1494addi | r4 | r4 | 1
+1495jump | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+L_else_8328:
+1492fstore | f2 | r4 | 0
+1493subi | r5 | r5 | 1
+1494addi | r4 | r4 | 1
+1495jump | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+L_else_8328:
+1492fstore | f2 | r4 | 0
+1493subi | r5 | r5 | 1
+1494addi | r4 | r4 | 1
+1495jump | min_caml_init_float_array |  | 
+min_caml_init_float_array:
+1490bne | r5 | r0 | L_else_8328
+1491return |  |  | 
+1523load | r4 | r2 | 0
+1524add | r4 | r0 | r4
+1525addi | r2 | r2 | 1
+1526return |  |  | 
+4567addi | r5 | r0 | 0
+4568load | r6 | r2 | 1
+4569add | r5 | r6 | r5
+4570fload | f2 | r5 | 0
+4571addi | r5 | r0 | 1
+4572add | r5 | r6 | r5
+4573fload | f3 | r5 | 0
+4574addi | r5 | r0 | 2
+4575add | r5 | r6 | r5
+4576fload | f4 | r5 | 0
+4577load | r5 | r2 | 0//
+4578store | r4 | r2 | 2
+4579store | r5 | r2 | 0
+4580store | r6 | r2 | 1
+4581add | r4 | r0 | r5//
+4582call | L_quadratic_2632 |  | 
+L_quadratic_2632:
+3267subi | r2 | r2 | 15
+3268fstore | f2 | r2 | 0
+3269fstore | f4 | r2 | 1
+3270fstore | f3 | r2 | 2
+3271store | r4 | r2 | 3//
+3272call | L_fsqr_2442 |  | 
+L_fsqr_2442:
+1561fmul | f2 | f2 | f2
+1562return |  |  | 
+3273load | r4 | r2 | 3//
+3274store | r4 | r2 | 3
+3275fstore | f2 | r2 | 4
+3276call | L_o_param_a_2527 |  | 
+L_o_param_a_2527:
+2052load | r4 | r4 | 4
+2053addi | r5 | r0 | 0
+2054add | r4 | r4 | r5
+2055fload | f2 | r4 | 0
+Segmentation fault

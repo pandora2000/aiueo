@@ -1,0 +1,260 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <ctype.h>
+
+#define ARG_MAX_COUNT 3
+#define NAME_SIZE 40
+
+#define INST_MAX_COUNT 20000
+
+#define LABEL_MAX_COUNT 10000
+
+#define FPT_MAX_COUNT 100
+
+#define  ACCESS_GOOD 0
+#define  ACCESS_BAD -1
+
+typedef struct
+{
+  char name[NAME_SIZE];
+  char args[ARG_MAX_COUNT][NAME_SIZE];
+} instruction;
+
+typedef struct
+{
+  int index;
+  char name[NAME_SIZE];
+} label;
+
+typedef struct
+{
+  int inst_count;
+  int label_count;
+  instruction insts[INST_MAX_COUNT];
+  label labels[LABEL_MAX_COUNT];
+} program;
+
+
+typedef struct
+{
+  int name;
+  int args[ARG_MAX_COUNT];
+} instruction_fast;
+
+typedef struct
+{
+  int inst_count;
+  instruction_fast insts[INST_MAX_COUNT];
+} program_fast;
+
+typedef struct
+{
+  float val;
+  char label[NAME_SIZE];
+} fpelem;
+
+typedef union
+{
+  float f;
+  int i;
+} conv;
+
+program prog;
+program_fast fprog;
+fpelem fpt[FPT_MAX_COUNT];
+
+bool is_separator(char c)
+{
+  return c == ' ' || c == '\r' || c == '\t';
+}
+
+bool is_name_letter(char c)
+{
+  return isalpha(c) || c == '.' || isdigit(c) || c == '-';
+}
+
+void parse_fpt(FILE *fp)
+{
+  int c, state = 0, fpc = 0, i = 0;
+  char d, name[NAME_SIZE];
+     
+  while(true)
+    {
+      c = fgetc(fp);
+      if(c == EOF)
+	{
+	  fprintf(stderr, "EOF at parse_fpt\n");
+	  exit(0);
+	}
+      d = (char)c;
+      if(state == 0)
+	{
+	  if(is_name_letter(d))
+	    {
+	      state = 1;
+	      name[i++] = d;
+	    }
+	  else
+	    {
+	      perror("aa");
+	    }
+	}
+      else if(state == 1)
+	{
+	  if(is_name_letter(d))
+	    {
+	      name[i++] = d;
+	    }
+	  else if(d == ':')
+	    {
+	      name[i] = '\0';
+	      strcpy(fpt[fpc].label, name);
+	      i = 0;
+	      state = 2;
+	    }
+	  else if(is_separator(d))
+	    {
+	      name[i] = '\0';
+	      if(strcmp(name, ".section") == 0)
+		{
+		  state = 5;
+		}
+	    }
+	  else
+	    {
+	      perror("ab");
+	    }
+	}
+      else if(state == 2)
+	{
+	  if(is_separator(d) || d == '!')
+	    {
+	      continue;
+	    }
+	  else if(is_name_letter(d))
+	    {
+	      name[i++] = d;
+	    }
+	  else if(d == '\n')
+	    {
+	      name[i] = '\0';
+	      fpt[fpc++].val = atof(name);
+	      i = 0;
+	      state = 3;
+	    }
+	  else
+	    {
+	      perror("ac");
+	    }
+	}
+      else if(state == 3)
+	{
+	  if(d == '\n')
+	    {
+	      state = 4;
+	    }
+	  else
+	    {
+	      continue;
+	    }
+	}
+      else if(state == 4)
+	{
+	  if(d == '\n')
+	    {
+	      state = 0;
+	    }
+	  else
+	    {
+	      continue;
+	    }
+	}
+      else if(state = 5)
+	{
+	  if(d == '\n')
+	    {
+	      break;
+	    }
+	  else
+	    {
+	      continue;
+	    }
+	}
+    }
+
+  for(i = 0; i < fpc; ++i)
+    {
+      printf("%f\n", fpt[i].val);
+    }
+}
+
+void parse_prog(FILE *fp)
+{
+  int c, state = 0, i = 0, index = 0;
+  char d, name[NAME_SIZE];
+     
+  while(true)
+    {
+      c = fgetc(fp);
+      if(c == EOF)
+	{
+	  break;
+	}
+      d = (char)c;
+      if(state == 0)
+	{
+	  if(is_separator(d))
+	    {
+	      continue;
+	    }
+	  else if(is_name_letter(d))
+	    {
+	      name[i++] = d;
+	      state = 1;
+	    }
+	  else
+	    {
+	      perror("ba");
+	    }
+	}
+      else if(state == 1)
+	{
+	  if(is_name_letter(d))
+	    {
+	      name[i++] = d;
+	    }
+	  else if(d == ':')
+	    {
+	      name[i] = '\0';
+	      strcpy(prog.labels[label_count].name, name);
+	      prog.labels[label_count++].index = index;
+	      i = 0;
+	      state = 2;
+	    }
+	  else if(isspace(d))
+	    {
+	      
+	    }
+	}
+    }
+}
+
+void parse(FILE *fp)
+{
+  parse_fpt(fp);
+  parse_prog(fp);
+}
+
+int main(int argc, char *argv[])
+{
+  FILE *fp;
+
+  fp = fopen(argv[1], "r");
+  parse(fp);
+
+  return 0;
+}

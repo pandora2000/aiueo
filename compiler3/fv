@@ -1,0 +1,14 @@
+globals.mlにあるのだけけす
+
+free variable sqrt assumed as external
+free variable read_float assumed as external
+free variable cos assumed as external
+free variable sin assumed as external
+free variable read_int assumed as external
+free variable abs_float assumed as external
+free variable floor assumed as external
+free variable atan assumed as external
+free variable int_of_float assumed as external
+free variable print_byte assumed as external
+free variable print_int assumed as external
+free variable float_of_int assumed as external

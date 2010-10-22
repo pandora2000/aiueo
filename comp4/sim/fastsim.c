@@ -306,9 +306,7 @@ int new_label_trans(char *label, program * program)
   }
   /*label */
   /*特殊ラベル*/
-  if (strcmp(label, "min_caml_print_float") == 0) {
-    return -800;
-  }
+
   
 
   for (i = 0; i < program->label_count; i++) {
@@ -581,7 +579,7 @@ program2 *parse_all2(program * program)
             PARSE_INST_12("rdi", RDI)
             PARSE_INST_13("rdf", RDF)
             PARSE_INST_12("ptc", PTC)
-      
+            PARSE_INST_13("ptf", PTF)      
     else {
       printf("Error : this is iligal inst!: %s\n", iname);
       exit(1);
@@ -852,51 +850,11 @@ int do_assemble2(program *program, program2 * program2)
 
     /*JUMP命令 */
     else if (iname == 39) {
-     if (ist.name[1] == -700) {
-	print_int();
-	nextpc = pop(&call_stack) - 1;
-      } else if (ist.name[1] == -800) {
-	print_float();
-	nextpc = pop(&call_stack) - 1;
-      }
-      else
-	{
-      
 	  nextpc = ist.name[1] - 1;
-      
-	}
-      /*
-	if(strncmp(program->insts[pc].name[1] , "L_main", 6) == 0)
-	{
-	print_memory();
-	}
-      */
     }
-
-
     else if (iname == 40) {
-      
       nextpc = ist.name[1] - 1;
-      /*特殊ラベル*/
-      if (ist.name[1] == -300) {
-	regist[4] = read_int();
-	//printf("read_int: %d\n", regist[4]);
-	nextpc = pc;
-      } else if (ist.name[1] == -400) {
-	freg[2] = read_float();
-	//printf("read_float: %f\n", freg[2]);
-	nextpc = pc;
-      } else if (ist.name[1] == -700) {
-	print_int();
-	nextpc = pc;
-      } else if (ist.name[1] == -800) {
-	print_float();
-	nextpc = pc;
-      } else {
-	push(&call_stack, (pc + 1));
-      }
-
-
+      push(&call_stack, (pc + 1));
     }
     else if (iname == RDI) {
       regist[ist.name[1]] = read_int();
@@ -909,6 +867,9 @@ int do_assemble2(program *program, program2 * program2)
     }
     else if (iname == PTC) {
       fprintf(out_fp,"%c",regist[ist.name[1]]);
+    }
+    else if (iname == PTF) {
+      fprintf(out_fp,"%d",((int)freg[ist.name[1]]));
     }
     else {//if (iname == 41) {
       nextpc = pop(&call_stack) - 1;

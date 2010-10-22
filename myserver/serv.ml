@@ -1,0 +1,177 @@
+(* compile with `ocamlc [opts...] unix.cma serv.ml' *)
+
+(*
+  第一引数からsldファイルを読み込み、rs232cから0xaaを受け取ったらバイナリを送信、
+  その後rs232cからの出力データを読み込み、結果を第二引数に出す。
+*)
+
+
+open Unix
+open Printf
+
+type parity_type = ODD | EVEN | NOPARITY
+type flowctl_type = XON | NOFLOW
+let set_params fd baud bytelen parity stopbits flowctl=
+  let attr=tcgetattr fd in
+    begin
+      attr.c_obaud<-baud;
+      attr.c_ibaud<-baud;
+      attr.c_csize<-bytelen;
+      attr.c_ignbrk<-true;
+      attr.c_brkint<-false;
+      attr.c_parmrk<-false;
+      attr.c_istrip<-false;
+      attr.c_inlcr<-false;
+      attr.c_igncr<-false;
+      attr.c_icrnl<-false;
+      attr.c_opost<-false;
+      attr.c_cread<-true;
+      attr.c_hupcl<-false;
+      attr.c_clocal<-true;
+      attr.c_isig<-false;
+      attr.c_icanon<-false;
+      attr.c_noflsh<-false;
+      attr.c_echo<-false;
+      attr.c_echonl<-false;
+      begin
+	match parity with
+	  | ODD -> begin
+	      attr.c_parodd<-true;
+	      attr.c_parenb<-true;
+	      attr.c_inpck<-true
+	    end
+	  | EVEN -> begin
+	      attr.c_parodd<-false;
+	      attr.c_parenb<-true;
+	      attr.c_inpck<-true
+	    end
+	  | NOPARITY -> begin
+	      attr.c_parenb<-false;
+	      attr.c_inpck<-false
+	    end
+      end;
+      attr.c_cstopb<-stopbits;
+      begin
+	match flowctl with
+	  | XON -> begin
+	      attr.c_ixon<-true;
+	      attr.c_ixoff<-true
+	    end
+	  | NOFLOW -> begin
+	      attr.c_ixon<-false;
+	      attr.c_ixoff<-false
+	    end
+      end;
+      tcsetattr fd TCSADRAIN attr
+    end
+
+(*16進数との変換*)
+let hex_of_byte num =
+  let digit0 = num land 0x0f in
+  let digit1 = (num lsr 4) land 0x0f in
+  let digit0_chr = String.get "0123456789ABCDEF" digit0 in
+  let digit1_chr = String.get "0123456789ABCDEF" digit1 in
+  let lst_chr = [digit1_chr; digit0_chr] in
+    String.concat "" (List.map (fun ch -> String.make 1 ch) lst_chr)
+let hexl_of_Int32 num =
+  List.map Int32.to_int [Int32.shift_right_logical num 24;
+			 Int32.logand (Int32.shift_right_logical num 16) (Int32.of_int 0xff);
+			 Int32.logand (Int32.shift_right_logical num 8) (Int32.of_int 0xff);
+			 Int32.logand num (Int32.of_int 0xff)]
+
+(*出力(いちいちflush)*)
+let print_char c = output_char Pervasives.stdout c; flush Pervasives.stdout
+let print_int n = output_string Pervasives.stdout (sprintf "%x" n); flush Pervasives.stdout
+let print_string s = output_string Pervasives.stdout s; flush Pervasives.stdout
+
+(*読み込み系*)
+let data = ref []
+exception IllegalInput
+let is_unget = ref false
+let unget_data = ref ""
+let is_space x =
+  (*  print_char x;
+      print_int (int_of_char x);*)
+  let y = int_of_char x in
+  let z = y - 0x30 in
+    (z < 0 || z > 9) && y <> 0x2e && y <> 0x2d
+let unget_one n = is_unget := true; unget_data := Int32.to_string n
+let read_one cnl =
+  if !is_unget then (is_unget := false; !unget_data)
+  else
+    let ret = ref "" in
+    let flag = ref true in
+    let c = ref '0' in
+      try
+	while true do
+	  if !flag then
+	    try
+	      c := input_char cnl;
+	      (*		print_char !c;*)
+	      if not (is_space !c) then
+		(ret := !ret ^ (String.make 1 !c); flag := false);
+	    with End_of_file -> raise IllegalInput
+	  else
+	    (c := input_char cnl;
+	     if is_space !c then raise End_of_file
+	     else ret := !ret ^ (String.make 1 !c))
+	done; !ret
+      with End_of_file -> !ret
+let get_int cnl = Int32.of_string (read_one cnl)
+let read_int cnl = data := !data @ [Int32.of_string (read_one cnl)]
+let read_int_force n = data := !data @ [Int32.of_int n]
+let read_float cnl = data := !data @ [Int32.bits_of_float (float_of_string (read_one cnl))]
+let read_vec3 cnl = read_float cnl; read_float cnl; read_float cnl
+let read_sld_env cnl =
+  read_vec3 cnl; read_float cnl; read_float cnl; read_int cnl;
+  read_float cnl; read_float cnl; read_float cnl
+let read_sld_list f cnl =
+  let n = ref Int32.zero in
+    try
+      while true do
+	n := get_int cnl;
+	if (Int32.to_int !n) = -1 then raise Exit else (unget_one !n; f cnl)
+      done
+    with Exit -> read_int_force (- 1)
+let read_sld_object cnl =
+  read_int cnl; read_int cnl; read_int cnl; read_int cnl;
+  read_vec3 cnl; read_vec3 cnl;
+  read_float cnl; read_float cnl; read_float cnl;
+  read_vec3 cnl
+let read_sld_id cnl = read_int cnl
+let read_sld_and_net cnl = read_sld_list read_sld_id cnl
+let read_sld_or_net cnl = read_int cnl; read_sld_list read_sld_id cnl
+let read_sld_objects cnl = read_sld_list read_sld_object cnl
+let read_sld_and_nets cnl = read_sld_list read_sld_and_net cnl
+let read_sld_or_nets cnl = read_sld_list read_sld_or_net cnl
+let read_sld cnl =
+  read_sld_env cnl;
+  read_sld_objects cnl;
+  read_sld_and_nets cnl;
+  read_sld_or_nets cnl
+
+(*送信系*)
+let send_byte cnl x = output_byte cnl x(*; print_string (sprintf "%02x" x)*)
+let send_one cnl x = List.iter (fun y -> send_byte cnl y(*; print_char '\n'*)) (hexl_of_Int32 x)
+let send_sld_data cnl = List.iter (fun x -> send_one cnl x) !data
+
+let _ =
+  let iuartport = openfile "/dev/ttyUSB0" [O_RDONLY] 0 in
+  let ouartport = openfile "/dev/ttyUSB0" [O_WRONLY] 0 in
+  let _ = set_params iuartport 9600 8 NOPARITY 1 NOFLOW in
+  let _ = set_params ouartport 9600 8 NOPARITY 1 NOFLOW in
+  let icnl = in_channel_of_descr iuartport in
+    (*      let icnl = in_channel_of_descr stdin in*)
+  let ocnl = out_channel_of_descr ouartport in
+    (*  let ocnl = out_channel_of_descr stdout in*)
+  let sldcnl = open_in Sys.argv.(1) in
+  let ofilecnl = open_out Sys.argv.(2) in
+    read_sld sldcnl;
+    close_in sldcnl;
+    try
+      while (int_of_char (input_char icnl)) <> 0xaa do () done;
+      send_sld_data ocnl;
+      while true do output_char ofilecnl (input_char icnl) done
+    with _ ->
+      close_in icnl;
+      close_out ocnl

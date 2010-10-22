@@ -14,10 +14,10 @@ bytecode: min-rt_b
 .SUFFIXES: .ml .mli .cmo .cmi .cmx
 
 .ml.cmo:
-	$(OCAMLC) -g -c -nopervasives -pp ./preprocess.sh $<
+	$(OCAMLC) -S -g -c -nopervasives -pp ./preprocess.sh $<
 
 .ml.cmx:
-	$(OCAMLOPT) -c $(OCOPT) -nopervasives -pp ./preprocess.sh $<
+	$(OCAMLOPT) -S -c $(OCOPT) -nopervasives -pp ./preprocess.sh $<
 
 .mli.cmi:
 	$(OCAMLC) -g -c -nopervasives $<

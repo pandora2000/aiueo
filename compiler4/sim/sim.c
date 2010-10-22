@@ -5,619 +5,522 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
+#include "ssim.h"
 
-#define ARG_MAX_COUNT 3
-#define NAME_SIZE 40
+const int rareg = 20;//return address
+const int greg1 = 2;
+const int greg2 = 3;
+const int fgreg1 = 0;
+const int fgreg2 = 1;
+const int spreg = 0;
+const int hpreg = 1;
+const int sp_offset = 2048;
+const int hp_offset = 4096;
 
-#define REG_MAX_COUNT 100
+bool cmpne;
+bool cmpg;
+bool cmpl;
 
-#define INST_MAX_COUNT 20000
+FILE *out_fp;
 
-#define LABEL_MAX_COUNT 10000
-
-#define FPT_MAX_COUNT 100
-
-#define  ACCESS_GOOD 0
-#define  ACCESS_BAD -1
-
-typedef struct
+/*stdinからfloatを読む*/
+float read_float()
 {
-  int arg_count;
-  char name[NAME_SIZE];
-  char args[ARG_MAX_COUNT][NAME_SIZE];
-} instruction;
+  char s[100];
+  int a, i;
+  bool f;
 
-typedef struct
-{
-  int index;
-  char name[NAME_SIZE];
-} label;
-
-typedef struct
-{
-  int inst_count;
-  int label_count;
-  instruction insts[INST_MAX_COUNT];
-  label labels[LABEL_MAX_COUNT];
-} program;
-
-
-typedef struct
-{
-  int name;
-  int args[ARG_MAX_COUNT];
-} instruction_fast;
-
-typedef struct
-{
-  int inst_count;
-  instruction_fast insts[INST_MAX_COUNT];
-} program_fast;
-
-typedef struct
-{
-  float val;
-  char label[NAME_SIZE];
-} fptelem;
-
-typedef struct
-{
-  char name[NAME_SIZE];
-  int index;
-} t_extval;
-
-typedef union
-{
-  float f;
-  int i;
-} conv;
-
-program prog;
-program_fast fprog;
-fptelem fpt[FPT_MAX_COUNT];
-int fpt_count = 0;
-int extval_offset = 0;
-int fpt_offset = 1024;
-t_extval extval[] =
-  {
-    { "n_objects", 0 },
-    { "objects", 1 },
-    { "screen", 61 },
-    { "viewpoint", 64 },
-    { "light", 67 },
-    { "beam", 70 },
-    { "and_net", 71 },
-    { "or_net", 121 },
-    { "solver_dist", 122 },
-    { "intsec_rectside", 123 },
-    { "tmin", 124 },
-    { "intersection_point", 125 },
-    { "intersected_object_id", 128 },
-    { "nvector", 129 },
-    { "texture_color", 132 },
-    { "diffuse_ray", 135 },
-    { "rgb", 138 },
-    { "image_size", 141 },
-    { "image_center", 143 },
-    { "scan_pitch", 145 },
-    { "startp", 146 },
-    { "startp_fast", 149 },
-    { "screenx_dir", 152 },
-    { "screeny_dir", 155 },
-    { "screenz_dir", 158 },
-    { "ptrace_dirvec", 161 },
-    { "dirvecs", 164 },
-    { "light_dirvec", 169 },
-    { "reflections", 171 },
-    { "n_reflections", 351 },
-    { "", 0 },
-  };
-char extfunc[][NAME_SIZE] =
-  {
-    "imul",
-    "fiszero",
-    "fispos",
-    "fneg",
-    "fsqr",
-    "sqrt",
-    "read_float",
-    "cos",
-    "sin",
-    "read_int",
-    "fisneg",
-    "fabs",
-    "fless",
-    "fhalf",
-    "floor",
-    "atan",
-    "print_int",
-    "print_float",
-    "float_of_int",
-    "create_array",
-    "create_float_array",
-    "",
-  };
-char reg_names[][NAME_SIZE] =
-  {
-    "%i0", "%i1", "%i2", "%i3", "%i4", "%i5",
-    "%l0", "%l1", "%l2", "%l3", "%l4", "%l5", "%l6", "%l7", 
-    "%o0", "%o1", "%o2", "%o3", "%o4", "%o5", "%o7", "",
-  };
-char freg_names[][NAME_SIZE] =
-  {
-    "%f0", "%f1", "%f2", "%f3", "%f4", "%f5", "%f6", "%f7", "%f8", "%f9", 
-    "%f10", "%f11", "%f12", "%f13", "%f14", "%f15", "%f16", "%f17", "%f18", "%f19", 
-    "%f20", "%f21", "%f22", "%f23", "%f24", "%f25", "%f26", "%f27", "%f28", "%f29", 
-    "%f30", "%f31", "",
-  };
-int extval_count;
-int extfunc_count;
-int reg_count;
-int freg_count;
-int regs[REG_MAX_COUNT];
-float fregs[REG_MAX_COUNT];
-char inst_names[][NAME_SIZE] =
-  {
-    "nop", "add", "sub", "cmp", 
-    "bne", "ld", "ldd", "st", 
-    "set", "retl", "b", "mov", 
-    "std", "call", "bl", "fmovs", 
-    "faddd", "fmuld", "fdivd", "fsubd", 
-    "sll", "bg", "fcmpd", "fbg", 
-    "", "", "", "",
-  };
-int inst_kind_count;
-
-void error(char *str)
-{
-  fprintf(stderr, "%s\n", str);
-  exit(0);
-}
-
-bool is_separator(char c)
-{
-  return c == ' ' || c == '\r' || c == '\t';
-}
-
-bool is_name_letter(char c)
-{
-  return isalpha(c) || c == '.' || isdigit(c) || c == '-' || c == '_' || c == '%';
-}
-
-int regtoi(char *reg)
-{
-  int i;
-  
-  for(i = 0; i < reg_count; ++i)
+  for (i = 0, f = false; true; )
     {
-      if(strcmp(reg, reg_names[i]) == 0)
-	{
-	  return i;
-	}
-    }
-  for(i = 0; i < freg_count; ++i)
-    {
-      if(strcmp(reg, freg_names[i]) == 0)
-	{
-	  return i;
-	}
-    }
-  error("ca");
-  return -1;
-}
-
-int labeltoi(char *name)
-{
-  int i;
-
-  for(i = 0; i < prog.label_count; ++i)
-    {
-      if(strcmp(name, prog.labels[i].name) == 0)
-	{
-	  return prog.labels[i].index;
-	}
-    }
-  return -1;
-}
-
-int insttoi(char *name)
-{
-  int i;
-
-  for(i = 0; i < inst_kind_count; ++i)
-    {
-      if(strcmp(name, inst_names[i]) == 0)
-	{
-	  return i;
-	}
-    }
-  return -1;
-}
-
-int extvaltoi(char *name)
-{
-  int i;
-
-  for(i = 0; i < extval_count; ++i)
-    {
-      if(strcmp(extval[i].name, name) == 0)
-	{
-	  return i + extval_offset;
-	}
-    }
-  return -1;
-}
-
-int extfunctoi(char *name)
-{
-  int i;
-
-  for(i = 0; i < extfunc_count; ++i)
-    {
-      if(strcmp(extfunc[i], name) == 0)
-	{
-	  return i;
-	}
-    }
-  return -1;
-}
-
-int fptlabeltoi(char *name)
-{
-  int i;
-
-  for(i = 0; i < fpt_count; ++i)
-    {
-      if(strcmp(name, fpt[i].label) == 0)
-	{
-	  return i + fpt_offset;
-	}
-    }
-  return -1;
-}
-
-void parse_fpt(FILE *fp)
-{
-  int c, state = 0, i = 0;
-  char d, name[NAME_SIZE];
-     
-  while(true)
-    {
-      c = fgetc(fp);
-      if(c == EOF)
-	{
-	  error("EOF at parse_fpt");
-	}
-      d = (char)c;
-      if(state == 0)
-	{
-	  if(is_name_letter(d))
-	    {
-	      state = 1;
-	      name[i++] = d;
-	    }
-	  else
-	    {
-	      error("aa");
-	    }
-	}
-      else if(state == 1)
-	{
-	  if(is_name_letter(d))
-	    {
-	      name[i++] = d;
-	    }
-	  else if(d == ':')
-	    {
-	      name[i] = '\0';
-	      strcpy(fpt[fpt_count].label, name);
-	      i = 0;
-	      state = 2;
-	    }
-	  else if(is_separator(d))
-	    {
-	      name[i] = '\0';
-	      if(strcmp(name, ".section") == 0)
-		{
-		  state = 5;
-		}
-	    }
-	  else
-	    {
-	      error("ab");
-	    }
-	}
-      else if(state == 2)
-	{
-	  if(is_separator(d) || d == '!')
-	    {
-	      continue;
-	    }
-	  else if(is_name_letter(d))
-	    {
-	      name[i++] = d;
-	    }
-	  else if(d == '\n')
-	    {
-	      name[i] = '\0';
-	      fpt[fpt_count++].val = atof(name);
-	      i = 0;
-	      state = 3;
-	    }
-	  else
-	    {
-	      error("ac");
-	    }
-	}
-      else if(state == 3)
-	{
-	  if(d == '\n')
-	    {
-	      state = 4;
-	    }
-	  else
-	    {
-	      continue;
-	    }
-	}
-      else if(state == 4)
-	{
-	  if(d == '\n')
-	    {
-	      state = 0;
-	    }
-	  else
-	    {
-	      continue;
-	    }
-	}
-      else if(state == 5)
-	{
-	  if(d == '\n')
-	    {
-	      break;
-	    }
-	  else
-	    {
-	      continue;
-	    }
-	}
-    }
-
-  /*
-  for(i = 0; i < fpt_count; ++i)
-    {
-      printf("%f\n", fpt[i].val);
+      a = fgetc(stdin);
+      if (f) {
+	if (a == EOF || isspace(a))
+	  {
+	    s[i] = '\0';
+	    return atof(s);
+	  }
+	else
+	  {
+	    s[i++] = (char) a;
+	  }
       }
-  */
-}
-
-void parse_prog(FILE *fp)
-{
-  instruction *ist;
-  instruction_fast *fist;
-  int c, state = 0, i = 0, j, k;
-  char d, name[NAME_SIZE], *p;
-
-  prog.inst_count = 0;
-  prog.label_count = 0;
-  while(true)
-    {
-      c = fgetc(fp);
-      if(c == EOF)
+      else
 	{
-	  break;
-	}
-      d = (char)c;
-      if(state == 0)
-	{
-	  if(is_separator(d))
+	  if (!(a == EOF || isspace(a)))
 	    {
-	      continue;
-	    }
-	  else if(is_name_letter(d))
-	    {
-	      name[i++] = d;
-	      state = 1;
-	    }
-	  else
-	    {
-	      error("ba");
-	    }
-	}
-      else if(state == 1)
-	{
-	  if(is_name_letter(d))
-	    {
-	      name[i++] = d;
-	    }
-	  else if(d == ':')
-	    {
-	      name[i] = '\0';
-	      strcpy(prog.labels[prog.label_count].name, name);
-	      prog.labels[prog.label_count++].index = prog.inst_count;
-	      i = 0;
-	      fgetc(fp);
-	      state = 0;
-	    }
-	  else if(d == '\n')
-	    {
-	      name[i] = '\0';
-	      ist = &prog.insts[prog.inst_count++];
-	      strcpy(ist->name, name);
-	      ist->arg_count = 0;
-	      i = 0;
-	      state = 0;
-	    }
-	  else if(is_separator(d))
-	    {
-	      name[i] = '\0';
-	      ist = &prog.insts[prog.inst_count];
-	      strcpy(ist->name, name);
-	      ist->arg_count = 0;
-	      i = 0;
-	      state = 2;
-	    }
-	  else
-	    {
-	      error("bb");
-	    }
-	}
-      else if(state == 2 || state == 3 || state == 4)
-	{
-	  if(is_name_letter(d))
-	    {
-	      name[i++] = d;
-	    }
-	  else if(d == ',')
-	    {
-	      name[i] = '\0';
-	      i = 0;
-	      ist = &prog.insts[prog.inst_count];
-	      strcpy(ist->args[ist->arg_count++], name);
-	      fgetc(fp);
-	      ++state;
-	    }
-	  else if(d == '\n')
-	    {
-	      name[i] = '\0';
-	      i = 0;
-	      ist = &prog.insts[prog.inst_count++];
-	      strcpy(ist->args[ist->arg_count++], name);
-	      state = 0;
-	    }
-	  else
-	    {
-	      error("bc");
+	      f = true;
+	      s[i++] = (char) a;
 	    }
 	}
     }
+}
 
-  for(i = 0; i < prog.inst_count; ++i)
+/*stdinからintを読む*/
+int read_int()
+{
+  char s[100];
+  int a, i;
+  bool f;
+
+  for (i = 0, f = false; true; )
     {
-      ist = &prog.insts[i];
-      fist = &fprog.insts[i];
-      if((k = insttoi(ist->name)) != -1)
+      a = fgetc(stdin);
+      if (f)
 	{
-	  fist->name = k;
+	  if (a == EOF || isspace(a))
+	    {
+	      s[i] = '\0';
+	      return atoi(s);
+	    }
+	  else
+	    {
+	      s[i++] = (char) a;
+	    }
 	}
       else
 	{
-	  printf("%s\n", ist->name);
-	  error("da");
+	  if (!(a == EOF || isspace(a)))
+	    {
+	      f = true;
+	      s[i++] = (char) a;
+	    }
 	}
-      for(j = 0; j < ist->arg_count; ++j)
+    }
+}
+
+void print_int(int n)
+{
+  static int counter = 0;
+
+  if(counter == 0)
+    {
+      fprintf(out_fp, "P3\n%d ", n);
+    }
+  else if((counter % 3) == 2)
+    {
+      fprintf(out_fp, "%d\n", n);
+    }
+  else
+    {
+      fprintf(out_fp, "%d ", n);
+    }
+  ++counter;
+}
+
+void simulate_extfunc(int n)
+{
+  int i, a, b, c;
+  float d;
+  
+  if(n == 0)
+    {
+      //imul
+      regs[greg1] = regs[greg1] * regs[greg2];
+    }
+  else if(n == 1)
+    {
+      //fiszero
+      regs[greg1] = fregs[fgreg1] == 0.0 ? 1 : 0;
+    }
+  else if(n == 2)
+    {
+      //fispos
+      regs[greg1] = fregs[fgreg1] > 0.0 ? 1 : 0;
+    }
+  else if(n == 3)
+    {
+      //fneg
+      fregs[fgreg1] = - fregs[fgreg1];
+    }
+  else if(n == 4)
+    {
+      //fsqr
+      fregs[fgreg1] = fregs[fgreg1] * fregs[fgreg1];
+    }
+  else if(n == 5)
+    {
+      //sqrt
+      fregs[fgreg1] = sqrtf(fregs[fgreg1]);
+    }
+  else if(n == 6)
+    {
+      //read_float
+      d = read_float();
+      printf("read_float: %f\n", d);
+      fregs[fgreg1] = d;
+    }
+  else if(n == 7)
+    {
+      //cos
+      fregs[fgreg1] = cosf(fregs[fgreg1]);
+    }
+  else if(n == 8)
+    {
+      //sin
+      fregs[fgreg1] = sinf(fregs[fgreg1]);
+    }
+  else if(n == 9)
+    {
+      //read_int
+      a = read_int();
+      printf("read_int: %d\n", a);
+      regs[greg1] = a;
+    }
+  else if(n == 10)
+    {
+      //fisneg
+      regs[greg1] = fregs[fgreg1] < 0.0 ? 1 : 0;
+    }
+  else if(n == 11)
+    {
+      //fabs
+      fregs[fgreg1] = fregs[fgreg1] < 0.0 ? - fregs[fgreg1] : fregs[fgreg1];
+    }
+  else if(n == 12)
+    {
+      //fless
+      regs[greg1] = fregs[fgreg1] < fregs[fgreg2] ? 1 : 0;
+    }
+  else if(n == 13)
+    {
+      //fhalf
+      fregs[fgreg1] = fregs[fgreg1] * 0.5;
+    }
+  else if(n == 14)
+    {
+      //floor
+      fregs[fgreg1] = floorf(fregs[fgreg1]);
+    }
+  else if(n == 15)
+    {
+      //atan
+      fregs[fgreg1] = atanf(fregs[fgreg1]);
+    }
+  else if(n == 16)
+    {
+      //print_int
+      print_int(regs[greg1]);
+    }
+  else if(n == 17)
+    {
+      //print_float
+      print_int((int)fregs[fgreg1]);
+    }
+  else if(n == 18)
+    {
+      //float_of_int
+      fregs[fgreg1] = (float)regs[greg1];
+    }
+  else if(n == 19)
+    {
+      //create_array
+      a = regs[greg1];
+      b = regs[hpreg];
+      regs[greg1] = b;
+      regs[hpreg] += a << 2;
+      c = regs[greg2];
+      for(i = 0; i < a; ++i)
 	{
-	  p = ist->args[j];
-	  d = *p;
-	  if(isdigit(d) || d == '-')
-	    {
-	      fist->args[j] = atoi(p);
-	    }
-	  else if(d == '%')
-	    {
-	      fist->args[j] = regtoi(p);
-	    }
-	  else if(is_name_letter(d))
-	    {
-	      if((k = extvaltoi(p)) != -1)
-		{
-		  fist->args[j] = k * 4;
-		}
-	      else if((k = extfunctoi(p)) != -1)
-		{
-		  fist->args[j] = -1 - k;
-		}
-	      else if((k = labeltoi(p)) != -1)
-		{
-		  fist->args[j] = k;
-		}
-	      else if((k = fptlabeltoi(p)) != -1)
-		{
-		  fist->args[j] = k * 4;
-		}
-	      else
-		{
-		  printf("%s\n", p);
-		  error("cc");
-		}
-	    }
+	  memory[(b + (i << 2)) >> 2].i = c;
+	}
+    }
+  else
+    {
+      //create_float_array
+      a = regs[greg1];
+      b = regs[hpreg];
+      regs[greg1] = b;
+      regs[hpreg] += a << 3;
+      d = fregs[fgreg1];
+      for(i = 0; i < a; ++i)
+	{
+	  memory[(b + (i << 3)) >> 2].f = d;
 	}
     }
 }
 
-void parse(FILE *fp)
+int simulate_blanch_extfunc(int n)
 {
-  parse_fpt(fp);
-  parse_prog(fp);
+  simulate_extfunc(-1 - n);
+  return regs[rareg];
 }
 
-void init_reg_count()
+int simulate_instruction(instruction_fast *fist, int pc)
 {
-  int i;
+  int npc = pc + 1, nm, a1, a2, a3, a4, t;
+  static long long clk = 0;
+  
+  nm = fist->name;
+  a1 = fist->args[0];
+  a2 = fist->args[1];
+  a3 = fist->args[2];
+  a4 = fist->args[3];
 
-  for(i = 0; reg_names[i][0] != '\0'; ++i);
-
-  reg_count = i;
-}
-
-void init_freg_count()
-{
-  int i;
-
-  for(i = 0; freg_names[i][0] != '\0'; ++i);
-
-  freg_count = i;
-}
-
-void init_extval()
-{
-  int i;
-  char tmp[NAME_SIZE];
-
-  for(i = 0; extval[i].name[0] != '\0'; ++i)
+  //print_regs();
+  //print_fregs();
+  if(clk > 620000 && memory[2].i == 271504)
     {
-      strcpy(tmp, extval[i].name);
-      sprintf(extval[i].name, "%s%s", "min_caml_", tmp);
+      /*
+      print_regs();
+      //print_fregs();
+      //printf("%lld %d\n", clk, pc);
+      print_label(pc);
+      print_instruction(pc);
+      */
+    }
+  if(clk > 621000)
+    {
+      //print_regs();
+      //print_fregs();
+      //printf("%lld %d\n", clk, pc);
+      //print_label(pc);
+      //print_instruction(pc);
+    }
+  ++clk;
+  if(nm == 0)
+    {
+      //nop
+    }
+  else if(nm == 1)
+    {
+      //add
+      t = a2 < 0 ? a4 : regs[a2];
+      regs[a3] = regs[a1] + t;
+    }
+  else if(nm == 2)
+    {
+      //sub
+      t = a2 < 0 ? a4 : regs[a2];
+      regs[a3] = regs[a1] - t;
+    }
+  else if(nm == 3)
+    {
+      //cmp
+      t = a2 < 0 ? a4 : regs[a2];
+      cmpne = regs[a1] != t;
+      cmpg = regs[a1] > t;
+      cmpl = regs[a1] < t;
+    }
+  else if(nm == 4)
+    {
+      //bne
+      if(cmpne)
+	{
+	  simulate_instruction(&fprog.insts[npc], npc);
+	  if(a1 < 0)
+	    {
+	      return simulate_blanch_extfunc(a1);
+	    }
+	  return a1;
+	}
+    }
+  else if(nm == 5)
+    {
+      //ld
+      t = a2 < 0 ? a4 : regs[a2];
+      regs[a3] = memory[(regs[a1] + t) >> 2].i;
+    }
+  else if(nm == 6)
+    {
+      //ldd
+      t = a2 < 0 ? a4 : regs[a2];
+      fregs[a3] = memory[(regs[a1] + t) >> 2].f;
+    }
+  else if(nm == 7)
+    {
+      //st
+      t = a3 < 0 ? a4 : regs[a3];
+      memory[(regs[a2] + t) >> 2].i = regs[a1];
+    }
+  else if(nm == 8)
+    {
+      //set
+      t = a1 < 0 ? a4 : a1;
+      regs[a2] = t;
+    }
+  else if(nm == 9)
+    {
+      //retl
+      simulate_instruction(&fprog.insts[npc], npc);
+      return regs[rareg];
+    }
+  else if(nm == 10)
+    {
+      //b
+      simulate_instruction(&fprog.insts[npc], npc);
+      if(a1 < 0)
+	{
+	  return simulate_blanch_extfunc(a1);
+	}
+      return a1;
+    }
+  else if(nm == 11)
+    {
+      //mov
+      regs[a2] = regs[a1];
+    }
+  else if(nm == 12)
+    {
+      //std
+      t = a3 < 0 ? a4 : regs[a3];
+      memory[(regs[a2] + t) >> 2].f = fregs[a1];
+    }
+  else if(nm == 13)
+    {
+      //call
+      simulate_instruction(&fprog.insts[npc], npc);
+      if(a1 < 0)
+	{
+	  simulate_extfunc(-1 - a1);
+	  return npc + 1;
+	}
+      regs[rareg] = npc + 1;
+      return a1;
+    }
+  else if(nm == 14)
+    {
+      //bl
+      if(cmpl)
+	{
+	  simulate_instruction(&fprog.insts[npc], npc);
+	  if(a1 < 0)
+	    {
+	      return simulate_blanch_extfunc(a1);
+	    }
+	  return a1;
+	}
+    }
+  else if(nm == 15)
+    {
+      //fmovs
+      if((a1 & 1) == 0)
+	{
+	  fregs[a2] = fregs[a1];
+	}
+    }
+  else if(nm == 16)
+    {
+      //faddd
+      fregs[a3] = fregs[a1] + fregs[a2];
+    }
+  else if(nm == 17)
+    {
+      //fmuld
+      fregs[a3] = fregs[a1] * fregs[a2];
+    }
+  else if(nm == 18)
+    {
+      //fdivd
+      fregs[a3] = fregs[a1] / fregs[a2];
+    }
+  else if(nm == 19)
+    {
+      //fsubd
+      fregs[a3] = fregs[a1] - fregs[a2];
+    }
+  else if(nm == 20)
+    {
+      //sll
+      t = a2 < 0 ? a4 : regs[a2];
+      regs[a3] = regs[a1] << t;
+    }
+  else if(nm == 21)
+    {
+      //bg
+      if(cmpg)
+	{
+	  simulate_instruction(&fprog.insts[npc], npc);
+	  if(a1 < 0)
+	    {
+	      return simulate_blanch_extfunc(a1);
+	    }
+	  return a1;
+	}
+    }
+  else if(nm == 22)
+    {
+      //fcmpd
+      cmpg = fregs[a1] > fregs[a2];
+    }
+  else if(nm == 23)
+    {
+      //fbg
+      if(cmpg)
+	{
+	  simulate_instruction(&fprog.insts[npc], npc);
+	  if(a1 < 0)
+	    {
+	      return simulate_blanch_extfunc(a1);
+	    }
+	  return a1;
+	}
+    }
+  else
+    {
+      //bp
+      print_regs();
     }
 
-  extval_count = i;
+  return npc;
 }
 
-void init_extfunc()
+void simulate(char *ofname)
 {
-  int i;
-  char tmp[NAME_SIZE];
-
-  for(i = 0; extfunc[i][0] != '\0'; ++i)
+  int pc = labeltoi("min_caml_start");
+  //int i;
+  //char str[1000];
+  /*
+    for(i = 0; i < prog.label_count; ++i)
     {
-      strcpy(tmp, extfunc[i]);
-      sprintf(extfunc[i], "%s%s", "min_caml_", tmp);
+    printf("%s: %d\n", prog.labels[i].name, prog.labels[i].index);
+    }
+  */
+
+  out_fp = fopen(ofname, "w");
+
+  regs[spreg] = sp_offset << 2;
+  regs[hpreg] = hp_offset << 2;
+  init_memory();
+  //print_memory();
+  //printf("pc: %d\n", pc);
+  while(true)
+    {
+      if((pc = simulate_instruction(&fprog.insts[pc], pc)) == prog.inst_count)
+	{
+	  break;
+	}
     }
 
-  extfunc_count = i;
-}
-
-void init_inst_kind_count()
-{
-  int i;
-
-  for(i = 0; inst_names[i][0] != '\0'; ++i);
-
-  inst_kind_count = i;
+  fclose(out_fp);
 }
 
 int main(int argc, char *argv[])
 {
+  int result;
   FILE *fp;
+  char ofname[1000] = "result";
 
-  fp = fopen(argv[1], "r");
+  while ((result = getopt(argc, argv, "o:")) != -1)
+    {
+      switch (result)
+	{
+	case 'o':
+	  strcpy(ofname, optarg);
+	  break;
+	}
+    }
+  argc -= optind;
+  argv += optind;
+
+  fp = fopen(argv[0], "r");
   init_reg_count();
   init_freg_count();
   init_extval();
   init_extfunc();
   init_inst_kind_count();
   parse(fp);
+  simulate(ofname);
+  //print_memory();
 
   return 0;
 }

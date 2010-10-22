@@ -103,7 +103,9 @@ let lexbuf outchan foutchan boutchan a = (* バッファをコンパイルしてチャンネルへ
 
     output_string foutchan (Emit.string_of_flist i);
 
-    output_string boutchan (Emit.string_of_binary i);
+(*
+  output_string boutchan (Emit.string_of_binary i);
+*)
     
 (*    
       output_string stdout j;

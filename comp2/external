@@ -1,0 +1,25 @@
+free variable fiszero assumed as external function
+free variable fispos assumed as external function
+free variable fneg assumed as external function
+free variable fsqr assumed as external function
+free variable sqrt assumed as external function
+free variable read_float assumed as external function
+free variable cos assumed as external function
+free variable sin assumed as external function
+free variable read_int assumed as external function
+free variable fisneg assumed as external function
+free variable fabs assumed as external function
+free variable fless assumed as external function
+free variable fhalf assumed as external function
+free variable floor assumed as external function
+free variable atan assumed as external function
+free variable print_char assumed as external function
+free variable print_int assumed as external function
+free variable int_of_float assumed as external function
+free variable float_of_int assumed as external function
+     
+free variable floor assumed as external function
+free variable print_char assumed as external function
+free variable print_int assumed as external function
+free variable int_of_float assumed as external function
+free variable float_of_int assumed as external function

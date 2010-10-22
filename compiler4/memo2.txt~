@@ -1,0 +1,365 @@
+	set	min_caml_objects %i4
+	sll	%i3 2 %i5
+	ld	%i4 %i5 %i4
+	st	%i3 %i0 0
+	st	%i4 %i0 4
+	st	%i2 %i0 8
+	st	%o7 %i0 12
+	call	d_const.2698
+	add	%i0 16 %i0
+d_const.2698:
+	ld	%i2 4 %i2
+	retl
+	nop
+	sub	%i0 16 %i0
+	ld	%i0 12 %o7
+	ld	%i0 8 %i3
+	st	%i2 %i0 12
+	mov	%i3 %i2
+	st	%o7 %i0 20
+	call	d_vec.2696
+	add	%i0 24 %i0
+d_vec.2696:
+	ld	%i2 0 %i2
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 4 %i3
+	st	%i2 %i0 16
+	mov	%i3 %i2
+	st	%o7 %i0 20
+	call	o_form.2637
+	add	%i0 24 %i0
+o_form.2637:
+	ld	%i2 4 %i2
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	cmp	%i2 1
+	bne	be_else.8447
+	nop
+	ld	%i0 16 %i2
+	ld	%i0 4 %i3
+	st	%o7 %i0 20
+	call	setup_rect_table.2813
+	add	%i0 24 %i0
+setup_rect_table.2813:
+	set	6 %i4
+	set	l.6247 %i5
+	ldd	%i5 0 %f0
+	st	%i3 %i0 0
+	st	%i2 %i0 4
+	mov	%i4 %i2
+	st	%o7 %i0 12
+	call	min_caml_create_float_array
+	add	%i0 16 %i0
+	sub	%i0 16 %i0
+	ld	%i0 12 %o7
+	ld	%i0 4 %i3
+	ldd	%i3 0 %f0
+	st	%i2 %i0 8
+	st	%o7 %i0 12
+	call	min_caml_fiszero
+	add	%i0 16 %i0
+	sub	%i0 16 %i0
+	ld	%i0 12 %o7
+	cmp	%i2 0
+	bne	be_else.8432
+	nop
+	ld	%i0 0 %i2
+	st	%o7 %i0 12
+	call	o_isinvert.2641
+	add	%i0 16 %i0
+o_isinvert.2641:
+	ld	%i2 24 %i2
+	retl
+	nop
+	sub	%i0 16 %i0
+	ld	%i0 12 %o7
+	ld	%i0 4 %i3
+	ldd	%i3 0 %f0
+	st	%i2 %i0 12
+	st	%o7 %i0 20
+	call	min_caml_fisneg
+	add	%i0 24 %i0
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	mov	%i2 %i3
+	ld	%i0 12 %i2
+	st	%o7 %i0 20
+	call	xor.2578
+	add	%i0 24 %i0
+xor.2578:
+	cmp	%i2 0
+	bne	be_else.8314
+	nop
+	mov	%i3 %i2
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 0 %i3
+	st	%i2 %i0 16
+	mov	%i3 %i2
+	st	%o7 %i0 20
+	call	o_param_a.2645
+	add	%i0 24 %i0
+o_param_a.2645:
+	ld	%i2 16 %i2
+	ldd	%i2 0 %f0
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 16 %i2
+	st	%o7 %i0 20
+	call	fneg_cond.2583
+	add	%i0 24 %i0
+fneg_cond.2583:
+	cmp	%i2 0
+	bne	be_else.8318
+	nop
+be_else.8318:
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 8 %i2
+	std	%f0 %i2 0
+	set	l.6249 %i3
+	ldd	%i3 0 %f0
+	ld	%i0 4 %i3
+	ldd	%i3 0 %f2
+	fdivd	%f0 %f2 %f0
+	std	%f0 %i2 8
+	b	be_cont.8433
+	nop
+be_cont.8433:
+	ld	%i0 4 %i3
+	ldd	%i3 8 %f0
+	st	%o7 %i0 20
+	call	min_caml_fiszero
+	add	%i0 24 %i0
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	cmp	%i2 0
+	bne	be_else.8434
+	nop
+	ld	%i0 0 %i2
+	st	%o7 %i0 20
+	call	o_isinvert.2641
+	add	%i0 24 %i0
+o_isinvert.2641:
+	ld	%i2 24 %i2
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 4 %i3
+	ldd	%i3 8 %f0
+	st	%i2 %i0 20
+	st	%o7 %i0 28
+	call	min_caml_fisneg
+	add	%i0 32 %i0
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	mov	%i2 %i3
+	ld	%i0 20 %i2
+	st	%o7 %i0 28
+	call	xor.2578
+	add	%i0 32 %i0
+xor.2578:
+	cmp	%i2 0
+	bne	be_else.8314
+	nop
+	mov	%i3 %i2
+	retl
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	ld	%i0 0 %i3
+	st	%i2 %i0 24
+	mov	%i3 %i2
+	st	%o7 %i0 28
+	call	o_param_b.2647
+	add	%i0 32 %i0
+o_param_b.2647:
+	ld	%i2 16 %i2
+	ldd	%i2 8 %f0
+	retl
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	ld	%i0 24 %i2
+	st	%o7 %i0 28
+	call	fneg_cond.2583
+	add	%i0 32 %i0
+fneg_cond.2583:
+	cmp	%i2 0
+	bne	be_else.8318
+	nop
+	b	min_caml_fneg
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	ld	%i0 8 %i2
+	std	%f0 %i2 16
+	set	l.6249 %i3
+	ldd	%i3 0 %f0
+	ld	%i0 4 %i3
+	ldd	%i3 8 %f2
+	fdivd	%f0 %f2 %f0
+	std	%f0 %i2 24
+	b	be_cont.8435
+	nop
+be_cont.8435:
+	ld	%i0 4 %i3
+	ldd	%i3 16 %f0
+	st	%o7 %i0 28
+	call	min_caml_fiszero
+	add	%i0 32 %i0
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	cmp	%i2 0
+	bne	be_else.8436
+	nop
+	ld	%i0 0 %i2
+	st	%o7 %i0 28
+	call	o_isinvert.2641
+	add	%i0 32 %i0
+o_isinvert.2641:
+	ld	%i2 24 %i2
+	retl
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	ld	%i0 4 %i3
+	ldd	%i3 16 %f0
+	st	%i2 %i0 28
+	st	%o7 %i0 36
+	call	min_caml_fisneg
+	add	%i0 40 %i0
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	mov	%i2 %i3
+	ld	%i0 28 %i2
+	st	%o7 %i0 36
+	call	xor.2578
+	add	%i0 40 %i0
+xor.2578:
+	cmp	%i2 0
+	bne	be_else.8314
+	nop
+	mov	%i3 %i2
+	retl
+	nop
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	ld	%i0 0 %i3
+	st	%i2 %i0 32
+	mov	%i3 %i2
+	st	%o7 %i0 36
+	call	o_param_c.2649
+	add	%i0 40 %i0
+o_param_c.2649:
+	ld	%i2 16 %i2
+	ldd	%i2 16 %f0
+	retl
+	nop
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	ld	%i0 32 %i2
+	st	%o7 %i0 36
+	call	fneg_cond.2583
+	add	%i0 40 %i0
+fneg_cond.2583:
+	cmp	%i2 0
+	bne	be_else.8318
+	nop
+	b	min_caml_fneg
+	nop
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	ld	%i0 8 %i2
+	std	%f0 %i2 32
+	set	l.6249 %i3
+	ldd	%i3 0 %f0
+	ld	%i0 4 %i3
+	ldd	%i3 16 %f2
+	fdivd	%f0 %f2 %f0
+	std	%f0 %i2 40
+	b	be_cont.8437
+	nop
+be_cont.8437:
+	retl
+	nop
+	sub	%i0 24 %i0
+	ld	%i0 20 %o7
+	ld	%i0 0 %i3
+	sll	%i3 2 %i4
+	ld	%i0 12 %i5
+	st	%i2 %i5 %i4
+	b	be_cont.8448
+	nop
+be_cont.8450:
+	sub	%i3 1 %i3
+	ld	%i0 8 %i2
+	b	iter_setup_dirvec_constants.2822
+	nop
+iter_setup_dirvec_constants.2822:
+	cmp	%i3 0
+	bl	bge_else.8446
+	nop
+bge_else.8446:
+	retl
+	nop
+	sub	%i0 16 %i0
+	ld	%i0 12 %o7
+	ld	%i0 4 %i2
+	sub	%i2 1 %i3
+	ld	%i0 0 %i2
+	b	init_dirvec_constants.3040
+	nop
+init_dirvec_constants.3040:
+	cmp	%i3 0
+	bl	bge_else.8691
+	nop
+bge_else.8691:
+	retl
+	nop
+	sub	%i0 8 %i0
+	ld	%i0 4 %o7
+	ld	%i0 0 %i2
+	sub	%i2 1 %i2
+	b	init_vecset_constants.3043
+	nop
+init_vecset_constants.3043:
+	cmp	%i2 0
+	bl	bge_else.8693
+	nop
+bge_else.8693:
+	retl
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	set	min_caml_light_dirvec %i2
+	st	%o7 %i0 28
+	call	d_vec.2696
+	add	%i0 32 %i0
+d_vec.2696:
+	ld	%i2 0 %i2
+	retl
+	nop
+	sub	%i0 32 %i0
+	ld	%i0 28 %o7
+	set	min_caml_light %i3
+	st	%o7 %i0 28
+	call	veccpy.2599
+	add	%i0 32 %i0
+veccpy.2599:
+	ldd	%i3 0 %f0
+	std	%f0 %i2 0
+	ldd	%i3 8 %f0
+	std	%f0 %i2 8

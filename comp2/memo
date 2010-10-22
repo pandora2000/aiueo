@@ -1,0 +1,134 @@
+普通にこれでmin-rtを動かすには
+最初の2行を消して
+(         ;)
+みたいなところの;をなくして
+*を*.に変換する
+
+
+fstore | f2 | r2 | 2
+fadd | f2 | f0 | f3
+addi | r2 | r2 | 5
+call | L_atan_2452 |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 0
+fmul | f2 | f2 | f3
+addi | r2 | r2 | 5
+call | L_tan_2893 |  | 
+L_tan_2893:
+fstore | f2 | r2 | 0
+addi | r2 | r2 | 3
+call | L_sin_2448 |  | 
+subi | r2 | r2 | 3
+fload | f3 | r2 | 0
+fstore | f2 | r2 | 2
+fadd | f2 | f0 | f3
+addi | r2 | r2 | 5
+call | L_cos_2450 |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 2
+fdiv | f2 | f3 | f2
+return |  |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 2
+fmul | f2 | f2 | f3
+return |  |  | 
+subi | r2 | r2 | 38
+addi | r4 | r0 | 1
+load | r5 | r2 | 36
+add | r4 | r5 | r4
+fload | f3 | r2 | 34
+fstore | f2 | r2 | 38
+store | r4 | r2 | 40
+addi | r2 | r2 | 42
+call | L_adjust_position_2895 |  | 
+L_adjust_position_2895:
+fmul | f2 | f2 | f2
+fload | f4 | r0 | 4
+fadd | f2 | f2 | f4
+fstore | f3 | r2 | 0
+addi | r2 | r2 | 3
+call | L_sqrt_2458 |  | 
+subi | r2 | r2 | 3
+fload | f3 | r0 | 40
+fdiv | f3 | f3 | f2
+fstore | f2 | r2 | 2
+fadd | f2 | f0 | f3
+addi | r2 | r2 | 5
+call | L_atan_2452 |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 0
+fmul | f2 | f2 | f3
+addi | r2 | r2 | 5
+call | L_tan_2893 |  | 
+L_tan_2893:
+fstore | f2 | r2 | 0
+addi | r2 | r2 | 3
+call | L_sin_2448 |  | 
+subi | r2 | r2 | 3
+fload | f3 | r2 | 0
+fstore | f2 | r2 | 2
+fadd | f2 | f0 | f3
+addi | r2 | r2 | 5
+call | L_cos_2450 |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 2
+fdiv | f2 | f3 | f2
+return |  |  | 
+subi | r2 | r2 | 5
+fload | f3 | r2 | 2
+fmul | f2 | f2 | f3
+return |  |  | 
+subi | r2 | r2 | 42
+fadd | f3 | f0 | f2
+fload | f2 | r2 | 38
+fload | f4 | r2 | 32
+fload | f5 | r2 | 34
+load | r4 | r2 | 40
+load | r5 | r2 | 1
+load | r6 | r2 | 0
+jump | L_calc_dirvec_2898 |  | 
+L_calc_dirvec_2898:
+addi | r7 | r0 | 5
+bgt | r7 | r4 | L_else_8664
+store | r6 | r2 | 0
+store | r5 | r2 | 1
+fstore | f2 | r2 | 2
+fstore | f3 | r2 | 4
+addi | r2 | r2 | 7
+call | L_fsqr_2442 |  | 
+L_fsqr_2442:
+fmul | f2 | f2 | f2
+return |  |  | 
+subi | r2 | r2 | 7
+fload | f3 | r2 | 4
+fstore | f2 | r2 | 6
+fadd | f2 | f0 | f3
+addi | r2 | r2 | 9
+call | L_fsqr_2442 |  | 
+L_fsqr_2442:
+fmul | f2 | f2 | f2
+return |  |  | 
+subi | r2 | r2 | 9
+fload | f3 | r2 | 6
+fadd | f2 | f3 | f2
+fload | f3 | r0 | 40
+fadd | f2 | f2 | f3
+addi | r2 | r2 | 9
+call | L_sqrt_2458 |  | 
+subi | r2 | r2 | 9
+fload | f3 | r2 | 2
+fdiv | f3 | f3 | f2
+fload | f4 | r2 | 4
+fdiv | f4 | f4 | f2
+fload | f5 | r0 | 40
+fdiv | f2 | f5 | f2
+addi | r4 | r0 | 4148
+load | r5 | r2 | 1
+add | r4 | r4 | r5
+load | r4 | r4 | 0
+load | r5 | r2 | 0
+add | r6 | r4 | r5
+load | r6 | r6 | 0
+Error:ACSESS_BAD :
+23
+575718

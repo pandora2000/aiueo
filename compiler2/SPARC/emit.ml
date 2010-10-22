@@ -1,8 +1,10 @@
 open Asm
 open Printf
 
+(*
 exception UnknownInstruction
-  
+*)
+  (*
 let opcode_of x =
   match x with
     | "foi" -> 0b010101 | "floor" -> 0b010110(*仮*)
@@ -13,15 +15,26 @@ let opcode_of x =
     | "ori" -> 0b001101 | "nori" -> 0b001110 | "xori" -> 0b001111
     | "fadd" -> 0b010000 | "fsub" -> 0b010001| "fmul" -> 0b010010
     | "finv" -> 0b010011 | "fsqrt" -> 0b010100 | "fdiv" -> 0b010011
-    | "load" -> 0b011001 | "store" -> 0b011011 | "fload" -> 0b011101
+    | "ldi" -> 0b011001 | "store" -> 0b011011 | "fldi" -> 0b011101
     | "fstore" -> 0b011111 | "beq" -> 0b100000 | "bne" -> 0b100001
     | "bgt" -> 0b100010 | "blt" -> 0b100011 | "fbeq" -> 0b100100
     | "fbne" -> 0b100101 | "fbgt" -> 0b100110 | "fblt" -> 0b100111
     | "jump" -> 0b110000 | "call" -> 0b110100 | "return" -> 0b111000
     | _ -> raise UnknownInstruction
+  *)
 
 let ltostr (Id.L x) = x
-let lstring_of_vinst x = String.lowercase (string_of_vinst x)
+let string_of_inst = function
+  | Floor _ -> "floor" | Float_of_int _ -> "foi"
+  | Nop -> "nop" | Add _ -> "add" | Sub _ -> "sub" | Mul _ -> "mul"
+  | And _ -> "and" | Or _ -> "or" | Nor _ -> "nor" | Xor _ -> "xor"
+  | Addi _ -> "addi" | Subi _ -> "subi" | Muli _ -> "muli" | Andi _ -> "andi"
+  | Ori _ -> "ori" | Nori _ -> "nori" | Xori _ -> "xori" | Fadd _ -> "fadd"
+  | Fsub _ -> "fsub" | Fmul _ -> "fmul" | Finv _ -> "finv" | Fsqrt _ -> "fsqrt"
+  | Fdiv _ -> "fdiv" | Load _ -> "load" | Store _ ->  "store" | Fload _ -> "fload"
+  | Fstore _ ->  "fstore" | IfEq _ -> "IfEq" | IfLE _ -> "IfLE" | IfGE _ -> "IfGE"
+  | IfFEq _ -> "IfEFq" | IfFLE _ -> "IfFLE" | CallCls _ -> "CallCls" | CallDir _ -> "CallDir"
+  | Save _ -> "Save" | Restore _ -> "Restore"
 
 let stackset = ref S.empty (* すでにSaveされた変数の集合 (caml2html: emit_stackset) *)
 let stackmap = ref [] (* Saveされた変数の、スタックにおける位置 (caml2html: emit_stackmap) *)
@@ -104,7 +117,7 @@ let rec g = function (* 命令列のアセンブリ生成 (caml2html: emit_g) *)
 	tmp @ (g (dest, e))
 and g' e =(* 各命令のアセンブリ生成 (caml2html: emit_gprime) *)
   (* 末尾でなかったら計算結果をdestにセット (caml2html: emit_nontail) *)
-  let n = lstring_of_vinst (snd e) in
+  let n = string_of_inst (snd e) in
     match e with
       | NonTail(_), Nop -> []
       | NonTail(x), Floor(y) | NonTail(x), Float_of_int(y) ->
@@ -348,6 +361,7 @@ exception ImValueOverflow
 exception Exit5
 exception Exit6
 
+  (*
 let string_of_bi_a x l =
   (*  print_endline (string_of_int (get_label_index l "L_fib_11"));
       print_endline x.nm;*)
@@ -390,7 +404,8 @@ let string_of_bi_a x l =
     else raise Exit5 in
     (*    print_endline p;*)
     p
-
+  *)
+      (*
 let string_of_binary (x, _) =
   let i = ref 0 in
     List.iter (fun y ->
@@ -406,7 +421,8 @@ let string_of_binary (x, _) =
 		   let p = !i in incr i; y.index <- p) x;
     String.concat ""
       ((List.map (fun y -> string_of_bi_a y x) x) @
-	 ["00000000\n"; "00000000\n"; "00000000\n"; "00000000\n"; "FFFFFFFF\n"])
+	["00000000\n"; "00000000\n"; "00000000\n"; "00000000\n"; "FFFFFFFF\n"])
+      *)
 
 let string_of_flist (_, x) =
   (*  print_endline (string_of_int (List.length x));*)

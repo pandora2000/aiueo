@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <unistd.h>
+#include <ctype.h>
+
+#define ARG_MAX_COUNT 4
+#define NAME_SIZE 40
+#define REG_MAX_COUNT 100
+#define INST_MAX_COUNT 20000
+#define LABEL_MAX_COUNT 10000
+#define FPT_MAX_COUNT 100
+#define MEM_SIZE 1000000
+
+typedef struct
+{
+  int arg_count;
+  char name[NAME_SIZE];
+  char args[ARG_MAX_COUNT][NAME_SIZE];
+} instruction;
+
+typedef struct
+{
+  int index;
+  char name[NAME_SIZE];
+} label;
+
+typedef struct
+{
+  int inst_count;
+  int label_count;
+  instruction insts[INST_MAX_COUNT];
+  label labels[LABEL_MAX_COUNT];
+} program;
+
+
+typedef struct
+{
+  int name;
+  int args[ARG_MAX_COUNT];
+} instruction_fast;
+
+typedef struct
+{
+  int inst_count;
+  instruction_fast insts[INST_MAX_COUNT];
+} program_fast;
+
+typedef struct
+{
+  float val;
+  char label[NAME_SIZE];
+} fptelem;
+
+typedef struct
+{
+  char name[NAME_SIZE];
+  int index;
+} t_extval;
+
+typedef union
+{
+  float f;
+  int i;
+} conv;
+
+extern program prog;
+extern program_fast fprog;
+extern int reg_count;
+extern int freg_count;
+extern int regs[REG_MAX_COUNT];
+extern float fregs[REG_MAX_COUNT];
+extern int fpt_count;
+extern int fpt_offset;
+extern fptelem fpt[FPT_MAX_COUNT];
+extern conv memory[MEM_SIZE];
+
+void error(char *);
+bool is_separator(char);
+bool is_name_letter(char);
+int regtoi(char *);
+int labeltoi(char *);
+int insttoi(char *);
+int extvaltoi(char *);
+int extfunctoi(char *);
+int fptlabeltoi(char *);
+void print_label(int);
+void print_instruction(int);
+void print_regs();
+void print_fregs();
+void print_memory();
+void parse_fpt(FILE *);
+void parse_prog(FILE *);
+void parse(FILE *);
+void init_memory();
+void init_reg_count();
+void init_freg_count();
+void init_extval();
+void init_extfunc();
+void init_inst_kind_count();

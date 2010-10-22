@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <ctype.h>
+#include <sys/time.h>
 
 #define NAME_MAX_COUNT 4
 #define NAME_SIZE 40
@@ -82,7 +84,7 @@ bool is_seperator(char c)
 /*1line_instructionのparse (入力は\nで終わっていることを前提とする。）*/
 instruction *parse_one_line_instruction(char *str, instruction * inst)
 {
-    int len = strlen(str);
+
     int i = 0;
     int name_number = 0;
     int name_now = 0;
@@ -140,7 +142,7 @@ void print_label(label * label)
 
 void print_program(program * program)
 {
-    int label_i = 0;
+
     int i, j;
 
     for (i = 0; i < program->inst_count; ++i) {
@@ -231,7 +233,7 @@ int check_memory(int num)
 }
 
 /*print系*/
-print_memory()
+void print_memory()
 {
     int i;
 
@@ -293,7 +295,6 @@ int new_label_trans(char *label, program * program)
     }
     /*label */
     /*特殊ラベル*/
-    /*実際はcallのときしか使われないからいいのですが、jumpにあったときの事を思うと…*/
     if (strncmp(label, "L_atan", 6) == 0) {
       return -100;
     }
@@ -303,11 +304,7 @@ int new_label_trans(char *label, program * program)
       return -300;
     } else if (strcmp(label, "min_caml_read_float") == 0) {
       return -400;
-     } else if (strncmp(label, "L_sin", 5) == 0) {
-	  return -500;
-     } else if (strncmp(label, "L_cos", 5) == 0) {
-	  return -600;
-     }
+    }
 
     for (i = 0; i < program->label_count; i++) {
 	if (strcmp(label, program->labels[i]->name) == 0) {
@@ -367,7 +364,6 @@ int label_trans_soutai(char *label, program * program, int nowpc)
     return -1;
 }
 
-/*stdinからfloatを読む*/
 float read_float()
 {
     char s[100];
@@ -392,7 +388,6 @@ float read_float()
     }
 }
 
-/*stdinからintを読む*/
 int read_int()
 {
     char s[100];
@@ -472,7 +467,7 @@ int null_cal(char *null)
 
 #define PARSE_INST_6(INST,INST_NUM) \
       else if(strcmp(iname,INST) == 0){             \
-      answer -> insts[i].name[0] = INST_NUM;\
+      answer -> insts[i].name[0] = INST_NUM; \
       answer -> insts[i].name[1] = int_of_fregi(ist.name[1]);                    \
       answer -> insts[i].name[2] = int_of_fregi(ist.name[2]);                    \
       answer -> insts[i].name[3] =  label_trans_soutai(ist.name[3],program,i); \
@@ -480,16 +475,70 @@ int null_cal(char *null)
 
 #define PARSE_INST_7(INST,INST_NUM) \
       else if(strcmp(iname,INST) == 0){             \
-      answer -> insts[i].name[0] = INST_NUM;\
+      answer -> insts[i].name[0] = INST_NUM; \
       answer -> insts[i].name[1] = new_label_trans(ist.name[1],program);    \
+      answer -> insts[i].name[2] = null_cal(ist.name[2]);  \
+      answer -> insts[i].name[3] = null_cal(ist.name[3]); \
         }
 
 #define PARSE_INST_8(INST,INST_NUM)             \
  else if(strcmp (iname,INST) == 0){             \
    answer -> insts[i].name[0] = INST_NUM;        \
+      answer -> insts[i].name[1] = null_cal(ist.name[1]);  \
+      answer -> insts[i].name[2] = null_cal(ist.name[2]);   \
+      answer -> insts[i].name[3] = null_cal(ist.name[3]); \
  }
 
 #define PARSE_INST_10(INST,INST_NUM) PARSE_INST(INST,INST_NUM,int_of_fregi,int_of_regi,null_cal)
+
+#define PARSE_INST_11(INST,INST_NUM) PARSE_INST(INST,INST_NUM,int_of_fregi,int_of_regi,int_of_regi)
+
+#define NOP 0
+#define ADD 1
+#define SUB 2
+#define MUL 3
+#define AND 4
+#define OR 5
+#define NOR 6
+#define XOR 7
+#define ADDI 9
+#define SUBI 10
+#define MULI 11
+#define ANDI 12
+#define ORI 13
+#define NORI 14
+#define XORI 15
+
+#define FADD 16
+#define FSUB 17
+#define FMUL 18
+#define FSQRT 20
+#define FDIV 19
+#define FOI 21
+#define FIO 23
+#define FLR 22
+#define LDR 24
+#define STR 26
+#define FLDR 28
+#define FSTR 30
+#define LDI 25
+#define STI 27
+#define FLDI 29
+#define FSTI 31
+
+#define BEQ 32
+#define BNE 33
+#define BGT 34
+#define BLT 35
+#define FBEQ 36
+#define FBNE 37
+#define FBGT 38
+#define FBLT 39
+
+#define JUMP 48
+#define CALL 52
+#define RETURN 56
+
 
 program2 *parse_all2(program * program)
 {
@@ -503,7 +552,6 @@ program2 *parse_all2(program * program)
     answer->inst_count = program->inst_count;
 
     for (i = 0; i < program->inst_count; i++) {
-
         ist = program->insts[i];
         iname = ist.name[0];
         arg1 = ist.name[1];
@@ -513,48 +561,51 @@ program2 *parse_all2(program * program)
         if (strcmp(iname, "nop") == 0) {
             answer->insts[i].name[0] = 0;
         }
-        PARSE_INST_1("add", 1)
-	     PARSE_INST_1("sub", 2)
-            PARSE_INST_1("mul", 3)
-            PARSE_INST_1("and", 4)
-            PARSE_INST_1("or", 5)
-            PARSE_INST_1("nor", 6)
-            PARSE_INST_1("xor", 7)
-            PARSE_INST_2("addi", 8)
-            PARSE_INST_2("subi", 9)
-            PARSE_INST_2("muli", 10)
-            PARSE_INST_2("andi", 11)
-            PARSE_INST_2("ori", 12)
-            PARSE_INST_2("nori", 13)
-            PARSE_INST_2("xori", 14)
-            PARSE_INST_3("fadd", 15)
-            PARSE_INST_3("fsub", 16)
-            PARSE_INST_3("fmul", 17)
-            PARSE_INST_3("fdiv", 18)
-            PARSE_INST_4("finv", 19)
-            PARSE_INST_4("fsqrt", 20)
-            PARSE_INST_4("floor", 21)
-            PARSE_INST_10("foi", 22)
-            PARSE_INST_2("load", 23)
-            PARSE_INST_2("store", 24)
-            PARSE_INST_9("fload", 25)
-            PARSE_INST_9("fstore", 26)
-            PARSE_INST_5("beq", 27)
-            PARSE_INST_5("bne", 28)
-            PARSE_INST_5("bgt", 29)
-            PARSE_INST_5("blt", 30)
-            PARSE_INST_5("bge", 31)
-            PARSE_INST_5("ble", 32)
-            PARSE_INST_6("beq", 33)
-            PARSE_INST_6("fbne", 34)
-            PARSE_INST_6("fbgt", 35)
-            PARSE_INST_6("fblt", 36)
-            PARSE_INST_6("fbge", 37)
-            PARSE_INST_6("fble", 38)
-            PARSE_INST_7("jump", 39)
-            PARSE_INST_7("call", 40)
-	     PARSE_INST_8("return", 41)
-	     PARSE_INST_8("bp", 42)
+        PARSE_INST_1("add", ADD)
+            PARSE_INST_1("sub", SUB)
+            PARSE_INST_1("mul", MUL)
+            PARSE_INST_1("and", AND)
+            PARSE_INST_1("or", OR)
+            PARSE_INST_1("nor", NOR)
+          PARSE_INST_1("xor", XOR)
+            PARSE_INST_2("addi", ADDI)
+            PARSE_INST_2("subi", SUBI)
+            PARSE_INST_2("muli", MULI)
+            PARSE_INST_2("andi", ANDI)
+            PARSE_INST_2("ori", ORI)
+            PARSE_INST_2("nori", NORI)
+            PARSE_INST_2("xori", XORI)
+            PARSE_INST_3("fadd", FADD)
+            PARSE_INST_3("fsub", FSUB)
+            PARSE_INST_3("fmul", FMUL)
+            PARSE_INST_3("fdiv", FDIV)
+          //PARSE_INST_4("finv", )
+            PARSE_INST_4("fsqrt",FSQRT)
+            PARSE_INST_4("floor",FLR)
+            PARSE_INST_10("foi", FOI)
+            PARSE_INST_2("ldi", LDI)
+            PARSE_INST_2("sti", STI)
+            PARSE_INST_9("fldi", FLDI)
+            PARSE_INST_9("fsti", FSTI)
+            PARSE_INST_1("ldr", LDR)
+            PARSE_INST_1("str", STR)
+            PARSE_INST_11("fldr", FLDR)
+            PARSE_INST_11("fstr", FSTR)
+            PARSE_INST_5("beq", BEQ)
+            PARSE_INST_5("bne", BNE)
+            PARSE_INST_5("bgt", BGT)
+            PARSE_INST_5("blt", BLT)
+          //            PARSE_INST_5("bge", 31)
+          //            PARSE_INST_5("ble", 32)
+            PARSE_INST_6("fbeq", FBEQ)
+            PARSE_INST_6("fbne", FBNE)
+            PARSE_INST_6("fbgt", FBGT)
+            PARSE_INST_6("fblt", FBLT)
+          //            PARSE_INST_6("fbge", 37)
+          //            PARSE_INST_6("fble", 38)
+            PARSE_INST_7("jump", JUMP)
+            PARSE_INST_7("call", CALL)
+            PARSE_INST_8("return", RETURN)
             else {
             printf("Error : this is iligal inst!: %s\n", iname);
             exit(1);
@@ -563,6 +614,83 @@ program2 *parse_all2(program * program)
     return answer;
 }
 
+
+
+
+/*parseして機械語に直す*/
+void parse_all3(program2* program2, char *filename){
+  FILE *fp;
+  int i;
+  unsigned int buf = 0x0;
+
+  fp = fopen(filename,"w");
+  for(i=0;i<program2 -> inst_count;i++){
+    switch(program2-> insts[i].name[0]){
+    case NOP:
+    case ADD:
+    case SUB:
+    case MUL:
+    case AND:
+    case OR:
+    case NOR:
+    case XOR:
+    case FADD:
+    case FSUB:
+    case FMUL:
+    case FSQRT:
+    case FDIV:
+    case FOI:
+    case FIO:
+    case FLR:
+    case LDR:
+    case STR:
+    case FLDR:
+    case FSTR:
+    case RETURN:
+    buf = (program2->insts[i].name[0] * pow(2,26)) 
+      + (program2->insts[i].name[1] * pow(2,21)) 
+      + (program2-> insts[i].name[2] * pow(2,16)) 
+      + (program2-> insts[i].name[3] * pow(2,11)); 
+    break;
+    case ADDI:
+    case SUBI:
+    case MULI:
+    case ANDI:
+    case ORI:
+    case NORI:
+    case XORI:
+    case BEQ:
+    case BNE:
+    case BGT:
+    case BLT:
+    case FBEQ:
+    case FBNE:
+    case FBGT:
+    case FBLT:
+    case LDI:
+    case STI:
+    case FLDI:
+    case FSTI:
+    buf = (program2->insts[i].name[0] * pow(2,26)) 
+      + (program2->insts[i].name[1] * pow(2,21)) 
+      + (program2-> insts[i].name[2] * pow(2,16)) 
+      + (program2-> insts[i].name[3]); 
+    break;
+    case JUMP:
+    case CALL:
+    buf = (program2->insts[i].name[0] * pow(2,26)) 
+      + (program2->insts[i].name[1]); 
+    break;
+    }
+    fprintf(fp,"%08X\n",buf);
+  }
+
+  fprintf(fp,"%08X\n",0xFFFFFFFF);
+  fclose(fp);
+
+  return;
+
+}
 
 #define DO_INST_1(INST_NUM,OP)                  \
     else if(iname == INST_NUM){ \
@@ -585,70 +713,70 @@ int do_assemble2(program2 * program2)
         arg2 = ist.name[2];
         arg3 = ist.name[3];
 
-        if (iname == 0) {
+        if (iname == NOP) {
           // printf("this is nop\n");
         }
-        DO_INST_1(1, +)
-            DO_INST_1(2, -)
-            DO_INST_1(3, *)
-            DO_INST_1(4, &)
-            DO_INST_1(5, |)
+        DO_INST_1(ADD, +)
+            DO_INST_1(SUB, -)
+            DO_INST_1(MUL, *)
+            DO_INST_1(AND, &)
+            DO_INST_1(OR, |)
           /*ALU命令 */
-        else if (iname == 6) {
+        else if (iname == NOR) {
           regist[ist.name[1]] = ~(regist[ist.name[2]] | regist[ist.name[3]]);
         }
-        else if (iname == 7) {
+        else if (iname == XOR) {
             regist[ist.name[1]] = regist[ist.name[2]] ^ regist[ist.name[3]];
         }
-        else if (iname == 8) {
+        else if (iname == ADDI) {
             regist[ist.name[1]] = regist[ist.name[2]] + ist.name[3];
         }
-        else if (iname == 9) {
+        else if (iname == SUBI) {
             regist[ist.name[1]] = regist[ist.name[2]] - ist.name[3];
         }
-        else if (iname == 10) {
+        else if (iname == MULI) {
             regist[ist.name[1]] = regist[ist.name[2]] * ist.name[3];
         }
-        else if (iname == 11) {
+        else if (iname == ANDI) {
             regist[ist.name[1]] = regist[ist.name[2]] & ist.name[3];
         }
-        else if (iname == 12) {
+        else if (iname == ORI) {
             regist[ist.name[1]] = regist[ist.name[2]] | ist.name[3];
         }
-        else if (iname == 13) {
+        else if (iname == NORI) {
             regist[ist.name[1]] = ~(regist[ist.name[2]] | ist.name[3]);
         }
-        else if (iname == 14) {
+        else if (iname == XORI) {
             regist[ist.name[1]] = regist[ist.name[2]] ^ ist.name[3];
         }
         /*FPU命令 */
-        else if (iname == 15) {
+        else if (iname == FADD) {
             freg[ist.name[1]] = freg[ist.name[2]] + freg[ist.name[3]];
         }
-        else if (iname == 16) {
+        else if (iname == FSUB) {
             freg[ist.name[1]] = freg[ist.name[2]] - freg[ist.name[3]];
         }
-        else if (iname == 17) {
+        else if (iname == FMUL) {
             freg[ist.name[1]] = freg[ist.name[2]] * freg[ist.name[3]];
         }
-        else if (iname == 18) {
+        else if (iname == FDIV) {
             freg[ist.name[1]] = freg[ist.name[2]] / freg[ist.name[3]];
         }
-        else if (iname == 19) {
+        /*      else if (iname == 19) {
             freg[ist.name[1]] = 1 / freg[ist.name[2]];
-        }
-        else if (iname == 20) {
+            }*/
+        else if (iname == FSQRT) {
             freg[ist.name[1]] = sqrt(freg[ist.name[2]]);
         }
-        else if (iname == 21) {
+        else if (iname == FLR) {
             freg[ist.name[1]] = floor(freg[ist.name[2]]);
         }
-        else if (iname == 22) {
+        else if (iname == FOI) {
             freg[ist.name[1]] = (float) (regist[ist.name[2]]);
         }
 
         /*MEM ACSESS命令 */
-        else if (iname == 23) {
+        else if (iname == LDI) {
             //memory_check
             if (check_memory(regist[ist.name[2]] + ist.name[3]) == ACSESS_BAD) {
                 printf("Error:ACSESS_BAD :\n");
@@ -657,7 +785,7 @@ int do_assemble2(program2 * program2)
             regist[ist.name[1]] = memory[regist[ist.name[2]] + ist.name[3]].i;
         }
 
-        else if (iname == 24) {
+        else if (iname == STI) {
             //memory_check
             if (check_memory(regist[ist.name[2]] + ist.name[3]) == ACSESS_BAD) {
                 printf("Error:ACSESS_BAD :\n");
@@ -666,7 +794,7 @@ int do_assemble2(program2 * program2)
             memory[regist[ist.name[2]] + ist.name[3]].i =  regist[ist.name[1]];
         }
 
-        else if (iname == 25) {
+        else if (iname == FLDI) {
             //memory_check
             if (check_memory(regist[ist.name[2]] + ist.name[3])
                 == ACSESS_BAD) {
@@ -677,7 +805,7 @@ int do_assemble2(program2 * program2)
                 memory[regist[ist.name[2]] + ist.name[3]].d;
         }
 
-        else if (iname == 26) {
+        else if (iname == FSTI) {
             //memory_check
             if (check_memory(regist[ist.name[2]] + ist.name[3])
                 == ACSESS_BAD) {
@@ -687,32 +815,71 @@ int do_assemble2(program2 * program2)
             memory[regist[ist.name[2]] + ist.name[3]].d =
                 freg[ist.name[1]];
         }
+        else if (iname == LDR) {
+            //memory_check
+            if (check_memory(regist[ist.name[2]] + regist[ist.name[3]]) == ACSESS_BAD) {
+                printf("Error:ACSESS_BAD :\n");
+                exit(1);
+            }
+            regist[ist.name[1]] = memory[regist[ist.name[2]] + regist[ist.name[3]]].i;
+        }
+
+        else if (iname == STR) {
+            //memory_check
+            if (check_memory(regist[ist.name[2]] + regist[ist.name[3]]) == ACSESS_BAD) {
+                printf("Error:ACSESS_BAD :\n");
+                exit(1);
+            }
+            memory[regist[ist.name[2]] + regist[ist.name[3]]].i =  regist[ist.name[1]];
+        }
+
+        else if (iname == FLDR) {
+            //memory_check
+            if (check_memory(regist[ist.name[2]] + regist[ist.name[3]])
+                == ACSESS_BAD) {
+                printf("Error:ACSESS_BAD :\n");
+                exit(1);
+            }
+            freg[ist.name[1]] =
+                memory[regist[ist.name[2]] + regist[ist.name[3]]].d;
+        }
+
+        else if (iname == FSTR) {
+            //memory_check
+            if (check_memory(regist[ist.name[2]] + regist[ist.name[3]])
+                == ACSESS_BAD) {
+                printf("Error:ACSESS_BAD :\n");
+                exit(1);
+            }
+            memory[regist[ist.name[2]] + regist[ist.name[3]]].d =
+                freg[ist.name[1]];
+        }
 
 
         /*BRANCH命令 */
-        else if (iname == 27) {
+        else if (iname == BEQ) {
             if (regist[ist.name[1]] == regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
 
-        else if (iname == 28) {
+        else if (iname == BNE) {
             if (regist[ist.name[1]] != regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
-        else if (iname == 29) {
+        else if (iname == BGT) {
             if (regist[ist.name[1]] > regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
 
-        else if (iname == 30) {
+        else if (iname == BLT) {
             if (regist[ist.name[1]] < regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
-
+        /*
         else if (iname == 31) {
             if (regist[ist.name[1]] >= regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
@@ -720,34 +887,35 @@ int do_assemble2(program2 * program2)
         }
 
         else if (iname == 32) {
-            if (regist[ist.name[1]] <= regist[ist.name[2]]) {
+        if (regist[ist.name[1]] <= regist[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
-            }
-
-        } else if (iname == 33) {
+                }
+            }        
+        */
+         else if (iname == FBEQ) {
             if (freg[ist.name[1]] == freg[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
 
-        else if (iname == 34) {
+        else if (iname == FBNE) {
             if (freg[ist.name[1]] != freg[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
 
-        else if (iname == 35) {
+        else if (iname == FBGT) {
             if (freg[ist.name[1]] > freg[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
 
-        else if (iname == 36) {
+        else if (iname == FBLT) {
             if (freg[ist.name[1]] < freg[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
             }
         }
-
+    /*
         else if (iname == 37) {
             if (freg[ist.name[1]] >= freg[ist.name[2]]) {
                 nextpc = pc + ist.name[3] - 1;
@@ -759,55 +927,42 @@ int do_assemble2(program2 * program2)
                 nextpc = pc + ist.name[3] - 1;
             }
         }
-
+    */
 
         /*JUMP命令 */
-        else if (iname == 39) {
+        else if (iname == JUMP) {
             nextpc = ist.name[1] - 1;
         }
 
 
-        else if (iname == 40) {
+        else if (iname == CALL) {
           
           nextpc = ist.name[1] - 1;
           /*特殊ラベル*/
-          if (ist.name[1] == -100) {
+          if (ist.name[1] == -100){
             freg[2] = atanf(freg[2]);
             nextpc = pc;
           } else if (ist.name[1] == -200) {
             freg[2] = sqrtf(freg[2]);
             nextpc = pc;
-          } else if (ist.name[1] == -300) {
-	       regist[4] = read_int();
-	       printf("read_int: %d\n", regist[4]);
-	       nextpc = pc;
+          } else if (ist.name[1]  == -300) {
+            regist[4] = read_int();
+            //            printf("read_int: %d\n", regist[4]);
+            nextpc = pc;
           } else if (ist.name[1] == -400) {
-	       freg[2] = read_float();
-	       printf("read_float: %f\n", freg[2]);
-	       nextpc = pc;
-          } else if (ist.name[1] == -500) {
-	       freg[2] = sinf(freg[2]);
-	       //printf("read_float: %f\n", freg[2]);
-	       nextpc = pc;
-          } else if (ist.name[1] == -600) {
-	       freg[2] = cosf(freg[2]);
-	       //printf("read_float: %f\n", freg[2]);
-	       nextpc = pc;
+            freg[2] = read_float();
+            //            printf("read_float: %f\n", freg[2]);
+            nextpc = pc;
           } else {
-	       push(&call_stack, (pc + 1));
+            push(&call_stack, (pc + 1));
           }
 
 
         }
 
-        else if (iname == 41) {
+        else if (iname == RETURN) {
             nextpc = pop(&call_stack) - 1;
         }
-
-	else if (iname = 42) {
-	     print_register();
-	     print_memory();
-	}
         //命令が存在しなかった場合error parseでやっているのでいらない。
         //printf("ist = %d\n",iname);
 
@@ -1324,8 +1479,7 @@ int main(int argc, char *argv[])
 {
     FILE *fp, *fp2;
     char buf[100000][100];	/*命令 読み込み用バッファ */
-    char fpt[FPT_MAX_COUNT][20] = { 0 };
-    char ofname[1000] = "result";
+    char fpt[FPT_MAX_COUNT][20] ;
     int i = 0, j, k;
     //メモリ上の浮動小数点テーブルの位置
     int fpmemoffset = 0;
@@ -1336,7 +1490,7 @@ int main(int argc, char *argv[])
     double t2, t1;
     int ll = 0;
 
-    while ((result = getopt(argc, argv, "rmo:")) != -1) {
+    while ((result = getopt(argc, argv, "r")) != -1) {
 	switch (result) {
 
 	    /* 値をとらないオプション */
@@ -1348,9 +1502,10 @@ int main(int argc, char *argv[])
 	    doprintmem = true;
 	    break;
 
-	case 'o':
-	     /* 値を取る引数の場合は外部変数optargにその値を格納する. */
-	     strcpy(ofname, optarg);
+	case 'd':
+	case 'e':
+	    /* 値を取る引数の場合は外部変数optargにその値を格納する. */
+	    //fprintf(stdout,"%c %s\n",result,optarg);
 	    break;
 
 	    /* 以下二つのcaseは意味がないようだ.
@@ -1367,9 +1522,7 @@ int main(int argc, char *argv[])
 	    break;
 	}
     }
-    argc -= optind;
-    argv += optind;
-    
+
 
 /*
   if (argc < 3) {
@@ -1381,16 +1534,16 @@ int main(int argc, char *argv[])
 
 
     /*assembler-file open and read */
-    fp = fopen(argv[0], "r");
+    fp = fopen(argv[1], "r");
     if (fp == NULL) {
-	printf("%sが開けませんaa\n", argv[0]);
+	printf("%sが開けません\n", argv[1]);
 	return 1;
     }
 
-    if (argc > 1) {
-	fp2 = fopen(argv[1], "r");
+    if (argc > 2) {
+	fp2 = fopen(argv[2], "r");
 	if (fp2 == NULL) {
-	    printf("%sが開けません\n", argv[1]);
+	    printf("%sが開けません\n", argv[2]);
 	    return 1;
 	}
 	for (i = 0; i < FPT_MAX_COUNT; ++i) {
@@ -1404,7 +1557,7 @@ int main(int argc, char *argv[])
 	    //printf("%s\n", fpt[j]);
 	    memory[j + fpmemoffset].i = (int) strtoll(fpt[j], NULL, 16);
 	}
-	print_memory();
+	//print_memory();
     }
 
     i = 0;
@@ -1419,24 +1572,32 @@ int main(int argc, char *argv[])
     answer = parse_all(buf, i);
 
     answer2 = parse_all2(answer);
-    //print_program(answer);
+    print_program(answer);
+
+    //機械語に翻訳
+    parse_all3(answer2,"kikai.txt");
 
     t1 = gettimeofday_sec();
     //do_assemble(answer);
     do_assemble2(answer2);
     t2 = gettimeofday_sec();
     printf("%lf\n", t2 - t1);
+
+
+
+
     
-    if (doprintregs)
+    //    if (doprintregs)
 	print_register();
-    if (doprintmem)
+    //    if (doprintmem)
 	print_memory();
 
     fclose(fp);
     fclose(fp2);
 
-    fp = fopen(ofname, "w");
-    fprintf(fp, "P3\n%d %d %d\n", memory[8193].i, memory[8194].i,
+    fp = fopen("res", "w");
+    fprintf(fp, "P3\n");
+    fprintf(fp, "%d %d %d\n", memory[8193].i, memory[8194].i,
 	    memory[8195].i);
     /*
        k = 8196;

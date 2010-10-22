@@ -1,1 +1,2 @@
-let rec p x = sqr
+let rec p x = sqrt x in
+  print_int (p 81.0)

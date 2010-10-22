@@ -17,3 +17,198 @@ free variable imul assumed as external
 free variable print_int assumed as external
 free variable print_float assumed as external
 free variable float_of_int assumed as external
+
+
+	call	min_caml_fiszero
+	add	%i0 40 %i0
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	cmp	%i2 0
+	bne	be_else.8323
+	nop
+	ld	%i0 0 %i2
+	cmp	%i2 0
+	bne	be_else.8325
+	nop
+	set	l.6249 %i2
+	ldd	%i2 0 %f0
+	ldd	%i0 24 %f2
+	fdivd	%f0 %f2 %f0
+	b	be_cont.8326
+	nop
+be_cont.8326:
+	b	be_cont.8324
+	nop
+be_cont.8324:
+	ld	%i0 4 %i2
+	ldd	%i2 0 %f2
+	fmuld	%f2 %f0 %f2
+	std	%f2 %i2 0
+	ldd	%i2 8 %f2
+	fmuld	%f2 %f0 %f2
+	std	%f2 %i2 8
+	ldd	%i2 16 %f2
+	fmuld	%f2 %f0 %f0
+	std	%f0 %i2 16
+	retl
+	nop
+	sub	%i0 56 %i0
+	ld	%i0 52 %o7
+	set	min_caml_rgb %i2
+	st	%o7 %i0 52
+	call	vecbzero.2597
+	add	%i0 56 %i0
+vecbzero.2597:
+	set	l.6247 %i3
+	ldd	%i3 0 %f0
+	b	vecfill.2594
+	nop
+vecfill.2594:
+	std	%f0 %i2 0
+	std	%f0 %i2 8
+	std	%f0 %i2 16
+	retl
+	nop
+	sub	%i0 56 %i0
+	ld	%i0 52 %o7
+	set	min_caml_startp %i2
+	set	min_caml_viewpoint %i3
+	st	%o7 %i0 52
+	call	veccpy.2599
+	add	%i0 56 %i0
+veccpy.2599:
+	ldd	%i3 0 %f0
+	std	%f0 %i2 0
+	ldd	%i3 8 %f0
+	std	%f0 %i2 8
+	ldd	%i3 16 %f0
+	std	%f0 %i2 16
+	retl
+	nop
+	sub	%i0 56 %i0
+	ld	%i0 52 %o7
+	set	0 %i2
+	set	l.6249 %i3
+	ldd	%i3 0 %f0
+	set	min_caml_ptrace_dirvec %i3
+	ld	%i0 8 %i4
+	sll	%i4 2 %i5
+	ld	%i0 4 %l0
+	ld	%l0 %i5 %i5
+	set	l.6247 %l1
+	ldd	%l1 0 %f2
+	mov	%i5 %i4
+	st	%o7 %i0 52
+	call	trace_ray.2916
+	add	%i0 56 %i0
+trace_ray.2916:
+	cmp	%i2 4
+	bg	ble_else.8591
+	nop
+	std	%f2 %i0 0
+	st	%i4 %i0 8
+	std	%f0 %i0 16
+	st	%i2 %i0 24
+	st	%i3 %i0 28
+	mov	%i4 %i2
+	st	%o7 %i0 36
+	call	p_surface_ids.2681
+	add	%i0 40 %i0
+p_surface_ids.2681:
+	ld	%i2 8 %i2
+	retl
+	nop
+	sub	%i0 40 %i0
+	ld	%i0 36 %o7
+	ld	%i0 28 %i3
+	st	%i2 %i0 32
+	mov	%i3 %i2
+	st	%o7 %i0 36
+	call	judge_intersection.2879
+	add	%i0 40 %i0
+judge_intersection.2879:
+	set	min_caml_tmin %i3
+	set	l.6642 %i4
+	ldd	%i4 0 %f0
+	std	%f0 %i3 0
+	set	0 %i3
+	set	min_caml_or_net %i4
+	ld	%i4 0 %i4
+	mov	%i4 %o4
+	mov	%i2 %i4
+	mov	%i3 %i2
+	mov	%o4 %i3
+	st	%o7 %i0 4
+	call	trace_or_matrix.2875
+	add	%i0 8 %i0
+trace_or_matrix.2875:
+	sll	%i2 2 %i5
+	ld	%i3 %i5 %i5
+	ld	%i5 0 %l0
+	cmp	%l0 -1
+	bne	be_else.8513
+	nop
+be_else.8513:
+	st	%i4 %i0 0
+	st	%i3 %i0 4
+	st	%i2 %i0 8
+	cmp	%l0 99
+	bne	be_else.8515
+	nop
+	set	1 %l0
+	mov	%i5 %i3
+	mov	%l0 %i2
+	st	%o7 %i0 12
+	call	solve_one_or_network.2871
+	add	%i0 16 %i0
+solve_one_or_network.2871:
+	sll	%i2 2 %i5
+	ld	%i3 %i5 %i5
+	cmp	%i5 -1
+	bne	be_else.8511
+	nop
+be_else.8511:
+	set	min_caml_and_net %l0//
+	sll	%i5 2 %i5//
+	ld	%l0 %i5 %i5//
+	set	0 %l0//
+	st	%i4 %i0 0
+	st	%i3 %i0 4
+	st	%i2 %i0 8
+	mov	%i5 %i3//
+	mov	%l0 %i2//
+	st	%o7 %i0 12
+	call	solve_each_element.2867
+	add	%i0 16 %i0
+solve_each_element.2867:
+	sll	%i2 2 %i5//
+	ld	%i3 %i5 %i5//
+	cmp	%i5 -1
+	bne	be_else.8499
+	nop
+be_else.8499:
+	set	min_caml_startp %l0
+	st	%i4 %i0 0
+	st	%i3 %i0 4
+	st	%i2 %i0 8
+	st	%i5 %i0 12
+	mov	%i4 %i3
+	mov	%i5 %i2//
+	mov	%l0 %i4
+	st	%o7 %i0 20
+	call	solver.2769
+	add	%i0 24 %i0
+solver.2769:
+	set	min_caml_objects %i5
+	sll	%i2 2 %i2
+	ld	%i5 %i2 %i2//
+	ldd	%i4 0 %f0
+	st	%i3 %i0 0
+	st	%i2 %i0 4
+	st	%i4 %i0 8
+	std	%f0 %i0 16
+	st	%o7 %i0 28
+	call	o_param_x.2653
+	add	%i0 32 %i0
+o_param_x.2653:
+	ld	%i2 20 %i2//
